@@ -18,7 +18,7 @@ public interface ISComDetailsRepository {
 
 	int insertISComDetails(ISComDetailsEntity iSComDetails);
 
-	int updateISComDetails(ISComDetailsEntity iSComDetails);
+	int updateISComDetails(List<ISComDetailsEntity> iSComList);
 
 	List<ISComDetailsEntity> findAllISCommittee();
 

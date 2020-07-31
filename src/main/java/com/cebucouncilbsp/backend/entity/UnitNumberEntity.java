@@ -12,7 +12,7 @@ public class UnitNumberEntity extends BaseEntity {
 	private String unitNumber;
 	private Integer institutionId;
 	private String sectionCode;
-	private String lastUsedYear;
+	private Integer lastUsedYear;
 
 	public String getUnitNumber() {
 		return unitNumber;
@@ -38,11 +38,11 @@ public class UnitNumberEntity extends BaseEntity {
 		this.sectionCode = sectionCode;
 	}
 
-	public String getLastUsedYear() {
+	public Integer getLastUsedYear() {
 		return lastUsedYear;
 	}
 
-	public void setLastUsedYear(String lastUsedYear) {
+	public void setLastUsedYear(Integer lastUsedYear) {
 		this.lastUsedYear = lastUsedYear;
 	}
 }

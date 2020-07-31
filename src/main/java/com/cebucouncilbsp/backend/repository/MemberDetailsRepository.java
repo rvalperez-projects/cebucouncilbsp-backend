@@ -18,7 +18,7 @@ public interface MemberDetailsRepository {
 
 	int insertMemberDetails(MemberDetailsEntity memberDetails);
 
-	int updateMemberDetails(MemberDetailsEntity memberDetails);
+	int updateMemberDetails(List<MemberDetailsEntity> membersList);
 
 	List<MemberDetailsEntity> findAllUnitMembers();
 

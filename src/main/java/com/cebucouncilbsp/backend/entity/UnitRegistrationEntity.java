@@ -5,6 +5,7 @@ package com.cebucouncilbsp.backend.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author reneir.val.t.perez
@@ -22,6 +23,9 @@ public class UnitRegistrationEntity extends BaseEntity {
 	private String officialReceiptNo;
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
+
+	private List<ISComDetailsEntity> institutionalCommitteeList;
+	private List<MemberDetailsEntity> patrolMembersList;
 
 	public Integer getFormId() {
 		return formId;
@@ -101,5 +105,21 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setExpirationDate(LocalDate expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public List<ISComDetailsEntity> getInstitutionalCommitteeList() {
+		return institutionalCommitteeList;
+	}
+
+	public void setInstitutionalCommitteeList(List<ISComDetailsEntity> institutionalCommitteeList) {
+		this.institutionalCommitteeList = institutionalCommitteeList;
+	}
+
+	public List<MemberDetailsEntity> getPatrolMembersList() {
+		return patrolMembersList;
+	}
+
+	public void setPatrolMembersList(List<MemberDetailsEntity> patrolMembersList) {
+		this.patrolMembersList = patrolMembersList;
 	}
 }

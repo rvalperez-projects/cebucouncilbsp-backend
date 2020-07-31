@@ -5,6 +5,9 @@ package com.cebucouncilbsp.backend.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.LoginResultEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 
@@ -14,7 +17,7 @@ import com.cebucouncilbsp.backend.entity.UserEntity;
  */
 public interface UserRepository {
 
-	int insertUser(UserEntity user);
+	int insertUser(@Param("user") UserEntity user, @Param("institution") InstitutionEntity institution);
 
 	int updateUser(UserEntity user);
 
@@ -24,5 +27,6 @@ public interface UserRepository {
 
 	LoginResultEntity findByUsernamePassword(String username, String password);
 
-	List<UserEntity> findByAreaInstitutionName(String area, Integer institutionId, String name);
+	List<UserEntity> findByAreaDistrictInstitutionName(String area, String district, Integer institutionId,
+			String name);
 }

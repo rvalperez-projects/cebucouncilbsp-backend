@@ -7,7 +7,7 @@ package com.cebucouncilbsp.backend.entity;
  * @author reneir.val.t.perez
  *
  */
-public class LoginResultEntity extends BaseEntity {
+public class LoginResultEntity {
 
 	private Integer userId;
 	private String authorityCode;
