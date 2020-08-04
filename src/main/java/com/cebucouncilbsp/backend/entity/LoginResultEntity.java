@@ -10,7 +10,7 @@ package com.cebucouncilbsp.backend.entity;
 public class LoginResultEntity {
 
 	private Integer userId;
-	private String authorityCode;
+	private String roleCode;
 	private Integer institutionId;
 	private String area;
 
@@ -22,12 +22,12 @@ public class LoginResultEntity {
 		this.userId = userId;
 	}
 
-	public String getAuthorityCode() {
-		return authorityCode;
+	public String getRoleCode() {
+		return roleCode;
 	}
 
-	public void setAuthorityCode(String authorityCode) {
-		this.authorityCode = authorityCode;
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
 	}
 
 	public Integer getInstitutionId() {

@@ -2,8 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cebucouncilbsp.backend.repository.InstitutionRepository">
 
+  <resultMap id="InstitutionResultMap" type="InstitutionEntity">
+    <id column="INSTITUTION_ID" jdbcType="INTEGER" property="institutionId"/>
+    <result column="INSTITUTION_NAME" jdbcType="VARCHAR" property="institutionName"/>
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+    <result column="CONTACT_NUMBER" jdbcType="VARCHAR" property="contactNumber"/>
+    <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
+    <result column="AREA" jdbcType="VARCHAR" property="area"/>
+    <result column="CATEGORY_CODE" jdbcType="VARCHAR" property="categoryCode"/>
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDateTime"/>
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+    <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
+  </resultMap>
 
-  <select id="findAllInstitutions" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.InstitutionEntity">
+  <select id="findAllInstitutions" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
     SELECT
       MINST.INSTITUTION_ID,
       MINST.INSTITUTION_NAME,
@@ -16,7 +29,7 @@
       M_INSTITUTION MINST
   </select>
 
-  <select id="findByInstitutionId" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.InstitutionEntity">
+  <select id="findByInstitutionId" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
     SELECT
       MINST.INSTITUTION_ID,
       MINST.INSTITUTION_NAME,
@@ -31,7 +44,7 @@
       MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
   </select>
 
-  <select id="findByArea" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.InstitutionEntity">
+  <select id="findByArea" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
     SELECT
       MINST.INSTITUTION_ID,
       MINST.INSTITUTION_NAME,
@@ -46,7 +59,7 @@
       MINST.AREA = #{area,jdbcType=VARCHAR}
   </select>
 
-  <insert id="insertInstitution" parameterType="com.cebucouncilbsp.backend.entity.InstitutionEntity">
+  <insert id="insertInstitution" parameterType="InstitutionEntity">
     INSERT INTO
       M_USER
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -76,7 +89,7 @@
     RETURNING INSTITUTION_ID
   </insert>
 
-  <update id="updateInstitution" parameterType="com.cebucouncilbsp.backend.entity.InstitutionEntity">
+  <update id="updateInstitution" parameterType="InstitutionEntity">
     UPDATE
       M_USER
     <set>

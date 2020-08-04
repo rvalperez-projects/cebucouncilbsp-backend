@@ -23,6 +23,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.cebucouncilbsp.backend.ResponseBodyWrapper;
 import com.cebucouncilbsp.backend.constant.ResponseStatusCode;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
+import com.cebucouncilbsp.backend.exception.SystemFailureException;
+import com.cebucouncilbsp.backend.exception.UserNotFoundException;
 
 /**
  * @author reneir.val.t.perez
@@ -31,11 +33,31 @@ import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 @ControllerAdvice
 @Order(0)
 public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationErrorAdvice.class);
+	private static final Logger BACKEND_LOGGER = LoggerFactory.getLogger(ValidationErrorAdvice.class);
 	private static final String NO_MESSAGE_FOUND_ERROR = "No message found";
 
 	@Autowired
 	MessageSource messageSource;
+
+	/**
+	 * Handles {@link UserNotFoundException} and creates an object that shows a
+	 * Validation error.
+	 *
+	 * @param exception The exception thrown: {@link UserNotFoundException}.
+	 * @return A {@link ResponseBodyWrapper} that contains the Validation error.
+	 */
+	@ExceptionHandler(UserNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ResponseBodyWrapper handleValidationError(UserNotFoundException exception) {
+		BACKEND_LOGGER.info(MessageFormat.format("UserNotFoundException has occurred. {0}", exception.getMessage()));
+
+		String message = messageSource.getMessage("backend.error.auth.login.NotFound", new Object[] {}, null);
+		List<String> errorMessagesList = new ArrayList<>();
+		errorMessagesList.add(message);
+
+		return new ResponseBodyWrapper(ResponseStatusCode.VALIDATION_FAILURE.getCode(), null, errorMessagesList);
+	}
 
 	/**
 	 * Handles {@link BusinessFailureException} and creates an object that shows a
@@ -48,7 +70,7 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	public ResponseBodyWrapper handleValidationError(BusinessFailureException exception) {
-		LOGGER.info(MessageFormat.format("BusinessFailureException has occurred. {0}", exception.getMessage()));
+		BACKEND_LOGGER.info(MessageFormat.format("BusinessFailureException has occurred. {0}", exception.getMessage()));
 		Errors errors = exception.getErrors();
 
 		List<String> errorMessagesList = new ArrayList<>();
@@ -56,6 +78,21 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 			setValidationErrorMessages(errorMessagesList, errors);
 		}
 		return new ResponseBodyWrapper(ResponseStatusCode.VALIDATION_FAILURE.getCode(), null, errorMessagesList);
+	}
+
+	/**
+	 * Captures a {@link SystemFailureException} and generates
+	 * a、{@link JsonResponseStatus#SYSTEM_ERROR} response.
+	 *
+	 * @param ex Captured exception
+	 * @return {@link JsonResponseStatus#SYSTEM_ERROR} response
+	 */
+	@ExceptionHandler(SystemFailureException.class)
+	@ResponseBody
+	public ResponseBodyWrapper handleSystemError(SystemFailureException ex) {
+		BACKEND_LOGGER.error("SystemFailureException has occurred.", ex);
+
+		return new ResponseBodyWrapper(ResponseStatusCode.SYSTEM_ERROR.getCode(), null, new ArrayList<>());
 	}
 
 	/**
@@ -73,12 +110,12 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 				message = messageSource.getMessage(fe.getCode(), fe.getArguments(), null);
 			} catch (NoSuchMessageException e) {
 				// Intended to be empty
-				LOGGER.debug(NO_MESSAGE_FOUND_ERROR, e);
+				BACKEND_LOGGER.debug(NO_MESSAGE_FOUND_ERROR, e);
 				try {
 					message = messageSource.getMessage(fe.getDefaultMessage(), null, null);
 				} catch (NoSuchMessageException ex2) {
 					// Intended to be empty
-					LOGGER.debug(NO_MESSAGE_FOUND_ERROR, ex2);
+					BACKEND_LOGGER.debug(NO_MESSAGE_FOUND_ERROR, ex2);
 				}
 			}
 			if (message == null) {
@@ -93,7 +130,7 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 			try {
 				message = messageSource.getMessage(oe.getCode(), oe.getArguments(), null);
 			} catch (NoSuchMessageException e) {
-				LOGGER.debug(NO_MESSAGE_FOUND_ERROR, e);
+				BACKEND_LOGGER.debug(NO_MESSAGE_FOUND_ERROR, e);
 			}
 			if (message == null) {
 				message = oe.getDefaultMessage();

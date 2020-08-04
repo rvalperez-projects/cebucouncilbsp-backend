@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.ISComDetailsEntity;
 import com.cebucouncilbsp.backend.entity.MemberDetailsEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
@@ -42,7 +43,7 @@ public class UnitRegistrationService {
 	private static final String UNIT_REGISTRATION_FORM_NOT_FOUND = "backend.aur.submit.form.NotFound";
 	private static final String NO_MORE_UNIT_NUMBERS = "backend.error.unitNumber.NoMore";
 
-	private static enum MethodCode {
+	private enum MethodCode {
 		INSERT, UPDATE
 	}
 
@@ -89,7 +90,7 @@ public class UnitRegistrationService {
 	 * @param requestForm
 	 * @return Number of submitted forms.
 	 */
-	public int submit(UnitRegistrationFormRequestForm requestForm) {
+	public int submit(UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser) {
 		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 
 		if (null == requestForm.getUnitNumber()) {
@@ -103,7 +104,7 @@ public class UnitRegistrationService {
 		}
 
 		UnitRegistrationEntity unitRegistrationForm = new UnitRegistrationEntity();
-		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, MethodCode.INSERT);
+		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.INSERT);
 
 		// Insert UnitRegistrationEntity and InstitutionEntity to DB
 		return unitRegistrationRepository.insertUnitRegistrationEntityForm(unitRegistrationForm);
@@ -124,14 +125,14 @@ public class UnitRegistrationService {
 				requestForm.getStatusCode(), requestForm.getName().toLowerCase());
 	}
 
-	public UnitRegistrationEntity updateStatus(Integer formId, String statusCode) {
+	public UnitRegistrationEntity updateStatus(Integer formId, String statusCode, AuthorityEntity accessingUser) {
 		UnitRegistrationEntity entity = unitRegistrationRepository.findByFormId(formId);
 		if (null == entity) {
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
 		}
 
 		entity.setStatusCode(statusCode);
-		entity.setUpdatedBy("test-user");
+		entity.setUpdatedBy(accessingUser.getUsername());
 		entity.setUpdatedDateTime(LocalDateTime.now());
 
 		unitRegistrationRepository.updateFormStatus(entity);
@@ -139,7 +140,8 @@ public class UnitRegistrationService {
 	}
 
 	@Transactional
-	public UnitRegistrationEntity updateForm(UnitRegistrationFormRequestForm requestForm) {
+	public UnitRegistrationEntity updateForm(UnitRegistrationFormRequestForm requestForm,
+			AuthorityEntity accessingUser) {
 		if (null == requestForm.getFormId()) {
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
 		}
@@ -149,7 +151,7 @@ public class UnitRegistrationService {
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
 		}
 
-		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, MethodCode.UPDATE);
+		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.UPDATE);
 
 		// Update unitRegistrationForm
 		unitRegistrationRepository.updateUnitRegistrationEntityForm(unitRegistrationForm);
@@ -160,7 +162,7 @@ public class UnitRegistrationService {
 	}
 
 	private void setUnitRegistrationEntity(UnitRegistrationEntity unitRegistrationForm,
-			UnitRegistrationFormRequestForm requestForm, MethodCode methodCode) {
+			UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser, MethodCode methodCode) {
 
 		// Get current date and time
 		LocalDateTime now = LocalDateTime.now();
@@ -178,13 +180,13 @@ public class UnitRegistrationService {
 		if (methodCode.equals(MethodCode.INSERT)) {
 			unitRegistrationForm.setDateApplied(now);
 			unitRegistrationForm.setExpirationDate(now.toLocalDate().plusYears(1L));
-			unitRegistrationForm.setCreatedBy("test-user");
+			unitRegistrationForm.setCreatedBy(accessingUser.getUsername());
 			unitRegistrationForm.setCreatedDateTime(now);
 		} else if (methodCode.equals(MethodCode.UPDATE)) {
 			unitRegistrationForm.setDateApplied(requestForm.getDateApplied());
 			unitRegistrationForm.setExpirationDate(requestForm.getExpirationDate());
 		}
-		unitRegistrationForm.setUpdatedBy("test-user");
+		unitRegistrationForm.setUpdatedBy(accessingUser.getUsername());
 		unitRegistrationForm.setUpdatedDateTime(now);
 
 		List<ISComDetailsEntity> institutionalCommitteeList = new ArrayList<>();
@@ -204,12 +206,11 @@ public class UnitRegistrationService {
 			entity.setReligion(iSCom.getReligion());
 
 			if (methodCode.equals(MethodCode.INSERT)) {
-				entity.setCreatedBy("test-user");
+				entity.setCreatedBy(accessingUser.getUsername());
 				entity.setCreatedDateTime(now);
 			}
-			entity.setUpdatedBy("test-user");
+			entity.setUpdatedBy(accessingUser.getUsername());
 			entity.setUpdatedDateTime(now);
-			System.out.println(entity.toString());
 			institutionalCommitteeList.add(entity);
 		}
 		unitRegistrationForm.setInstitutionalCommitteeList(institutionalCommitteeList);
@@ -231,12 +232,11 @@ public class UnitRegistrationService {
 			entity.setReligion(member.getReligion());
 
 			if (methodCode.equals(MethodCode.INSERT)) {
-				entity.setCreatedBy("test-user");
+				entity.setCreatedBy(accessingUser.getUsername());
 				entity.setCreatedDateTime(now);
 			}
-			entity.setUpdatedBy("test-user");
+			entity.setUpdatedBy(accessingUser.getUsername());
 			entity.setUpdatedDateTime(now);
-			System.out.println(entity.toString());
 			patrolMembersList.add(entity);
 		}
 		unitRegistrationForm.setPatrolMembersList(patrolMembersList);

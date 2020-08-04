@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cebucouncilbsp.backend.annotation.AccessingUser;
+import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
+import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
+import com.cebucouncilbsp.backend.annotation.AllUsers;
+import com.cebucouncilbsp.backend.annotation.CouncilAndUserOnly;
+import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.UnitRegistrationEntity;
 import com.cebucouncilbsp.backend.entity.UnitRegistrationSearchResultEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
@@ -33,25 +39,30 @@ public class UnitRegistrationController {
 	private UnitRegistrationRequestFormValidator validator;
 
 	@GetMapping(path = "/all")
+	@AdminUserOnly
 	public List<UnitRegistrationEntity> getAllUsers() {
 		return service.getAll();
 	}
 
 	@GetMapping(path = "/{formId}")
+	@AllUsers
 	public UnitRegistrationEntity getUserByUserId(@PathVariable Integer formId) {
 		return service.getByFormId(formId);
 	}
 
 	@PostMapping(path = "/submit")
-	public int submit(@RequestBody @Valid UnitRegistrationFormRequestForm requestForm, Errors errors) {
+	@CouncilAndUserOnly
+	public int submit(@RequestBody @Valid UnitRegistrationFormRequestForm requestForm,
+			@AccessingUser AuthorityEntity user, Errors errors) {
 		validator.validate(requestForm, errors);
 		if (errors.hasErrors()) {
 			throw new BusinessFailureException(errors);
 		}
-		return service.submit(requestForm);
+		return service.submit(requestForm, user);
 	}
 
 	@PostMapping(path = "/search")
+	@AdminAndCouncilOnly
 	public List<UnitRegistrationSearchResultEntity> searchUsers(@RequestBody @Valid SearchRequestForm requestForm,
 			Errors errors) {
 		if (errors.hasErrors()) {
@@ -61,17 +72,20 @@ public class UnitRegistrationController {
 	}
 
 	@PutMapping(path = "/update-status")
-	public UnitRegistrationEntity updateStatus(@PathVariable Integer formId, @PathVariable String statusCode) {
-		return service.updateStatus(formId, statusCode);
+	@AdminAndCouncilOnly
+	public UnitRegistrationEntity updateStatus(@PathVariable Integer formId, @PathVariable String statusCode,
+			@AccessingUser AuthorityEntity user) {
+		return service.updateStatus(formId, statusCode, user);
 	}
 
 	@PutMapping(path = "/update")
-	public UnitRegistrationEntity updateStatus(@RequestBody @Valid UnitRegistrationFormRequestForm requestForm,
-			Errors errors) {
+	@AdminAndCouncilOnly
+	public UnitRegistrationEntity updateForm(@RequestBody @Valid UnitRegistrationFormRequestForm requestForm,
+			Errors errors, @AccessingUser AuthorityEntity user) {
 		validator.validate(requestForm, errors);
 		if (errors.hasErrors()) {
 			throw new BusinessFailureException(errors);
 		}
-		return service.updateForm(requestForm);
+		return service.updateForm(requestForm, user);
 	}
 }

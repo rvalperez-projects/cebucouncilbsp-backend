@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cebucouncilbsp.backend.entity.LoginResultEntity;
+import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.requestdto.LoginRequestForm;
 import com.cebucouncilbsp.backend.requestdto.LogoutRequestForm;
 import com.cebucouncilbsp.backend.service.LoginService;
@@ -21,11 +21,13 @@ public class LoginController {
 	private LoginService service;
 
 	@PostMapping(path = "/login")
-	public LoginResultEntity login(@RequestBody @Valid LoginRequestForm form) {
+	@AllUsers
+	public String login(@RequestBody @Valid LoginRequestForm form) throws Exception {
 		return service.login(form);
 	}
 
 	@PostMapping(path = "/logout")
+	@AllUsers
 	public void login(@RequestBody @Valid LogoutRequestForm form) {
 		service.logout(form);
 	}

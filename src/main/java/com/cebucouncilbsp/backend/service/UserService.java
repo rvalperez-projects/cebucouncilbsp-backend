@@ -10,11 +10,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
+import com.cebucouncilbsp.backend.repository.AuthorityRepository;
+import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
@@ -31,6 +36,12 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private InstitutionRepository institutionRepository;
+
+	@Autowired
+	private AuthorityRepository authorityRepository;
 
 	/**
 	 *
@@ -59,24 +70,10 @@ public class UserService {
 	 *
 	 * @param requestForm
 	 */
-	public int signUp(UserSignUpRequestForm requestForm) {
-		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
+	@Transactional
+	public int signUp(UserSignUpRequestForm requestForm, AuthorityEntity accessingUser) {
+		Integer userId = null;
 		LocalDateTime now = LocalDateTime.now();
-
-		// Create User Entity to insert
-		UserEntity user = new UserEntity();
-		user.setUsername(requestForm.getUsername());
-		user.setPassword(requestForm.getPassword());
-		user.setAuthorityCode(requestForm.getAuthorityCode());
-		user.setSurname(requestForm.getSurname());
-		user.setGivenName(requestForm.getGivenName());
-		user.setMiddleInitial(requestForm.getMiddleInitial());
-		user.setMobileNumber(requestForm.getMobileNumber());
-		user.setEmailAddress(requestForm.getEmailAddress());
-		user.setCreatedBy(requestForm.getUsername());
-		user.setUpdatedBy(requestForm.getUsername());
-		user.setCreatedDateTime(now);
-		user.setUpdatedDateTime(now);
 
 		// Create Institution Entity to insert
 		InstitutionEntity institution = new InstitutionEntity();
@@ -86,13 +83,41 @@ public class UserService {
 		institution.setAddress(requestForm.getAddress());
 		institution.setContactNumber(requestForm.getContactNumber());
 		institution.setCategoryCode(requestForm.getCategoryCode());
-		institution.setCreatedBy(requestForm.getUsername());
-		institution.setUpdatedBy(requestForm.getUsername());
+		institution.setCreatedBy(accessingUser.getUsername());
+		institution.setUpdatedBy(accessingUser.getUsername());
 		institution.setCreatedDateTime(now);
 		institution.setUpdatedDateTime(now);
+		Integer institutionId = institutionRepository.insertInstitution(institution);
+
+		// Create User Entity to insert
+		UserEntity user = new UserEntity();
+		user.setSurname(requestForm.getSurname());
+		user.setGivenName(requestForm.getGivenName());
+		user.setMiddleInitial(requestForm.getMiddleInitial());
+		user.setMobileNumber(requestForm.getMobileNumber());
+		user.setEmailAddress(requestForm.getEmailAddress());
+		user.setInstitutionId(institutionId);
+		user.setCreatedBy(accessingUser.getUsername());
+		user.setUpdatedBy(accessingUser.getUsername());
+		user.setCreatedDateTime(now);
+		user.setUpdatedDateTime(now);
+		userId = userRepository.insertUser(user);
+
+		// Create Authority Rights for User
+		AuthorityEntity authority = new AuthorityEntity();
+		authority.setUserId(userId);
+		authority.setToken("token");
+		authority.setUsername(requestForm.getUsername());
+		authority.setPassword(new BCryptPasswordEncoder().encode(requestForm.getPassword()));
+		authority.setRoleCode(requestForm.getAuthorityCode());
+		authority.setCreatedBy(accessingUser.getUsername());
+		authority.setUpdatedBy(accessingUser.getUsername());
+		authority.setCreatedDateTime(now);
+		authority.setUpdatedDateTime(now);
+		authorityRepository.insertAuthority(authority);
 
 		// Insert UserEntity and InstitutionEntity to DB
-		return userRepository.insertUser(user, institution);
+		return userId;
 	}
 
 	/**

@@ -15,9 +15,6 @@ public class UserEntity extends BaseEntity {
 	private String middleInitial;
 	private String emailAddress;
 	private String mobileNumber;
-	private String username;
-	private String password;
-	private String authorityCode;
 	private Integer institutionId;
 
 	public Integer getUserId() {
@@ -66,30 +63,6 @@ public class UserEntity extends BaseEntity {
 
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getAuthorityCode() {
-		return authorityCode;
-	}
-
-	public void setAuthorityCode(String authorityCode) {
-		this.authorityCode = authorityCode;
 	}
 
 	public Integer getInstitutionId() {

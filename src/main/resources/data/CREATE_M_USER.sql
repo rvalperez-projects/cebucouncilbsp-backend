@@ -10,9 +10,6 @@ CREATE TABLE public.M_USER
     MIDDLE_INITIAL character varying(1) COLLATE pg_catalog.default,
     EMAIL_ADDRESS character varying(32) COLLATE pg_catalog.default NOT NULL,
     MOBILE_NUMBER character varying(32) COLLATE pg_catalog.default,
-    USERNAME character varying(32) COLLATE pg_catalog.default NOT NULL,
-    PASSWORD character varying(32) COLLATE pg_catalog.default NOT NULL,
-    AUTHORITY_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     INSTITUTION_ID integer,
     CREATED_BY character varying(32) COLLATE pg_catalog.default NOT NULL,
     CREATED_DATETIME timestamp without time zone NOT NULL,
@@ -27,6 +24,4 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.M_USER
     OWNER to postgres;
-
-COMMENT ON COLUMN public.M_USER.AUTHORITY_CODE IS '"00": General User; "01": Council; "99": Admin;';
 
