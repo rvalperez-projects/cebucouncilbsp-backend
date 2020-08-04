@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.cebucouncilbsp.backend.ResponseBodyWrapper;
 import com.cebucouncilbsp.backend.constant.ResponseStatusCode;
+import com.cebucouncilbsp.backend.exception.AccessForbiddenException;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.exception.SystemFailureException;
 import com.cebucouncilbsp.backend.exception.UserNotFoundException;
@@ -88,11 +89,32 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 	 * @return {@link JsonResponseStatus#SYSTEM_ERROR} response
 	 */
 	@ExceptionHandler(SystemFailureException.class)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
 	public ResponseBodyWrapper handleSystemError(SystemFailureException ex) {
 		BACKEND_LOGGER.error("SystemFailureException has occurred.", ex);
 
 		return new ResponseBodyWrapper(ResponseStatusCode.SYSTEM_ERROR.getCode(), null, new ArrayList<>());
+	}
+
+	/**
+	 * Handles {@link AccessForbiddenException} and creates a
+	 * {@link JsonResponseStatus#SYSTEM_ERROR} response.
+	 *
+	 * @param exception Thrown Exception {@link AccessForbiddenException}
+	 * @return {@link ResponseBodyWrapper} that contains Validation Error contents.
+	 */
+	@ExceptionHandler(AccessForbiddenException.class)
+	@ResponseBody
+	public ResponseBodyWrapper handleValidationError(AccessForbiddenException exception) {
+		BACKEND_LOGGER.error("AccessForbiddenException has occurred.", exception);
+
+		String message = messageSource.getMessage("backend.validation.constraints.request.AccessForbidden",
+				new Object[] {}, null);
+		List<String> errorMessagesList = new ArrayList<>();
+		errorMessagesList.add(message);
+
+		return new ResponseBodyWrapper(ResponseStatusCode.SYSTEM_ERROR.getCode(), null, errorMessagesList);
 	}
 
 	/**

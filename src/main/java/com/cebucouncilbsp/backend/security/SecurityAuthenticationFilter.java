@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cebucouncilbsp.backend.exception.SystemFailureException;
+import com.cebucouncilbsp.backend.exception.AccessForbiddenException;
 import com.cebucouncilbsp.backend.utils.HttpRequestUtils;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -49,11 +49,11 @@ public class SecurityAuthenticationFilter extends OncePerRequestFilter {
 		} catch (IllegalArgumentException e) {
 			if (!request.getRequestURI().contains("auth")) {
 				LOGGER.error("Unable to get JWT Token");
-				throw new SystemFailureException();
+				throw new AccessForbiddenException();
 			}
 		} catch (ExpiredJwtException e) {
 			LOGGER.error("JWT Token has expired");
-			throw new SystemFailureException();
+			throw new AccessForbiddenException();
 		}
 
 		// Once we get the token validate it.
