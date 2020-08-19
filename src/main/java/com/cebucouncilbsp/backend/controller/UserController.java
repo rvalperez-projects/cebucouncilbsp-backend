@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cebucouncilbsp.backend.annotation.AccessingUser;
 import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
 import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
-import com.cebucouncilbsp.backend.annotation.AllUsers;
-import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
-import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
 import com.cebucouncilbsp.backend.service.UserService;
 
 @RestController
@@ -41,16 +37,6 @@ public class UserController {
 	@AdminUserOnly
 	public UserEntity getUserByUserId(@PathVariable Integer userId) {
 		return service.getUserByUserId(userId);
-	}
-
-	@PostMapping(path = "/sign-up")
-	@AllUsers
-	public void signUp(@RequestBody @Valid UserSignUpRequestForm requestForm, @AccessingUser AuthorityEntity user,
-			Errors errors) {
-		if (errors.hasErrors()) {
-			throw new BusinessFailureException(errors);
-		}
-		service.signUp(requestForm, user);
 	}
 
 	@PostMapping(path = "/search")

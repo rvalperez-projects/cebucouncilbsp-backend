@@ -23,7 +23,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenUtils {
 
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+	// Token Validity = 3 Hours
+	public static final long JWT_TOKEN_VALIDITY = 3 * 60 * 60;
 
 	@Autowired
 	private LoginService loginService;

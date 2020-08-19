@@ -3,6 +3,8 @@
  */
 package com.cebucouncilbsp.backend.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * @author reneir.val.t.perez
@@ -49,19 +54,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable().authorizeRequests()
+		http.cors().and().csrf().disable().authorizeRequests()
 				// set allowed api and role
-				// login & logout
+				// Login & Logout, and Sign-Up
 				.antMatchers("/auth/**").permitAll()
-				// user api
-				.antMatchers("/user/sign-up").permitAll().antMatchers("/user/search").hasAnyAuthority(COUNCIL, ADMIN)
-				.antMatchers("/user/all").hasAuthority(ADMIN)
-				// form api
+				// User api
+				.antMatchers("/user/search").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/user/all")
+				.hasAuthority(ADMIN)
+				// Form api
 				.antMatchers("/form/{\\d}}").permitAll().antMatchers("/form/submit").hasAnyAuthority(USER, COUNCIL)
-				.antMatchers("/form/search").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/update")
-				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/update-status").hasAnyAuthority(COUNCIL, ADMIN)
-				.antMatchers("/form/update").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/all")
-				.hasAuthority(ADMIN).anyRequest().authenticated()
+				.antMatchers("/form/search").permitAll().antMatchers("/form/update").hasAnyAuthority(COUNCIL, ADMIN)
+				.antMatchers("/form/update-status").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/update")
+				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/all").hasAuthority(ADMIN)
+				// Institution api
+				.antMatchers("/institution/all").hasAuthority(ADMIN).antMatchers("/institution/{\\d}}").permitAll()
+				// Area api
+				.antMatchers("/area/all").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/districts/institutions")
+				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/{\\w}}").hasAnyAuthority(COUNCIL, ADMIN)
+				// All other requests
+				.anyRequest().authenticated()
 				// this disables session creation on Spring Security
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -78,5 +89,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }

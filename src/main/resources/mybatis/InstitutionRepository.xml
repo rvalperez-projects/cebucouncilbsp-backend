@@ -59,6 +59,21 @@
       MINST.AREA = #{area,jdbcType=VARCHAR}
   </select>
 
+  <select id="findByDistrict" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
+    SELECT
+      MINST.INSTITUTION_ID,
+      MINST.INSTITUTION_NAME,
+      MINST.ADDRESS,
+      MINST.CONTACT_NUMBER,
+      MINST.DISTRICT,
+      MINST.AREA,
+      MINST.CATEGORY_CODE
+    FROM
+      M_INSTITUTION MINST
+    WHERE
+      MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+  </select>
+
   <insert id="insertInstitution" parameterType="InstitutionEntity">
     INSERT INTO
       M_USER

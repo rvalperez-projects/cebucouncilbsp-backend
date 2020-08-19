@@ -41,6 +41,9 @@
       TMEMB.UPDATED_DATETIME
     FROM
       T_MEMBER_DETAILS TMEMB
+    ORDER BY
+      TMEMB.POSITION_CODE ASC,
+	  TMEMB.MEMBER_ID ASC
   </select>
 
   <select id="findByFormId" parameterType="map" resultMap="MemberDetailsResultMap" resultType="MemberDetailsEntity">
@@ -65,6 +68,9 @@
       T_MEMBER_DETAILS TMEMB
     WHERE
       TMEMB.FORM_ID = #{formId,jdbcType=INTEGER}
+    ORDER BY
+      TMEMB.POSITION_CODE ASC,
+	  TMEMB.MEMBER_ID ASC
   </select>
 
   <insert id="insertMemberDetails" parameterType="MemberDetailsEntity">

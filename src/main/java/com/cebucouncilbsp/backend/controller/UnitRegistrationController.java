@@ -62,8 +62,8 @@ public class UnitRegistrationController {
 	}
 
 	@PostMapping(path = "/search")
-	@AdminAndCouncilOnly
-	public List<UnitRegistrationSearchResultEntity> searchUsers(@RequestBody @Valid SearchRequestForm requestForm,
+	@AllUsers
+	public List<UnitRegistrationSearchResultEntity> searchForms(@RequestBody @Valid SearchRequestForm requestForm,
 			Errors errors) {
 		if (errors.hasErrors()) {
 			throw new BusinessFailureException(errors);

@@ -2,7 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cebucouncilbsp.backend.repository.AreaRepository">
 
-  <select id="findAllAreas" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <resultMap id="AreaEntityResultMap" type="AreaEntity">
+    <id column="AREA_CODE" jdbcType="VARCHAR" property="areaCode"/>
+    <result column="DISTRICT_NAME" jdbcType="VARCHAR" property="districtName"/>
+    <result column="CHAIRMAN_NAME" jdbcType="VARCHAR" property="chairmanName"/>
+    <result column="CHAIRMAN_CONTACT_NO" jdbcType="VARCHAR" property="chairmanContactNo"/>
+    <result column="COMMISSIONER_NAME" jdbcType="VARCHAR" property="commissionerName"/>
+    <result column="COMMISSIONER_CONTACT_NO" jdbcType="VARCHAR" property="commissionerContactNo"/>
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks"/>
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDateTime"/>
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+    <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
+  </resultMap>
+
+  <select id="findAllAreas" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">
     SELECT
       AREA_CODE,
       DISTRICT_NAME,
@@ -17,9 +31,26 @@
       UPDATED_DATETIME
     FROM
       M_AREA
+    WHERE
+      VALID_FLAG = true
+    ORDER BY
+      AREA_CODE ASC
   </select>
 
-  <select id="findByArea" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <select id="findDistinctAreas" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">
+    SELECT
+      AREA_CODE
+    FROM
+      M_AREA
+    WHERE
+      VALID_FLAG = true
+    GROUP BY
+      AREA_CODE
+    ORDER BY
+      AREA_CODE ASC
+  </select>
+
+  <select id="findByArea" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">
     SELECT
       AREA_CODE,
       DISTRICT_NAME,
@@ -37,9 +68,11 @@
     WHERE
       AREA_CODE = #{area,jdbcType=VARCHAR}
       AND VALID_FLAG = true
+    ORDER BY
+      AREA_CODE ASC
   </select>
 
-  <select id="findByDistrict" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <select id="findByDistrict" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">
     SELECT
       AREA_CODE,
       DISTRICT_NAME,
@@ -58,9 +91,11 @@
     WHERE
       DISTRICT_NAME = #{district,jdbcType=VARCHAR}
       AND VALID_FLAG = true
+    ORDER BY
+      AREA_CODE ASC
   </select>
 
-  <select id="findByAreaAndDistrict" parameterType="map" resultType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <select id="findByAreaAndDistrict" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">
     SELECT
       AREA_CODE,
       DISTRICT_NAME,
@@ -80,9 +115,11 @@
       AREA_CODE = #{area,jdbcType=VARCHAR}
       AND DISTRICT_NAME = #{district,jdbcType=VARCHAR}
       AND VALID_FLAG = true
+    ORDER BY
+      AREA_CODE ASC
   </select>
 
-  <insert id="insertArea" parameterType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <insert id="insertArea" parameterType="AreaEntity">
     INSERT INTO
       M_AREA
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -115,7 +152,7 @@
     </trim>
   </insert>
 
-  <update id="updateAreaByAreaAndDistrict" parameterType="com.cebucouncilbsp.backend.entity.AreaEntity">
+  <update id="updateAreaByAreaAndDistrict" parameterType="AreaEntity">
     UPDATE
       M_AREA
     <set>

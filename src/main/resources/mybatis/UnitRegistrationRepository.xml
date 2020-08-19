@@ -5,8 +5,11 @@
   <resultMap id="UnitRegistrationResultMap" type="UnitRegistrationEntity">
     <id column="FORM_ID" jdbcType="INTEGER" property="formId"/>
     <result column="INSTITUTION_ID" jdbcType="INTEGER" property="institutionId"/>
+    <result column="INSTITUTION_NAME" jdbcType="VARCHAR" property="institutionName"/>
+    <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
     <result column="UNIT_NUMBER" jdbcType="VARCHAR" property="unitNumber"/>
     <result column="UNIT_REGISTRATION_NO" jdbcType="VARCHAR" property="unitRegistrationNo"/>
+    <result column="CHARTER_FLAG" jdbcType="BOOLEAN" property="charterFlag"/>
     <result column="SECTION_CODE" jdbcType="VARCHAR" property="sectionCode"/>
     <result column="STATUS_CODE" jdbcType="VARCHAR" property="statusCode"/>
     <result column="DATE_APPLIED" jdbcType="TIMESTAMP" property="dateApplied"/>
@@ -17,7 +20,7 @@
     <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDateTime"/>
     <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
     <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
-    <collection property="institutionalCommitteeList" ofType="ISComDetailsEntity">
+    <collection property="iscomMembersList" ofType="ISComDetailsEntity">
       <result column="ISCOM_ID" jdbcType="INTEGER" property="iSComId"/>
       <result column="FORM_ID" jdbcType="INTEGER" property="formId"/>
       <result column="POSITION_CODE" jdbcType="VARCHAR" property="positionCode"/>
@@ -35,7 +38,7 @@
       <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
       <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
     </collection>
-    <collection property="patrolMembersList" ofType="MemberDetailsEntity">
+    <collection property="unitMembersList" ofType="MemberDetailsEntity">
       <result column="MEMBER_ID" jdbcType="INTEGER" property="memberId"/>
       <result column="FORM_ID" jdbcType="INTEGER" property="formId"/>
       <result column="POSITION_CODE" jdbcType="VARCHAR" property="positionCode"/>
@@ -69,8 +72,13 @@
     SELECT
       TUR.FORM_ID,
       TUR.INSTITUTION_ID,
+      ( SELECT INSTITUTION_NAME FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS INSTITUTION_NAME,
+      ( SELECT DISTRICT FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS DISTRICT,
       TUR.UNIT_NUMBER,
       TUR.UNIT_REGISTRATION_NO,
+      TUR.CHARTER_FLAG,
       TUR.SECTION_CODE,
       TUR.STATUS_CODE,
       TUR.DATE_APPLIED,
@@ -89,8 +97,13 @@
     SELECT
       TUR.FORM_ID,
       TUR.INSTITUTION_ID,
+      ( SELECT INSTITUTION_NAME FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS INSTITUTION_NAME,
+      ( SELECT DISTRICT FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS DISTRICT,
       TUR.UNIT_NUMBER,
       TUR.UNIT_REGISTRATION_NO,
+      TUR.CHARTER_FLAG,
       TUR.SECTION_CODE,
       TUR.STATUS_CODE,
       TUR.DATE_APPLIED,
@@ -164,6 +177,7 @@
         INSTITUTION_ID,
         UNIT_NUMBER,
         UNIT_REGISTRATION_NO,
+        CHARTER_FLAG,
         SECTION_CODE,
         STATUS_CODE,
         DATE_APPLIED,
@@ -180,6 +194,7 @@
         #{unitNumber,jdbcType=VARCHAR},
         #{unitRegistrationNo,jdbcType=VARCHAR},
         #{sectionCode,jdbcType=VARCHAR},
+        #{charterFlag,jdbcType=BOOLEAN},
         #{statusCode,jdbcType=VARCHAR},
         #{dateApplied,jdbcType=TIMESTAMP},
         #{officialReceiptNo,jdbcType=VARCHAR},
@@ -293,6 +308,7 @@
       UNIT_NUMBER = #{unitNumber,jdbcType=VARCHAR},
       UNIT_REGISTRATION_NO = #{unitRegistrationNo,jdbcType=VARCHAR},
       SECTION_CODE = #{sectionCode,jdbcType=VARCHAR},
+      CHARTER_FLAG = #{charterFlag,jdbcType=BOOLEAN},
       STATUS_CODE = #{statusCode,jdbcType=VARCHAR},
       DATE_APPLIED = #{dateApplied,jdbcType=TIMESTAMP},
       OFFICIAL_RECEIPT_NO = #{officialReceiptNo,jdbcType=VARCHAR},

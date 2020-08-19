@@ -41,6 +41,9 @@
       TISC.UPDATED_DATETIME
     FROM
       T_ISCOM_DETAILS TISC
+    ORDER BY
+      TISC.POSITION_CODE ASC,
+	  TISC.ISCOM_ID ASC
   </select>
 
   <select id="findByFormId" parameterType="map" resultMap="ISComDetailsResultMap" resultType="ISComDetailsEntity">
@@ -65,6 +68,9 @@
       T_ISCOM_DETAILS TISC
     WHERE
       TISC.FORM_ID = #{formId,jdbcType=INTEGER}
+    ORDER BY
+      TISC.POSITION_CODE ASC,
+	  TISC.ISCOM_ID ASC
   </select>
 
   <insert id="insertISComDetails" parameterType="ISComDetailsEntity">

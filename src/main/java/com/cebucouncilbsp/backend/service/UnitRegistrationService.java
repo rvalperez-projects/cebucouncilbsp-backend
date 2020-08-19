@@ -37,6 +37,7 @@ import com.cebucouncilbsp.backend.requestdto.UnitRegistrationMemberRequestForm;
  *
  */
 @Service
+@Transactional
 public class UnitRegistrationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnitRegistrationService.class);
 
@@ -79,8 +80,8 @@ public class UnitRegistrationService {
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
 		}
 
-		result.setInstitutionalCommitteeList(iSComDetailsRepository.findByFormId(formId));
-		result.setPatrolMembersList(memberDetailsRepository.findByFormId(formId));
+		result.setIscomMembersList(iSComDetailsRepository.findByFormId(formId));
+		result.setUnitMembersList(memberDetailsRepository.findByFormId(formId));
 
 		return result;
 	}
@@ -120,9 +121,10 @@ public class UnitRegistrationService {
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();
+		String name = requestForm.getName() == null ? null : requestForm.getName().toLowerCase();
 
 		return unitRegistrationRepository.findByAreaDistInstStatusName(area, district, institutionId,
-				requestForm.getStatusCode(), requestForm.getName().toLowerCase());
+				requestForm.getStatusCode(), name);
 	}
 
 	public UnitRegistrationEntity updateStatus(Integer formId, String statusCode, AuthorityEntity accessingUser) {
@@ -139,7 +141,6 @@ public class UnitRegistrationService {
 		return entity;
 	}
 
-	@Transactional
 	public UnitRegistrationEntity updateForm(UnitRegistrationFormRequestForm requestForm,
 			AuthorityEntity accessingUser) {
 		if (null == requestForm.getFormId()) {
@@ -155,8 +156,8 @@ public class UnitRegistrationService {
 
 		// Update unitRegistrationForm
 		unitRegistrationRepository.updateUnitRegistrationEntityForm(unitRegistrationForm);
-		iSComDetailsRepository.updateISComDetails(unitRegistrationForm.getInstitutionalCommitteeList());
-		memberDetailsRepository.updateMemberDetails(unitRegistrationForm.getPatrolMembersList());
+		iSComDetailsRepository.updateISComDetails(unitRegistrationForm.getIscomMembersList());
+		memberDetailsRepository.updateMemberDetails(unitRegistrationForm.getUnitMembersList());
 
 		return unitRegistrationForm;
 	}
@@ -172,6 +173,7 @@ public class UnitRegistrationService {
 		unitRegistrationForm.setInstitutionId(requestForm.getInstitutionId());
 		unitRegistrationForm.setUnitRegistrationNo(requestForm.getUnitRegistrationNo());
 		unitRegistrationForm.setUnitNumber(requestForm.getUnitNumber());
+		unitRegistrationForm.setCharterFlag(requestForm.getCharterFlag());
 		unitRegistrationForm.setSectionCode(requestForm.getSectionCode());
 		unitRegistrationForm.setStatusCode(requestForm.getStatusCode());
 		unitRegistrationForm.setOfficialReceiptDate(requestForm.getOfficialReceiptDate());
@@ -213,7 +215,7 @@ public class UnitRegistrationService {
 			entity.setUpdatedDateTime(now);
 			institutionalCommitteeList.add(entity);
 		}
-		unitRegistrationForm.setInstitutionalCommitteeList(institutionalCommitteeList);
+		unitRegistrationForm.setIscomMembersList(institutionalCommitteeList);
 
 		List<MemberDetailsEntity> patrolMembersList = new ArrayList<>();
 		for (UnitRegistrationMemberRequestForm member : requestForm.getPatrolMembersList()) {
@@ -239,6 +241,6 @@ public class UnitRegistrationService {
 			entity.setUpdatedDateTime(now);
 			patrolMembersList.add(entity);
 		}
-		unitRegistrationForm.setPatrolMembersList(patrolMembersList);
+		unitRegistrationForm.setUnitMembersList(patrolMembersList);
 	}
 }

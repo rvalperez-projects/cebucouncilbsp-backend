@@ -27,6 +27,8 @@ public class UnitRegistrationFormRequestForm {
 	@Size(max = 2)
 	private String sectionCode;
 	@NotNull
+	private Boolean charterFlag;
+	@NotNull
 	@Size(max = 2)
 	private String statusCode;
 	@NotNull
@@ -62,6 +64,14 @@ public class UnitRegistrationFormRequestForm {
 
 	public void setUnitNumber(String unitNumber) {
 		this.unitNumber = unitNumber;
+	}
+
+	public Boolean getCharterFlag() {
+		return charterFlag;
+	}
+
+	public void setCharterFlag(Boolean charterFlag) {
+		this.charterFlag = charterFlag;
 	}
 
 	public String getSectionCode() {

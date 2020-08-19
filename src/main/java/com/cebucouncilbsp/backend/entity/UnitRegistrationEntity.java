@@ -15,8 +15,11 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	private Integer formId;
 	private Integer institutionId;
+	private String institutionName;
+	private String district;
 	private String unitNumber;
 	private String unitRegistrationNo;
+	private boolean charterFlag;
 	private String sectionCode;
 	private String statusCode;
 	private LocalDateTime dateApplied;
@@ -24,8 +27,8 @@ public class UnitRegistrationEntity extends BaseEntity {
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
 
-	private List<ISComDetailsEntity> institutionalCommitteeList;
-	private List<MemberDetailsEntity> patrolMembersList;
+	private List<ISComDetailsEntity> iSComMembersList;
+	private List<MemberDetailsEntity> unitMembersList;
 
 	public Integer getFormId() {
 		return formId;
@@ -43,6 +46,22 @@ public class UnitRegistrationEntity extends BaseEntity {
 		this.institutionId = institutionId;
 	}
 
+	public String getInstitutionName() {
+		return institutionName;
+	}
+
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
 	public String getUnitNumber() {
 		return unitNumber;
 	}
@@ -57,6 +76,14 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setUnitRegistrationNo(String unitRegistrationNo) {
 		this.unitRegistrationNo = unitRegistrationNo;
+	}
+
+	public boolean getCharterFlag() {
+		return charterFlag;
+	}
+
+	public void setCharterFlag(boolean charterFlag) {
+		this.charterFlag = charterFlag;
 	}
 
 	public String getSectionCode() {
@@ -107,19 +134,19 @@ public class UnitRegistrationEntity extends BaseEntity {
 		this.expirationDate = expirationDate;
 	}
 
-	public List<ISComDetailsEntity> getInstitutionalCommitteeList() {
-		return institutionalCommitteeList;
+	public List<ISComDetailsEntity> getIscomMembersList() {
+		return iSComMembersList;
 	}
 
-	public void setInstitutionalCommitteeList(List<ISComDetailsEntity> institutionalCommitteeList) {
-		this.institutionalCommitteeList = institutionalCommitteeList;
+	public void setIscomMembersList(List<ISComDetailsEntity> iSComMembersList) {
+		this.iSComMembersList = iSComMembersList;
 	}
 
-	public List<MemberDetailsEntity> getPatrolMembersList() {
-		return patrolMembersList;
+	public List<MemberDetailsEntity> getUnitMembersList() {
+		return unitMembersList;
 	}
 
-	public void setPatrolMembersList(List<MemberDetailsEntity> patrolMembersList) {
-		this.patrolMembersList = patrolMembersList;
+	public void setUnitMembersList(List<MemberDetailsEntity> unitMembersList) {
+		this.unitMembersList = unitMembersList;
 	}
 }

@@ -3,8 +3,6 @@
  */
 package com.cebucouncilbsp.backend.requestdto;
 
-import javax.validation.constraints.NotNull;
-
 import com.cebucouncilbsp.backend.constant.FormStatusCode;
 
 /**
@@ -16,8 +14,7 @@ public class SearchRequestForm {
 	private String area;
 	private String district;
 	private Integer institutionId;
-	@NotNull
-	private String name;
+	private String name = "";
 	private String statusCode = FormStatusCode.SUBMITTED.getCode();
 
 	public String getArea() {

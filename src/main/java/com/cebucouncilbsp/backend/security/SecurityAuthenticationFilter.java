@@ -45,12 +45,12 @@ public class SecurityAuthenticationFilter extends OncePerRequestFilter {
 		String username = null;
 		String jwtToken = HttpRequestUtils.getAuthToken(request);
 		try {
-			username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-		} catch (IllegalArgumentException e) {
 			if (!request.getRequestURI().contains("auth")) {
-				LOGGER.error("Unable to get JWT Token");
-				throw new AccessForbiddenException();
+				username = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			}
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Unable to get JWT Token");
+			throw new AccessForbiddenException();
 		} catch (ExpiredJwtException e) {
 			LOGGER.error("JWT Token has expired");
 			throw new AccessForbiddenException();

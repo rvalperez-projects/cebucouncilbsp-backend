@@ -130,9 +130,9 @@ public class UserService {
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();
+		String name = requestForm.getName() == null ? null : requestForm.getName().toLowerCase();
 
-		return userRepository.findByAreaDistrictInstitutionName(area, district, institutionId,
-				requestForm.getName().toLowerCase());
+		return userRepository.findByAreaDistrictInstitutionName(area, district, institutionId, name);
 	}
 
 }
