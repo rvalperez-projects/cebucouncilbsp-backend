@@ -192,7 +192,7 @@ public class UnitRegistrationService {
 		unitRegistrationForm.setUpdatedDateTime(now);
 
 		List<ISComDetailsEntity> institutionalCommitteeList = new ArrayList<>();
-		for (UnitRegistrationISComRequestForm iSCom : requestForm.getInstitutionalCommitteeList()) {
+		for (UnitRegistrationISComRequestForm iSCom : requestForm.getIscomMembersList()) {
 			ISComDetailsEntity entity = new ISComDetailsEntity();
 			entity.setFormId(requestForm.getFormId());
 			entity.setISComId(iSCom.getCommitteeMemberId());
@@ -218,7 +218,7 @@ public class UnitRegistrationService {
 		unitRegistrationForm.setIscomMembersList(institutionalCommitteeList);
 
 		List<MemberDetailsEntity> patrolMembersList = new ArrayList<>();
-		for (UnitRegistrationMemberRequestForm member : requestForm.getPatrolMembersList()) {
+		for (UnitRegistrationMemberRequestForm member : requestForm.getUnitMembersList()) {
 			MemberDetailsEntity entity = new MemberDetailsEntity();
 			entity.setFormId(requestForm.getFormId());
 			entity.setMemberId(member.getMemberId());

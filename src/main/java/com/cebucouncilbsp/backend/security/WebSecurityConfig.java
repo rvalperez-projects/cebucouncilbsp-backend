@@ -68,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/all").hasAuthority(ADMIN)
 				// Institution api
 				.antMatchers("/institution/all").hasAuthority(ADMIN).antMatchers("/institution/{\\d}}").permitAll()
+				.antMatchers("/institution/unitNumbers/{\\d}}").permitAll()
 				// Area api
 				.antMatchers("/area/all").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/districts/institutions")
 				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/{\\w}}").hasAnyAuthority(COUNCIL, ADMIN)

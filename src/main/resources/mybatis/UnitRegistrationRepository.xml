@@ -193,8 +193,8 @@
         #{institutionId,jdbcType=INTEGER},
         #{unitNumber,jdbcType=VARCHAR},
         #{unitRegistrationNo,jdbcType=VARCHAR},
-        #{sectionCode,jdbcType=VARCHAR},
         #{charterFlag,jdbcType=BOOLEAN},
+        #{sectionCode,jdbcType=VARCHAR},
         #{statusCode,jdbcType=VARCHAR},
         #{dateApplied,jdbcType=TIMESTAMP},
         #{officialReceiptNo,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
         UPDATED_BY,
         UPDATED_DATETIME
       </trim>
-      <foreach item="committee" collection="institutionalCommitteeList" open="values" separator="," close="">
+      <foreach item="committee" collection="iSComMembersList" open="values" separator="," close="">
         <trim prefix="(" suffix=")" suffixOverrides=",">
           (SELECT FORM_ID FROM INSERTED_FORM),
           #{committee.positionCode,jdbcType=VARCHAR},
@@ -267,7 +267,7 @@
       UPDATED_BY,
       UPDATED_DATETIME
     </trim>
-    <foreach item="member" collection="patrolMembersList" open="values" separator="," close="">
+    <foreach item="member" collection="unitMembersList" open="values" separator="," close="">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         (SELECT FORM_ID FROM INSERTED_FORM),
         #{member.positionCode,jdbcType=VARCHAR},

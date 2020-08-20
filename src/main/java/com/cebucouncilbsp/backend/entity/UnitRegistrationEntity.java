@@ -19,7 +19,7 @@ public class UnitRegistrationEntity extends BaseEntity {
 	private String district;
 	private String unitNumber;
 	private String unitRegistrationNo;
-	private boolean charterFlag;
+	private Boolean charterFlag;
 	private String sectionCode;
 	private String statusCode;
 	private LocalDateTime dateApplied;
@@ -78,11 +78,11 @@ public class UnitRegistrationEntity extends BaseEntity {
 		this.unitRegistrationNo = unitRegistrationNo;
 	}
 
-	public boolean getCharterFlag() {
+	public Boolean getCharterFlag() {
 		return charterFlag;
 	}
 
-	public void setCharterFlag(boolean charterFlag) {
+	public void setCharterFlag(Boolean charterFlag) {
 		this.charterFlag = charterFlag;
 	}
 

@@ -38,6 +38,10 @@ public class UnitRegistrationRequestFormValidator implements Validator {
 		// Unit Number
 		if (null != obj.getUnitNumber()) {
 			UnitNumberEntity unitNumberEntity = unitNumberRepository.findByUnitNumber(obj.getUnitNumber());
+			if (null == unitNumberEntity) {
+				errors.reject("backend.error.unitNumber.NotFound", new Object[] { obj.getUnitNumber() }, null);
+				return;
+			}
 
 			// Unit Number already used
 			if (unitNumberEntity.getLastUsedYear() == LocalDate.now().getYear()) {

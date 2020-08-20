@@ -23,5 +23,5 @@ public interface UnitNumberRepository {
 
 	UnitNumberEntity findByUnitNumber(String unitNumber);
 
-	List<UnitNumberEntity> findByInstitutionId(Integer institutionId);
+	List<UnitNumberEntity> findByInstitutionId(Integer institutionId, Integer currentYear);
 }

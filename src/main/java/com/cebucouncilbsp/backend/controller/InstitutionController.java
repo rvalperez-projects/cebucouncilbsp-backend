@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
 import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
+import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.service.InstitutionService;
 
 @RestController
@@ -30,5 +31,11 @@ public class InstitutionController {
 	@AllUsers
 	public InstitutionEntity getInstitutionId(@PathVariable Integer institutionId) {
 		return service.getIntitutionById(institutionId);
+	}
+
+	@GetMapping(path = "/unitNumbers/{institutionId}")
+	@AllUsers
+	public List<UnitNumberEntity> getInstitutionUnitNumbers(@PathVariable Integer institutionId) {
+		return service.getInstitutionUnitNumbers(institutionId);
 	}
 }

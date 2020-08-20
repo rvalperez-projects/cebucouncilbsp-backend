@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,10 +32,10 @@ public class UnitRegistrationFormRequestForm {
 	private String statusCode;
 	@NotNull
 	private Integer institutionId;
-	@NotEmpty
-	private List<@Valid UnitRegistrationISComRequestForm> institutionalCommitteeList;
-	@NotEmpty
-	private List<@Valid UnitRegistrationMemberRequestForm> patrolMembersList;
+	@NotNull
+	private List<@Valid UnitRegistrationISComRequestForm> iscomMembersList;
+	@NotNull
+	private List<@Valid UnitRegistrationMemberRequestForm> unitMembersList;
 	private String officialReceiptNo;
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
@@ -98,20 +97,20 @@ public class UnitRegistrationFormRequestForm {
 		this.institutionId = institutionId;
 	}
 
-	public List<UnitRegistrationISComRequestForm> getInstitutionalCommitteeList() {
-		return institutionalCommitteeList;
+	public List<UnitRegistrationISComRequestForm> getIscomMembersList() {
+		return iscomMembersList;
 	}
 
-	public void setInstitutionalCommitteeList(List<UnitRegistrationISComRequestForm> institutionalCommitteeList) {
-		this.institutionalCommitteeList = institutionalCommitteeList;
+	public void setIscomMembersList(List<UnitRegistrationISComRequestForm> iscomMembersList) {
+		this.iscomMembersList = iscomMembersList;
 	}
 
-	public List<UnitRegistrationMemberRequestForm> getPatrolMembersList() {
-		return patrolMembersList;
+	public List<UnitRegistrationMemberRequestForm> getUnitMembersList() {
+		return unitMembersList;
 	}
 
-	public void setPatrolMembersList(List<UnitRegistrationMemberRequestForm> patrolMembersList) {
-		this.patrolMembersList = patrolMembersList;
+	public void setUnitMembersList(List<UnitRegistrationMemberRequestForm> unitMembersList) {
+		this.unitMembersList = unitMembersList;
 	}
 
 	public String getOfficialReceiptNo() {
