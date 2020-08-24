@@ -11,7 +11,7 @@
 	<groupId>com.cebucouncilbsp</groupId>
 	<artifactId>cebucouncilbsp-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>cebucouncilbsp-backend</name>
 	<description>Web services for Cebu Council BSP</description>
 
