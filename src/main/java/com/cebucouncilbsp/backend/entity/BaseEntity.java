@@ -13,30 +13,37 @@ public class BaseEntity {
 
 	private String createdBy;
 	private LocalDateTime createdDateTime;
-	private String udpatedBy;
+	private String updatedBy;
 	private LocalDateTime updatedDateTime;
 
 	public String getCreatedBy() {
 		return createdBy;
 	}
+
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
+
 	public LocalDateTime getCreatedDateTime() {
 		return createdDateTime;
 	}
+
 	public void setCreatedDateTime(LocalDateTime createdDateTime) {
 		this.createdDateTime = createdDateTime;
 	}
-	public String getUdpatedBy() {
-		return udpatedBy;
+
+	public String getUpdatedBy() {
+		return updatedBy;
 	}
-	public void setUdpatedBy(String udpatedBy) {
-		this.udpatedBy = udpatedBy;
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
+
 	public LocalDateTime getUpdatedDateTime() {
 		return updatedDateTime;
 	}
+
 	public void setUpdatedDateTime(LocalDateTime updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
 	}

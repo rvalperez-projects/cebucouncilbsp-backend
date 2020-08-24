@@ -117,4 +117,13 @@ public class MemberDetailsEntity extends BaseEntity {
 	public void setReligion(String religion) {
 		this.religion = religion;
 	}
+
+	@Override
+	public String toString() {
+		return "MemberDetailsEntity [memberId=" + memberId + ", formId=" + formId + ", positionCode=" + positionCode
+				+ ", surname=" + surname + ", givenName=" + givenName + ", middleInitial=" + middleInitial
+				+ ", registrationStatusCode=" + registrationStatusCode + ", age=" + age + ", membershipCertNo="
+				+ membershipCertNo + ", highestBadgeCode=" + highestBadgeCode + ", tenure=" + tenure + ", religion="
+				+ religion + "]";
+	}
 }

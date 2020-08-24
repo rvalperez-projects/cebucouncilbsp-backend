@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cebucouncilbsp.backend.repository.UserRepository">
+
+  <resultMap id="UserResultMap" type="UserEntity">
+    <id column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    <result column="SURNAME" jdbcType="VARCHAR" property="surname"/>
+    <result column="GIVEN_NAME" jdbcType="VARCHAR" property="givenName"/>
+    <result column="MIDDLE_INITIAL" jdbcType="VARCHAR" property="middleInitial"/>
+    <result column="EMAIL_ADDRESS" jdbcType="VARCHAR" property="emailAddress"/>
+    <result column="MOBILE_NUMBER" jdbcType="VARCHAR" property="mobileNumber"/>
+    <result column="INSTITUTION_ID" jdbcType="INTEGER" property="institutionId"/>
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+    <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDateTime"/>
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+    <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
+  </resultMap>
+
+  <select id="findAllUsers" parameterType="map" resultType="UserEntity" resultMap="UserResultMap">
+    SELECT
+      MUSR.USER_ID,
+      MUSR.SURNAME,
+      MUSR.GIVEN_NAME,
+      MUSR.MIDDLE_INITIAL,
+      MUSR.EMAIL_ADDRESS,
+      MUSR.MOBILE_NUMBER,
+      MUSR.INSTITUTION_ID,
+      MUSR.CREATED_BY,
+      MUSR.CREATED_DATETIME,
+      MUSR.UPDATED_BY,
+      MUSR.UPDATED_DATETIME
+    FROM
+      M_USER MUSR
+  </select>
+
+  <select id="findByUserId" parameterType="map" resultType="UserEntity" resultMap="UserResultMap">
+    SELECT
+      MUSR.USER_ID,
+      MUSR.SURNAME,
+      MUSR.GIVEN_NAME,
+      MUSR.MIDDLE_INITIAL,
+      MUSR.EMAIL_ADDRESS,
+      MUSR.MOBILE_NUMBER,
+      MUSR.INSTITUTION_ID,
+      MUSR.CREATED_BY,
+      MUSR.CREATED_DATETIME,
+      MUSR.UPDATED_BY,
+      MUSR.UPDATED_DATETIME
+    FROM
+      M_USER MUSR
+    WHERE
+      MUSR.USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findByAreaDistrictInstitutionName" parameterType="map" resultType="UserEntity" resultMap="UserResultMap">
+    SELECT
+      MUSR.USER_ID,
+      MUSR.SURNAME,
+      MUSR.GIVEN_NAME,
+      MUSR.MIDDLE_INITIAL,
+      MUSR.EMAIL_ADDRESS,
+      MUSR.MOBILE_NUMBER,
+      MUSR.INSTITUTION_ID,
+      MUSR.CREATED_BY,
+      MUSR.CREATED_DATETIME,
+      MUSR.UPDATED_BY,
+      MUSR.UPDATED_DATETIME
+    FROM
+      M_USER MUSR
+    LEFT JOIN M_INSTITUTION MINST
+    ON
+      MUSR.INSTITUTION_ID = MINST.INSTITUTION_ID
+    WHERE
+      <if test="area != null">
+        MINST.AREA = #{area,jdbcType=VARCHAR} AND
+      </if>
+      <if test="district != null">
+        MINST.DISTRICT = #{district,jdbcType=VARCHAR} AND
+      </if>
+      <if test="institutionId != null">
+        MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER} AND
+      </if>
+      LOWER(MUSR.SURNAME || ' ' || MUSR.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
+  </select>
+
+  <insert id="insertUser" parameterType="UserEntity">
+    INSERT INTO
+      M_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      SURNAME,
+      GIVEN_NAME,
+      MIDDLE_INITIAL,
+      EMAIL_ADDRESS,
+      MOBILE_NUMBER,
+      USERNAME,
+      PASSWORD,
+      AUTHORITY_CODE,
+      INSTITUTION_ID,
+      CREATED_BY,
+      CREATED_DATETIME,
+      UPDATED_BY,
+      UPDATED_DATETIME
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{surname,jdbcType=VARCHAR},
+      #{givenName,jdbcType=VARCHAR},
+      #{middleInitial,jdbcType=VARCHAR},
+      #{emailAddress,jdbcType=VARCHAR},
+      #{mobileNumber,jdbcType=VARCHAR},
+      #{institutionId,jdbcType=INTEGER},
+      #{createdBy,jdbcType=VARCHAR},
+      #{createdDateTime,jdbcType=TIMESTAMP},
+      #{updatedBy,jdbcType=VARCHAR},
+      #{updatedDateTime,jdbcType=TIMESTAMP}
+    </trim>
+  </insert>
+
+  <update id="updateUser" parameterType="UserEntity">
+    UPDATE
+      M_USER
+    <set>
+      SURNAME = #{surname,jdbcType=VARCHAR},
+      GIVEN_NAME = #{givenName,jdbcType=VARCHAR},
+      MIDDLE_INITIAL = #{middleInitial,jdbcType=VARCHAR},
+      EMAIL_ADDRESS = #{emailAddress,jdbcType=VARCHAR},
+      MOBILE_NUMBER = #{mobileNumber,jdbcType=VARCHAR},
+      INSTITUTION_ID = #{institutionId,jdbcType=INTEGER},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATETIME = #{updatedDateTime,jdbcType=TIMESTAMP}
+    </set>
+    WHERE
+      USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

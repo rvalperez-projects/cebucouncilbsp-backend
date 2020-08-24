@@ -117,4 +117,13 @@ public class ISComDetailsEntity extends BaseEntity {
 	public void setReligion(String religion) {
 		this.religion = religion;
 	}
+
+	@Override
+	public String toString() {
+		return "ISComDetailsEntity [iSComId=" + iSComId + ", formId=" + formId + ", positionCode=" + positionCode
+				+ ", surname=" + surname + ", givenName=" + givenName + ", middleInitial=" + middleInitial
+				+ ", signature=" + signature + ", age=" + age + ", membershipCertNo=" + membershipCertNo
+				+ ", highestTrainingCode=" + highestTrainingCode + ", tenure=" + tenure + ", religion=" + religion
+				+ "]";
+	}
 }

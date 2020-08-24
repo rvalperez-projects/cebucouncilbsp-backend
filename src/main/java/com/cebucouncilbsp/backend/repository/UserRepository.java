@@ -5,7 +5,6 @@ package com.cebucouncilbsp.backend.repository;
 
 import java.util.List;
 
-import com.cebucouncilbsp.backend.entity.LoginResultEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 
 /**
@@ -22,7 +21,6 @@ public interface UserRepository {
 
 	UserEntity findByUserId(Integer userId);
 
-	LoginResultEntity findByUsernamePassword(String username, String password);
-
-	List<UserEntity> findByAreaInstitutionName(String area, Integer institutionId, String name);
+	List<UserEntity> findByAreaDistrictInstitutionName(String area, String district, Integer institutionId,
+			String name);
 }

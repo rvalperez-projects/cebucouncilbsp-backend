@@ -25,4 +25,6 @@ public interface InstitutionRepository {
 	InstitutionEntity findByInstitutionId(Integer institutionId);
 
 	List<InstitutionEntity> findByArea(String area);
+
+	List<InstitutionEntity> findByDistrict(String district);
 }

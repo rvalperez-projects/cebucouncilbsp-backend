@@ -19,7 +19,9 @@ public interface UnitNumberRepository {
 
 	List<UnitNumberEntity> findAllUnitNumbers();
 
+	List<UnitNumberEntity> findAvailableUnitNumbers(Integer currentYear, String sectionCode);
+
 	UnitNumberEntity findByUnitNumber(String unitNumber);
 
-	List<UnitNumberEntity> findByInstitutionId(Integer institutionId);
+	List<UnitNumberEntity> findByInstitutionId(Integer institutionId, Integer currentYear);
 }

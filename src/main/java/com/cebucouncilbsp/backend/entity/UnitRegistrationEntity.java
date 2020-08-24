@@ -5,6 +5,7 @@ package com.cebucouncilbsp.backend.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author reneir.val.t.perez
@@ -14,14 +15,20 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	private Integer formId;
 	private Integer institutionId;
+	private String institutionName;
+	private String district;
 	private String unitNumber;
 	private String unitRegistrationNo;
+	private Boolean charterFlag;
 	private String sectionCode;
 	private String statusCode;
 	private LocalDateTime dateApplied;
 	private String officialReceiptNo;
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
+
+	private List<ISComDetailsEntity> iSComMembersList;
+	private List<MemberDetailsEntity> unitMembersList;
 
 	public Integer getFormId() {
 		return formId;
@@ -39,6 +46,22 @@ public class UnitRegistrationEntity extends BaseEntity {
 		this.institutionId = institutionId;
 	}
 
+	public String getInstitutionName() {
+		return institutionName;
+	}
+
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
 	public String getUnitNumber() {
 		return unitNumber;
 	}
@@ -53,6 +76,14 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setUnitRegistrationNo(String unitRegistrationNo) {
 		this.unitRegistrationNo = unitRegistrationNo;
+	}
+
+	public Boolean getCharterFlag() {
+		return charterFlag;
+	}
+
+	public void setCharterFlag(Boolean charterFlag) {
+		this.charterFlag = charterFlag;
 	}
 
 	public String getSectionCode() {
@@ -101,5 +132,21 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setExpirationDate(LocalDate expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public List<ISComDetailsEntity> getIscomMembersList() {
+		return iSComMembersList;
+	}
+
+	public void setIscomMembersList(List<ISComDetailsEntity> iSComMembersList) {
+		this.iSComMembersList = iSComMembersList;
+	}
+
+	public List<MemberDetailsEntity> getUnitMembersList() {
+		return unitMembersList;
+	}
+
+	public void setUnitMembersList(List<MemberDetailsEntity> unitMembersList) {
+		this.unitMembersList = unitMembersList;
 	}
 }

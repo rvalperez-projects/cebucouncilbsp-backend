@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cebucouncilbsp.backend.repository.MemberDetailsRepository">
+
+  <resultMap id="MemberDetailsResultMap" type="MemberDetailsEntity">
+      <result column="MEMBER_ID" jdbcType="INTEGER" property="memberId"/>
+      <result column="FORM_ID" jdbcType="INTEGER" property="formId"/>
+      <result column="POSITION_CODE" jdbcType="VARCHAR" property="positionCode"/>
+      <result column="SURNAME" jdbcType="VARCHAR" property="surname"/>
+      <result column="GIVEN_NAME" jdbcType="VARCHAR" property="givenName"/>
+      <result column="MIDDLE_INITIAL" jdbcType="VARCHAR" property="middleInitial"/>
+      <result column="REGISTRATION_STATUS_CODE" jdbcType="VARCHAR" property="registrationStatusCode"/>
+      <result column="AGE" jdbcType="INTEGER" property="age"/>
+      <result column="MEMBERSHIP_CERT_NO" jdbcType="VARCHAR" property="membershipCertNo"/>
+      <result column="HIGHEST_BADGE_CODE" jdbcType="VARCHAR" property="highestBadgeCode"/>
+      <result column="TENURE" jdbcType="INTEGER" property="tenure"/>
+      <result column="RELIGION" jdbcType="VARCHAR" property="religion"/>
+      <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+      <result column="CREATED_DATETIME" jdbcType="TIMESTAMP" property="createdDateTime"/>
+      <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+      <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
+  </resultMap>
+
+  <select id="findAllUnitMembers" parameterType="map" resultMap="MemberDetailsResultMap" resultType="MemberDetailsEntity">
+    SELECT
+      TMEMB.MEMBER_ID,
+      TMEMB.FORM_ID,
+      TMEMB.POSITION_CODE,
+      TMEMB.SURNAME,
+      TMEMB.GIVEN_NAME,
+      TMEMB.MIDDLE_INITIAL,
+      TMEMB.REGISTRATION_STATUS_CODE,
+      TMEMB.AGE,
+      TMEMB.MEMBERSHIP_CERT_NO,
+      TMEMB.HIGHEST_BADGE_CODE,
+      TMEMB.TENURE,
+      TMEMB.RELIGION,
+      TMEMB.CREATED_BY,
+      TMEMB.CREATED_DATETIME,
+      TMEMB.UPDATED_BY,
+      TMEMB.UPDATED_DATETIME
+    FROM
+      T_MEMBER_DETAILS TMEMB
+    ORDER BY
+      TMEMB.POSITION_CODE ASC,
+	  TMEMB.MEMBER_ID ASC
+  </select>
+
+  <select id="findByFormId" parameterType="map" resultMap="MemberDetailsResultMap" resultType="MemberDetailsEntity">
+    SELECT
+      TMEMB.MEMBER_ID,
+      TMEMB.FORM_ID,
+      TMEMB.POSITION_CODE,
+      TMEMB.SURNAME,
+      TMEMB.GIVEN_NAME,
+      TMEMB.MIDDLE_INITIAL,
+      TMEMB.REGISTRATION_STATUS_CODE,
+      TMEMB.AGE,
+      TMEMB.MEMBERSHIP_CERT_NO,
+      TMEMB.HIGHEST_BADGE_CODE,
+      TMEMB.TENURE,
+      TMEMB.RELIGION,
+      TMEMB.CREATED_BY,
+      TMEMB.CREATED_DATETIME,
+      TMEMB.UPDATED_BY,
+      TMEMB.UPDATED_DATETIME
+    FROM
+      T_MEMBER_DETAILS TMEMB
+    WHERE
+      TMEMB.FORM_ID = #{formId,jdbcType=INTEGER}
+    ORDER BY
+      TMEMB.POSITION_CODE ASC,
+	  TMEMB.MEMBER_ID ASC
+  </select>
+
+  <insert id="insertMemberDetails" parameterType="MemberDetailsEntity">
+    INSERT INTO
+      T_MEMBER_DETAILS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      MEMBER_ID,
+      FORM_ID,
+      POSITION_CODE,
+      SURNAME,
+      GIVEN_NAME,
+      MIDDLE_INITIAL,
+      REGISTRATION_STATUS_CODE,
+      AGE,
+      MEMBERSHIP_CERT_NO,
+      HIGHEST_BADGE_CODE,
+      TENURE,
+      RELIGION
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{memberId,jdbcType=INTEGER},
+      #{formId,jdbcType=INTEGER},
+      #{positionCode,jdbcType=VARCHAR},
+      #{surname,jdbcType=VARCHAR},
+      #{givenName,jdbcType=VARCHAR},
+      #{middleInitial,jdbcType=VARCHAR},
+      #{registrationStatusCode,jdbcType=VARCHAR},
+      #{age,jdbcType=INTEGER},
+      #{membershipCertNo,jdbcType=VARCHAR},
+      #{highestBadgeCode,jdbcType=VARCHAR},
+      #{tenure,jdbcType=INTEGER},
+      #{religion,jdbcType=VARCHAR},
+      #{createdBy,jdbcType=VARCHAR},
+      #{updatedBy,jdbcType=VARCHAR},
+      #{creationDateTime,jdbcType=TIMESTAMP},
+      #{updatedDateTime,jdbcType=TIMESTAMP}
+    </trim>
+  </insert>
+
+  <update id="updateMemberDetails" parameterType="MemberDetailsEntity">
+    <foreach collection="membersList" item="entity" index="index" separator=";">
+    UPDATE
+      T_MEMBER_DETAILS
+    <set>
+      POSITION_CODE = #{entity.positionCode,jdbcType=VARCHAR},
+      SURNAME = #{entity.surname,jdbcType=VARCHAR},
+      GIVEN_NAME = #{entity.givenName,jdbcType=VARCHAR},
+      MIDDLE_INITIAL = #{entity.middleInitial,jdbcType=VARCHAR},
+      REGISTRATION_STATUS_CODE = #{entity.registrationStatusCode,jdbcType=VARCHAR},
+      AGE = #{entity.age,jdbcType=INTEGER},
+      MEMBERSHIP_CERT_NO = #{entity.membershipCertNo,jdbcType=VARCHAR},
+      HIGHEST_BADGE_CODE = #{entity.highestBadgeCode,jdbcType=VARCHAR},
+      TENURE = #{entity.tenure,jdbcType=INTEGER},
+      RELIGION = #{entity.religion,jdbcType=VARCHAR},
+      UPDATED_BY = #{entity.updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATETIME = #{entity.updatedDateTime,jdbcType=TIMESTAMP}
+    </set>
+    WHERE
+      MEMBER_ID = #{entity.memberId,jdbcType=INTEGER}
+      AND FORM_ID = #{entity.formId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+</mapper>

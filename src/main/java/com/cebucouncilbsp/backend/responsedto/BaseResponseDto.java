@@ -3,40 +3,45 @@
  */
 package com.cebucouncilbsp.backend.responsedto;
 
-import java.math.BigInteger;
-
 /**
  * @author reneir.val.t.perez
  *
  */
 public class BaseResponseDto {
 
-	private BigInteger userId;
+	private Integer userId;
 	private String authorityCode;
-	private BigInteger institutionalId;
+	private Integer institutionId;
 	private String area;
 
-	public BigInteger getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(BigInteger userId) {
+
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
+
 	public String getAuthorityCode() {
 		return authorityCode;
 	}
+
 	public void setAuthorityCode(String authorityCode) {
 		this.authorityCode = authorityCode;
 	}
-	public BigInteger getInstitutionalId() {
-		return institutionalId;
+
+	public Integer getInstitutionId() {
+		return institutionId;
 	}
-	public void setInstitutionalId(BigInteger institutionalId) {
-		this.institutionalId = institutionalId;
+
+	public void setInstitutionId(Integer institutionId) {
+		this.institutionId = institutionId;
 	}
+
 	public String getArea() {
 		return area;
 	}
+
 	public void setArea(String area) {
 		this.area = area;
 	}

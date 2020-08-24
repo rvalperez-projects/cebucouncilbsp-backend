@@ -19,9 +19,11 @@ public interface AreaRepository {
 
 	List<AreaEntity> findAllAreas();
 
+	List<AreaEntity> findDistinctAreas();
+
 	List<AreaEntity> findByArea(String area);
 
-	AreaEntity findByDistrict(String district);
+	List<AreaEntity> findByDistrict(String district);
 
 	AreaEntity findByAreaAndDistrict(String area, String district);
 }
