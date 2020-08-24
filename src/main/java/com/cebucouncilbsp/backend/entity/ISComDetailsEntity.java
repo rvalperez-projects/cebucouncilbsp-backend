@@ -9,7 +9,7 @@ package com.cebucouncilbsp.backend.entity;
  */
 public class ISComDetailsEntity extends BaseEntity {
 
-	private Integer iSComId;
+	private Integer iscomId;
 	private Integer formId;
 	private String positionCode;
 	private String surname;
@@ -22,12 +22,12 @@ public class ISComDetailsEntity extends BaseEntity {
 	private Integer tenure;
 	private String religion;
 
-	public Integer getISComId() {
-		return iSComId;
+	public Integer getIscomId() {
+		return iscomId;
 	}
 
-	public void setISComId(Integer iSComId) {
-		this.iSComId = iSComId;
+	public void setIscomId(Integer iscomId) {
+		this.iscomId = iscomId;
 	}
 
 	public Integer getFormId() {
@@ -120,7 +120,7 @@ public class ISComDetailsEntity extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "ISComDetailsEntity [iSComId=" + iSComId + ", formId=" + formId + ", positionCode=" + positionCode
+		return "ISComDetailsEntity [iSComId=" + iscomId + ", formId=" + formId + ", positionCode=" + positionCode
 				+ ", surname=" + surname + ", givenName=" + givenName + ", middleInitial=" + middleInitial
 				+ ", signature=" + signature + ", age=" + age + ", membershipCertNo=" + membershipCertNo
 				+ ", highestTrainingCode=" + highestTrainingCode + ", tenure=" + tenure + ", religion=" + religion

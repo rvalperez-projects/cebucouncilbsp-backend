@@ -94,7 +94,7 @@ public class UnitRegistrationService {
 	public int submit(UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser) {
 		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 
-		if (null == requestForm.getUnitNumber()) {
+		if (null == requestForm.getUnitNumber() || requestForm.getUnitNumber().equals("New")) {
 
 			List<UnitNumberEntity> availableUnitNumbersList = unitNumberRepository
 					.findAvailableUnitNumbers(LocalDate.now().getYear(), requestForm.getSectionCode());
@@ -178,15 +178,12 @@ public class UnitRegistrationService {
 		unitRegistrationForm.setStatusCode(requestForm.getStatusCode());
 		unitRegistrationForm.setOfficialReceiptDate(requestForm.getOfficialReceiptDate());
 		unitRegistrationForm.setOfficialReceiptNo(requestForm.getOfficialReceiptNo());
+		unitRegistrationForm.setDateApplied(requestForm.getDateApplied());
+		unitRegistrationForm.setExpirationDate(requestForm.getExpirationDate());
 
 		if (methodCode.equals(MethodCode.INSERT)) {
-			unitRegistrationForm.setDateApplied(now);
-			unitRegistrationForm.setExpirationDate(now.toLocalDate().plusYears(1L));
 			unitRegistrationForm.setCreatedBy(accessingUser.getUsername());
 			unitRegistrationForm.setCreatedDateTime(now);
-		} else if (methodCode.equals(MethodCode.UPDATE)) {
-			unitRegistrationForm.setDateApplied(requestForm.getDateApplied());
-			unitRegistrationForm.setExpirationDate(requestForm.getExpirationDate());
 		}
 		unitRegistrationForm.setUpdatedBy(accessingUser.getUsername());
 		unitRegistrationForm.setUpdatedDateTime(now);
@@ -195,7 +192,7 @@ public class UnitRegistrationService {
 		for (UnitRegistrationISComRequestForm iSCom : requestForm.getIscomMembersList()) {
 			ISComDetailsEntity entity = new ISComDetailsEntity();
 			entity.setFormId(requestForm.getFormId());
-			entity.setISComId(iSCom.getCommitteeMemberId());
+			entity.setIscomId(iSCom.getIscomId());
 			entity.setPositionCode(iSCom.getPositionCode());
 			entity.setSurname(iSCom.getSurname());
 			entity.setGivenName(iSCom.getGivenName());

@@ -36,7 +36,7 @@ public class UnitRegistrationRequestFormValidator implements Validator {
 		UnitRegistrationFormRequestForm obj = (UnitRegistrationFormRequestForm) target;
 
 		// Unit Number
-		if (null != obj.getUnitNumber()) {
+		if (null != obj.getUnitNumber() && !obj.getUnitNumber().equals("New")) {
 			UnitNumberEntity unitNumberEntity = unitNumberRepository.findByUnitNumber(obj.getUnitNumber());
 			if (null == unitNumberEntity) {
 				errors.reject("backend.error.unitNumber.NotFound", new Object[] { obj.getUnitNumber() }, null);

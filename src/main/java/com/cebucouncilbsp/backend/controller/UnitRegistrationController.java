@@ -80,9 +80,8 @@ public class UnitRegistrationController {
 
 	@PutMapping(path = "/update")
 	@AdminAndCouncilOnly
-	public UnitRegistrationEntity updateForm(@RequestBody @Valid UnitRegistrationFormRequestForm requestForm,
-			Errors errors, @AccessingUser AuthorityEntity user) {
-		validator.validate(requestForm, errors);
+	public UnitRegistrationEntity updateForm(@RequestBody UnitRegistrationFormRequestForm requestForm, Errors errors,
+			@AccessingUser AuthorityEntity user) {
 		if (errors.hasErrors()) {
 			throw new BusinessFailureException(errors);
 		}
