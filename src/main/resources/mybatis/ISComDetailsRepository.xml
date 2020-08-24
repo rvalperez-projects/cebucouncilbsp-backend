@@ -3,7 +3,7 @@
 <mapper namespace="com.cebucouncilbsp.backend.repository.ISComDetailsRepository">
 
   <resultMap id="ISComDetailsResultMap" type="ISComDetailsEntity">
-      <result column="ISCOM_ID" jdbcType="INTEGER" property="iSComId"/>
+      <result column="ISCOM_ID" jdbcType="INTEGER" property="iscomId"/>
       <result column="FORM_ID" jdbcType="INTEGER" property="formId"/>
       <result column="POSITION_CODE" jdbcType="VARCHAR" property="positionCode"/>
       <result column="SURNAME" jdbcType="VARCHAR" property="surname"/>
@@ -91,7 +91,7 @@
       RELIGION
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{iSComId,jdbcType=INTEGER},
+      #{iscomId,jdbcType=INTEGER},
       #{formId,jdbcType=INTEGER},
       #{positionCode,jdbcType=VARCHAR},
       #{surname,jdbcType=VARCHAR},
@@ -129,7 +129,7 @@
       UPDATED_DATETIME = #{entity.updatedDateTime,jdbcType=TIMESTAMP}
     </set>
     WHERE
-      ISCOM_ID = #{entity.iSComId,jdbcType=INTEGER}
+      ISCOM_ID = #{entity.iscomId,jdbcType=INTEGER}
       AND FORM_ID = #{entity.formId,jdbcType=INTEGER}
     </foreach>
   </update>

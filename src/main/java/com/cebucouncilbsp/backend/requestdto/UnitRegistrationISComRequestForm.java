@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
  */
 public class UnitRegistrationISComRequestForm {
 
-	private Integer committeeMemberId;
+	private Integer iscomId;
 	private Integer formId;
 	@NotNull
 	private String positionCode;
@@ -31,12 +31,12 @@ public class UnitRegistrationISComRequestForm {
 	private Integer tenure;
 	private String religion;
 
-	public Integer getCommitteeMemberId() {
-		return committeeMemberId;
+	public Integer getIscomId() {
+		return iscomId;
 	}
 
-	public void setCommitteeMemberId(Integer committeeMemberId) {
-		this.committeeMemberId = committeeMemberId;
+	public void setIscomId(Integer setIscomId) {
+		this.iscomId = setIscomId;
 	}
 
 	public Integer getFormId() {

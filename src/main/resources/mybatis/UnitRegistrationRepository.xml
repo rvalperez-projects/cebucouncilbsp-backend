@@ -161,9 +161,9 @@
             OR LOWER(TISC.SURNAME || ' ' || TISC.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
           GROUP BY
 		    TUR.FORM_ID
-          ) AND
+          ) <!-- AND -->
       </if>
-      TUR.STATUS_CODE = #{statusCode,jdbcType=VARCHAR}
+      <!-- TUR.STATUS_CODE = #{statusCode,jdbcType=VARCHAR}  -->
     ORDER BY
       TUR.DATE_APPLIED DESC,
       TUR.STATUS_CODE ASC
