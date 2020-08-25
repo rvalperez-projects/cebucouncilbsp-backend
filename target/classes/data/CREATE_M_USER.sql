@@ -2,7 +2,7 @@
 
 -- DROP TABLE public.M_USER;
 
-CREATE TABLE public.M_USER
+CREATE TABLE public.m_user
 (
     USER_ID serial NOT NULL,
     SURNAME character varying(32) COLLATE pg_catalog.default NOT NULL,
@@ -22,6 +22,6 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.M_USER
-    OWNER to postgres;
+ALTER TABLE public.m_user
+    OWNER to rqquhbbxasusyc;
 

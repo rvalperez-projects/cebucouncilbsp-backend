@@ -24,4 +24,4 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.M_AREA
-    OWNER to postgres;
+    OWNER to rqquhbbxasusyc;

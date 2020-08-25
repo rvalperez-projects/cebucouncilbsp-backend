@@ -1,8 +1,8 @@
 -- Table: public.M_AUTH
 
--- DROP TABLE public.M_AUTH;
+-- DROP TABLE public.m_auth;
 
-CREATE TABLE public.M_AUTH
+CREATE TABLE public.m_auth
 (
     USER_ID integer NOT NULL,
     TOKEN character varying(64) COLLATE pg_catalog.default NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE public.M_AUTH
     UPDATED_DATETIME timestamp without time zone NOT NULL,
     CONSTRAINT M_AUTH_pkey PRIMARY KEY (USER_ID, USERNAME),
     CONSTRAINT M_USER_fkey
-      FOREIGN KEY (USER_ID) REFERENCES M_USER(USER_ID)
+      FOREIGN KEY (USER_ID) REFERENCES m_user(USER_ID)
       ON DELETE CASCADE
 )
 WITH (
@@ -23,8 +23,8 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.M_AUTH
-    OWNER to postgres;
+ALTER TABLE public.m_auth
+    OWNER to rqquhbbxasusyc;
 
-COMMENT ON COLUMN public.M_AUTH.ROLE_CODE IS '"00": General User; "01": Council; "99": Admin;';
+COMMENT ON COLUMN public.m_auth.ROLE_CODE IS '"00": General User; "01": Council; "99": Admin;';
 
