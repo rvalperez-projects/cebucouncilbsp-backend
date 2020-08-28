@@ -147,7 +147,7 @@
       #{validFlag,jdbcType=BOOLEAN},
       #{createdBy,jdbcType=VARCHAR},
       #{updatedBy,jdbcType=VARCHAR},
-      #{creationDateTime,jdbcType=TIMESTAMP},
+      #{createdDateTime,jdbcType=TIMESTAMP},
       #{updatedDateTime,jdbcType=TIMESTAMP}
     </trim>
   </insert>

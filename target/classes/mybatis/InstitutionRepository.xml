@@ -15,6 +15,10 @@
     <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
     <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
   </resultMap>
+  <resultMap id="AreaDistrictResultMap" type="AreaDistrictsEntity">
+    <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
+    <result column="AREA" jdbcType="VARCHAR" property="area"/>
+  </resultMap>
 
   <select id="findAllInstitutions" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
     SELECT
@@ -27,6 +31,16 @@
       MINST.CATEGORY_CODE
     FROM
       M_INSTITUTION MINST
+  </select>
+
+  <select id="findAllDistinctDistricts" parameterType="map" resultMap="AreaDistrictResultMap" resultType="AreaDistrictsEntity">
+    SELECT
+      DISTINCT DISTRICT,
+      AREA
+    FROM
+      M_INSTITUTION
+    ORDER BY
+      AREA ASC
   </select>
 
   <select id="findByInstitutionId" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
@@ -74,9 +88,9 @@
       MINST.DISTRICT = #{district,jdbcType=VARCHAR}
   </select>
 
-  <insert id="insertInstitution" parameterType="InstitutionEntity">
+  <select id="insertInstitution" parameterType="InstitutionEntity" resultType="Integer">
     INSERT INTO
-      M_USER
+      M_INSTITUTION
     <trim prefix="(" suffix=")" suffixOverrides=",">
       INSTITUTION_NAME,
       ADDRESS,
@@ -97,16 +111,16 @@
       #{area,jdbcType=VARCHAR},
       #{categoryCode,jdbcType=VARCHAR},
       #{createdBy,jdbcType=VARCHAR},
+      #{createdDateTime,jdbcType=TIMESTAMP},
       #{updatedBy,jdbcType=VARCHAR},
-      #{creationDateTime,jdbcType=TIMESTAMP},
       #{updatedDateTime,jdbcType=TIMESTAMP}
     </trim>
     RETURNING INSTITUTION_ID
-  </insert>
+  </select>
 
   <update id="updateInstitution" parameterType="InstitutionEntity">
     UPDATE
-      M_USER
+      M_INSTITUTION
     <set>
       INSTITUTION_NAME = #{institutionName,jdbcType=VARCHAR},
       ADDRESS = #{address,jdbcType=VARCHAR},

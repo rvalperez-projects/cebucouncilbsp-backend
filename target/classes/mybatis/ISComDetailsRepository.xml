@@ -105,7 +105,7 @@
       #{religion,jdbcType=VARCHAR},
       #{createdBy,jdbcType=VARCHAR},
       #{updatedBy,jdbcType=VARCHAR},
-      #{creationDateTime,jdbcType=TIMESTAMP},
+      #{createdDateTime,jdbcType=TIMESTAMP},
       #{updatedDateTime,jdbcType=TIMESTAMP}
     </trim>
   </insert>

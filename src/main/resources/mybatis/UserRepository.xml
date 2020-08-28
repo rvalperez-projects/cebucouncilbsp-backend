@@ -83,7 +83,7 @@
       LOWER(MUSR.SURNAME || ' ' || MUSR.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
   </select>
 
-  <insert id="insertUser" parameterType="UserEntity">
+  <select id="insertUser" parameterType="UserEntity" resultType="Integer">
     INSERT INTO
       M_USER
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -92,9 +92,6 @@
       MIDDLE_INITIAL,
       EMAIL_ADDRESS,
       MOBILE_NUMBER,
-      USERNAME,
-      PASSWORD,
-      AUTHORITY_CODE,
       INSTITUTION_ID,
       CREATED_BY,
       CREATED_DATETIME,
@@ -113,7 +110,8 @@
       #{updatedBy,jdbcType=VARCHAR},
       #{updatedDateTime,jdbcType=TIMESTAMP}
     </trim>
-  </insert>
+    RETURNING USER_ID
+  </select>
 
   <update id="updateUser" parameterType="UserEntity">
     UPDATE

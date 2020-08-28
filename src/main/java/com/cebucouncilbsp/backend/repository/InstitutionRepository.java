@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 
 /**
@@ -27,4 +28,6 @@ public interface InstitutionRepository {
 	List<InstitutionEntity> findByArea(String area);
 
 	List<InstitutionEntity> findByDistrict(String district);
+
+	List<AreaDistrictsEntity> findAllDistinctDistricts();
 }
