@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
@@ -48,6 +49,10 @@ public class InstitutionService {
 
 	public List<UnitNumberEntity> getInstitutionUnitNumbers(Integer institutionId) {
 		return unitNumberRepository.findByInstitutionId(institutionId, LocalDate.now().getYear());
+	}
+
+	public List<AreaDistrictsEntity> getAllDistinctDistricts() {
+		return institutionRepository.findAllDistinctDistricts();
 	}
 
 }

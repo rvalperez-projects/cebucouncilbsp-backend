@@ -106,7 +106,7 @@ public class UserService {
 		// Create Authority Rights for User
 		AuthorityEntity authority = new AuthorityEntity();
 		authority.setUserId(userId);
-		authority.setToken("token");
+		authority.setToken("dummy-token");
 		authority.setUsername(requestForm.getUsername());
 		authority.setPassword(new BCryptPasswordEncoder().encode(requestForm.getPassword()));
 		authority.setRoleCode(requestForm.getAuthorityCode());
