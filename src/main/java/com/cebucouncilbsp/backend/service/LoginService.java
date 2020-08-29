@@ -77,6 +77,9 @@ public class LoginService {
 		loginResult.setUserId(authorityResult.getUserId());
 		loginResult.setRoleCode(authorityResult.getRoleCode());
 
+		UserEntity user = userRepository.findByUserId(authorityResult.getUserId());
+		loginResult.setGivenName(user.getGivenName());
+
 		if (authorityResult.getRoleCode().equals(AuthorityCategoryCode.GENERAL_USER.getCode())) {
 			UserEntity userResult = userRepository.findByUserId(authorityResult.getUserId());
 			InstitutionEntity institutionResult = institutionRepository
