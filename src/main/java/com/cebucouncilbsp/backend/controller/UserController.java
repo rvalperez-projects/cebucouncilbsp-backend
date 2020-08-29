@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
 import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
+import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
@@ -34,7 +35,7 @@ public class UserController {
 	}
 
 	@GetMapping(path = "/{userId}")
-	@AdminUserOnly
+	@AllUsers
 	public UserEntity getUserByUserId(@PathVariable Integer userId) {
 		return service.getUserByUserId(userId);
 	}
