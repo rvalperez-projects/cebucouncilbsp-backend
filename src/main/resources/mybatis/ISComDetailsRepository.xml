@@ -110,8 +110,49 @@
     </trim>
   </insert>
 
+   <insert id="insertISComDetailsList" parameterType="map">
+    INSERT INTO
+      T_ISCOM_DETAILS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      FORM_ID,
+      POSITION_CODE,
+      SURNAME,
+      GIVEN_NAME,
+      MIDDLE_INITIAL,
+      SIGNATURE,
+      AGE,
+      MEMBERSHIP_CERT_NO,
+      HIGHEST_TRAINING_CODE,
+      TENURE,
+      RELIGION,
+      CREATED_BY,
+      CREATED_DATETIME,
+      UPDATED_BY,
+      UPDATED_DATETIME
+    </trim>
+    <foreach item="committee" collection="iSComMembersList" open="values" separator="," close="">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{formId,jdbcType=INTEGER},
+        #{committee.positionCode,jdbcType=VARCHAR},
+        #{committee.surname,jdbcType=VARCHAR},
+        #{committee.givenName,jdbcType=VARCHAR},
+        #{committee.middleInitial,jdbcType=VARCHAR},
+        #{committee.signature,jdbcType=VARCHAR},
+        #{committee.age,jdbcType=INTEGER},
+        #{committee.membershipCertNo,jdbcType=VARCHAR},
+        #{committee.highestTrainingCode,jdbcType=VARCHAR},
+        #{committee.tenure,jdbcType=INTEGER},
+        #{committee.religion,jdbcType=VARCHAR},
+        #{committee.createdBy,jdbcType=VARCHAR},
+        #{committee.createdDateTime,jdbcType=TIMESTAMP},
+        #{committee.updatedBy,jdbcType=VARCHAR},
+        #{committee.updatedDateTime,jdbcType=TIMESTAMP}
+      </trim>
+    </foreach>
+  </insert>
+
   <update id="updateISComDetails" parameterType="ISComDetailsEntity">
-    <foreach collection="iSComList" item="entity" index="index" separator=";">
+    <foreach collection="iSComMembersList" item="entity" index="index" separator=";">
     UPDATE
       T_ISCOM_DETAILS
     <set>
@@ -133,5 +174,10 @@
       AND FORM_ID = #{entity.formId,jdbcType=INTEGER}
     </foreach>
   </update>
+
+  <delete id="deleteISComMembersByFormId" parameterType="map">
+    DELETE FROM T_ISCOM_DETAILS
+    WHERE FORM_ID = #{formId,jdbcType=INTEGER}
+  </delete>
 
 </mapper>

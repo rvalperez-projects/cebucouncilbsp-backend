@@ -1,8 +1,5 @@
 package com.cebucouncilbsp.backend.advice;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -17,13 +14,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.cebucouncilbsp.backend.ResponseBodyWrapper;
 import com.cebucouncilbsp.backend.constant.ResponseStatusCode;
+import com.cebucouncilbsp.backend.utils.DateUtils;
 
 @ControllerAdvice
 @Order(3)
 public class ResponseBodyBuilderAdvice implements ResponseBodyAdvice<Object> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResponseBodyBuilderAdvice.class);
 	private static final String SERVER_DATE_HEADER = "ServerDate";
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -51,7 +48,6 @@ public class ResponseBodyBuilderAdvice implements ResponseBodyAdvice<Object> {
 	}
 
 	private void addServerDate(ServerHttpResponse response) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-		response.getHeaders().set(SERVER_DATE_HEADER, LocalDateTime.now().format(formatter));
+		response.getHeaders().set(SERVER_DATE_HEADER, DateUtils.getFormattedDate());
 	}
 }

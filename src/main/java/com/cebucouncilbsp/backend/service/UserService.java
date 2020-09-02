@@ -23,6 +23,7 @@ import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
+import com.cebucouncilbsp.backend.utils.DateUtils;
 
 /**
  * @author reneir.val.t.perez
@@ -73,7 +74,7 @@ public class UserService {
 	@Transactional
 	public int signUp(UserSignUpRequestForm requestForm, AuthorityEntity accessingUser) {
 		Integer userId = null;
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = DateUtils.getCurrentDateTime();
 
 		// Create Institution Entity to insert
 		InstitutionEntity institution = new InstitutionEntity();

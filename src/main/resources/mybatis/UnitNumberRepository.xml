@@ -104,7 +104,7 @@
       #{unitNumber,jdbcType=VARCHAR},
       #{institutionId,jdbcType=INTEGER},
       #{sectionCode,jdbcType=VARCHAR},
-      #{lastUsedYear,jdbcType=VARCHAR},
+      #{lastUsedYear,jdbcType=INTEGER},
       #{validFlag,jdbcType=BOOLEAN},
       #{createdBy,jdbcType=VARCHAR},
       #{updatedBy,jdbcType=VARCHAR},
@@ -119,7 +119,7 @@
     <set>
       INSTITUTION_ID = #{institutionId,jdbcType=INTEGER},
       SECTION_CODE = #{sectionCode,jdbcType=VARCHAR},
-      LAST_USED_YEAR = #{lastUsedYear,jdbcType=VARCHAR},
+      LAST_USED_YEAR = #{lastUsedYear,jdbcType=INTEGER},
       UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
       UPDATED_DATETIME = #{updatedDateTime,jdbcType=TIMESTAMP}
     </set>

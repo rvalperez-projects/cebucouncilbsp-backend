@@ -3,7 +3,6 @@
  */
 package com.cebucouncilbsp.backend.service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +15,7 @@ import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UnitNumberRepository;
+import com.cebucouncilbsp.backend.utils.DateUtils;
 
 /**
  * @author reneir.val.t.perez
@@ -48,7 +48,7 @@ public class InstitutionService {
 	}
 
 	public List<UnitNumberEntity> getInstitutionUnitNumbers(Integer institutionId) {
-		return unitNumberRepository.findByInstitutionId(institutionId, LocalDate.now().getYear());
+		return unitNumberRepository.findByInstitutionId(institutionId, DateUtils.getCurrentDate().getYear());
 	}
 
 	public List<AreaDistrictsEntity> getAllDistinctDistricts() {

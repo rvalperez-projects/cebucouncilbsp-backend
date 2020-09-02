@@ -110,8 +110,49 @@
     </trim>
   </insert>
 
+  <insert id="insertMemberDetailsList" parameterType="map">
+    INSERT INTO
+      T_MEMBER_DETAILS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      FORM_ID,
+      POSITION_CODE,
+      SURNAME,
+      GIVEN_NAME,
+      MIDDLE_INITIAL,
+      REGISTRATION_STATUS_CODE,
+      AGE,
+      MEMBERSHIP_CERT_NO,
+      HIGHEST_BADGE_CODE,
+      TENURE,
+      RELIGION,
+      CREATED_BY,
+      CREATED_DATETIME,
+      UPDATED_BY,
+      UPDATED_DATETIME
+    </trim>
+    <foreach item="member" collection="unitMembersList" open="values" separator="," close="">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{formId,jdbcType=INTEGER},
+        #{member.positionCode,jdbcType=VARCHAR},
+        #{member.surname,jdbcType=VARCHAR},
+        #{member.givenName,jdbcType=VARCHAR},
+        #{member.middleInitial,jdbcType=VARCHAR},
+        #{member.registrationStatusCode,jdbcType=VARCHAR},
+        #{member.age,jdbcType=INTEGER},
+        #{member.membershipCertNo,jdbcType=VARCHAR},
+        #{member.highestBadgeCode,jdbcType=VARCHAR},
+        #{member.tenure,jdbcType=INTEGER},
+        #{member.religion,jdbcType=VARCHAR},
+        #{member.createdBy,jdbcType=VARCHAR},
+        #{member.createdDateTime,jdbcType=TIMESTAMP},
+        #{member.updatedBy,jdbcType=VARCHAR},
+        #{member.updatedDateTime,jdbcType=TIMESTAMP}
+      </trim>
+    </foreach>
+  </insert>
+
   <update id="updateMemberDetails" parameterType="MemberDetailsEntity">
-    <foreach collection="membersList" item="entity" index="index" separator=";">
+    <foreach collection="unitMembersList" item="entity" index="index" separator=";">
     UPDATE
       T_MEMBER_DETAILS
     <set>
@@ -133,5 +174,10 @@
       AND FORM_ID = #{entity.formId,jdbcType=INTEGER}
     </foreach>
   </update>
+
+  <delete id="deleteUnitMembersByFormId" parameterType="map">
+    DELETE FROM T_MEMBER_DETAILS
+    WHERE FORM_ID = #{formId,jdbcType=INTEGER}
+  </delete>
 
 </mapper>

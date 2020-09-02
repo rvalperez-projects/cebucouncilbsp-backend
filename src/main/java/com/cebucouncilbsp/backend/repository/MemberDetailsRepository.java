@@ -18,9 +18,13 @@ public interface MemberDetailsRepository {
 
 	int insertMemberDetails(MemberDetailsEntity memberDetails);
 
-	int updateMemberDetails(List<MemberDetailsEntity> membersList);
+	int insertMemberDetailsList(List<MemberDetailsEntity> unitMembersList, Integer formId);
+
+	int updateMemberDetails(List<MemberDetailsEntity> unitMembersList);
 
 	List<MemberDetailsEntity> findAllUnitMembers();
 
 	List<MemberDetailsEntity> findByFormId(Integer formId);
+
+	int deleteUnitMembersByFormId(Integer formId);
 }

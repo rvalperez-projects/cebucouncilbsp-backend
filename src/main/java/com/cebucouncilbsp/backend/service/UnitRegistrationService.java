@@ -4,7 +4,6 @@
 package com.cebucouncilbsp.backend.service;
 
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import com.cebucouncilbsp.backend.constant.FormStatusCode;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.ISComDetailsEntity;
 import com.cebucouncilbsp.backend.entity.MemberDetailsEntity;
@@ -31,6 +32,9 @@ import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationFormRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationISComRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationMemberRequestForm;
+import com.cebucouncilbsp.backend.utils.DateUtils;
+
+import io.jsonwebtoken.lang.Collections;
 
 /**
  * @author reneir.val.t.perez
@@ -42,6 +46,7 @@ public class UnitRegistrationService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnitRegistrationService.class);
 
 	private static final String UNIT_REGISTRATION_FORM_NOT_FOUND = "backend.aur.submit.form.NotFound";
+	private static final String UNIT_REGISTRATION_FORM_ALREADY_PROCESSED = "backend.aur.submit.form.AlreadyProcessed";
 	private static final String NO_MORE_UNIT_NUMBERS = "backend.error.unitNumber.NoMore";
 
 	private enum MethodCode {
@@ -89,26 +94,104 @@ public class UnitRegistrationService {
 	/**
 	 *
 	 * @param requestForm
+	 * @param accessingUser
 	 * @return Number of submitted forms.
 	 */
 	public int submit(UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser) {
 		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 
+		UnitNumberEntity unitNumber = null;
 		if (null == requestForm.getUnitNumber() || requestForm.getUnitNumber().equals("New")) {
 
 			List<UnitNumberEntity> availableUnitNumbersList = unitNumberRepository
-					.findAvailableUnitNumbers(LocalDate.now().getYear(), requestForm.getSectionCode());
+					.findAvailableUnitNumbers(DateUtils.getCurrentDate().getYear(), requestForm.getSectionCode());
 			if (CollectionUtils.isEmpty(availableUnitNumbersList)) {
 				throw new BusinessFailureException(NO_MORE_UNIT_NUMBERS);
 			}
-			requestForm.setUnitNumber(availableUnitNumbersList.get(0).getUnitNumber());
+			unitNumber = availableUnitNumbersList.get(0);
+		} else {
+			unitNumber = unitNumberRepository.findByUnitNumber(requestForm.getUnitNumber());
 		}
 
 		UnitRegistrationEntity unitRegistrationForm = new UnitRegistrationEntity();
 		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.INSERT);
 
-		// Insert UnitRegistrationEntity and InstitutionEntity to DB
-		return unitRegistrationRepository.insertUnitRegistrationEntityForm(unitRegistrationForm);
+		// Insert UnitRegistrationEntity
+		LocalDateTime now = DateUtils.getCurrentDateTime();
+		unitRegistrationForm.setCreatedBy(accessingUser.getUsername());
+		unitRegistrationForm.setUpdatedBy(accessingUser.getUsername());
+		unitRegistrationForm.setCreatedDateTime(now);
+		unitRegistrationForm.setUpdatedDateTime(now);
+		Integer formId = unitRegistrationRepository.insertUnitRegistrationEntityForm(unitRegistrationForm);
+
+		// Insert ISCOM Members
+		if (!Collections.isEmpty(unitRegistrationForm.getIscomMembersList())) {
+			for (ISComDetailsEntity iscom : unitRegistrationForm.getIscomMembersList()) {
+				iscom.setCreatedBy(accessingUser.getUsername());
+				iscom.setUpdatedBy(accessingUser.getUsername());
+				iscom.setCreatedDateTime(now);
+				iscom.setUpdatedDateTime(now);
+			}
+			iSComDetailsRepository.insertISComDetailsList(unitRegistrationForm.getIscomMembersList(), formId);
+		}
+
+		// Insert Unit Members
+		if (!Collections.isEmpty(unitRegistrationForm.getUnitMembersList())) {
+			for (MemberDetailsEntity member : unitRegistrationForm.getUnitMembersList()) {
+				member.setCreatedBy(accessingUser.getUsername());
+				member.setUpdatedBy(accessingUser.getUsername());
+				member.setCreatedDateTime(now);
+				member.setUpdatedDateTime(now);
+			}
+			memberDetailsRepository.insertMemberDetailsList(unitRegistrationForm.getUnitMembersList(), formId);
+		}
+
+		// Update Unit Number Last Used Year to this Year
+		unitNumber.setInstitutionId(requestForm.getInstitutionId());
+		unitNumber.setLastUsedYear(now.getYear());
+		unitNumber.setUpdatedBy(accessingUser.getUsername());
+		unitNumber.setUpdatedDateTime(now);
+		unitNumberRepository.updateUnitNumber(unitNumber);
+
+		return 1;
+	}
+
+	/**
+	 *
+	 * @param formId
+	 * @param accessingUser
+	 * @return Number of submitted forms.
+	 */
+	public int deleteAURForm(Integer formId, AuthorityEntity accessingUser) {
+
+		UnitRegistrationEntity unitRegistrationForm = unitRegistrationRepository.findByFormId(formId);
+		if (null == unitRegistrationForm) {
+			LOGGER.error(MessageFormat.format("Form {0} not found.", formId));
+			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
+		}
+
+		// Throw back error when Unit Registration is already processed
+		if (!FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
+			LOGGER.error(MessageFormat.format("Form {0} is already Processed.", formId));
+			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_ALREADY_PROCESSED);
+		}
+
+		// Delete Unit Registration Form Details
+		iSComDetailsRepository.deleteISComMembersByFormId(formId);
+		memberDetailsRepository.deleteUnitMembersByFormId(formId);
+		unitRegistrationRepository.deleteUnitRegistrationFormByFormId(formId);
+
+		// Update Unit Number back to NULL (unused)
+		LocalDateTime now = DateUtils.getCurrentDateTime();
+		UnitNumberEntity unitNumber = unitNumberRepository.findByUnitNumber(unitRegistrationForm.getUnitNumber());
+		if (null != unitNumber) {
+			unitNumber.setLastUsedYear(null);
+			unitNumber.setUpdatedBy(accessingUser.getUsername());
+			unitNumber.setUpdatedDateTime(now);
+			unitNumberRepository.updateUnitNumber(unitNumber);
+		}
+
+		return 1;
 	}
 
 	/**
@@ -121,7 +204,7 @@ public class UnitRegistrationService {
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();
-		String name = requestForm.getName() == null ? null : requestForm.getName().toLowerCase();
+		String name = StringUtils.hasText(requestForm.getName()) ? requestForm.getName().toLowerCase() : null;
 
 		return unitRegistrationRepository.findByAreaDistInstStatusName(area, district, institutionId,
 				requestForm.getStatusCode(), name);
@@ -135,7 +218,7 @@ public class UnitRegistrationService {
 
 		entity.setStatusCode(statusCode);
 		entity.setUpdatedBy(accessingUser.getUsername());
-		entity.setUpdatedDateTime(LocalDateTime.now());
+		entity.setUpdatedDateTime(DateUtils.getCurrentDateTime());
 
 		unitRegistrationRepository.updateFormStatus(entity);
 		return entity;
@@ -166,7 +249,7 @@ public class UnitRegistrationService {
 			UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser, MethodCode methodCode) {
 
 		// Get current date and time
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = DateUtils.getCurrentDateTime();
 
 		// Create Unit Registration Entity to insert
 		unitRegistrationForm.setFormId(requestForm.getFormId());

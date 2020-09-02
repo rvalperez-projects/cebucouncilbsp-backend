@@ -19,7 +19,7 @@ import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.LoginRequestForm;
 import com.cebucouncilbsp.backend.requestdto.LogoutRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
-import com.cebucouncilbsp.backend.service.InstitutionService;
+import com.cebucouncilbsp.backend.service.AreaService;
 import com.cebucouncilbsp.backend.service.LoginService;
 import com.cebucouncilbsp.backend.service.UserService;
 
@@ -34,7 +34,7 @@ public class LoginController {
 	private UserService userService;
 
 	@Autowired
-	private InstitutionService institutionServiceService;
+	private AreaService areaService;
 
 	@PostMapping(path = "/login")
 	@AllUsers
@@ -62,6 +62,6 @@ public class LoginController {
 	@GetMapping(path = "/areaDistricts")
 	@AllUsers
 	public List<AreaDistrictsEntity> getAllDistinctDistricts() {
-		return institutionServiceService.getAllDistinctDistricts();
+		return areaService.getAreasAndDistricts();
 	}
 }

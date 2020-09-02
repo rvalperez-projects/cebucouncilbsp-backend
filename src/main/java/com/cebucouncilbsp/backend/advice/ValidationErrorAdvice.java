@@ -70,7 +70,7 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(BusinessFailureException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public ResponseBodyWrapper handleValidationError(BusinessFailureException exception) {
+	public ResponseBodyWrapper handleBusinessFailureException(BusinessFailureException exception) {
 		BACKEND_LOGGER.info(MessageFormat.format("BusinessFailureException has occurred. {0}", exception.getMessage()));
 		Errors errors = exception.getErrors();
 
@@ -78,6 +78,11 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 		if (errors != null) {
 			setValidationErrorMessages(errorMessagesList, errors);
 		}
+		String message = messageSource.getMessage(exception.getMessage(), new Object[] {}, null);
+		if (!message.isEmpty()) {
+			errorMessagesList.add(message);
+		}
+
 		return new ResponseBodyWrapper(ResponseStatusCode.VALIDATION_FAILURE.getCode(), null, errorMessagesList);
 	}
 

@@ -1,7 +1,5 @@
 package com.cebucouncilbsp.backend.validator;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -11,6 +9,7 @@ import com.cebucouncilbsp.backend.constant.ScoutingSectionCode;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.repository.UnitNumberRepository;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationFormRequestForm;
+import com.cebucouncilbsp.backend.utils.DateUtils;
 
 /**
  * @author reneir.val.t.perez
@@ -44,7 +43,8 @@ public class UnitRegistrationRequestFormValidator implements Validator {
 			}
 
 			// Unit Number already used
-			if (unitNumberEntity.getLastUsedYear() == LocalDate.now().getYear()) {
+			if (null != unitNumberEntity.getLastUsedYear()
+					&& unitNumberEntity.getLastUsedYear() == DateUtils.getCurrentDate().getYear()) {
 				errors.reject("backend.aur.submit.unitNumber.NotAvailable", new Object[] { obj.getUnitNumber() }, null);
 			}
 
