@@ -18,9 +18,13 @@ public interface ISComDetailsRepository {
 
 	int insertISComDetails(ISComDetailsEntity iSComDetails);
 
-	int updateISComDetails(List<ISComDetailsEntity> iSComList);
+	int insertISComDetailsList(List<ISComDetailsEntity> iSComMembersList, Integer formId);
+
+	int updateISComDetails(List<ISComDetailsEntity> iSComMembersList);
 
 	List<ISComDetailsEntity> findAllISCommittee();
 
 	List<ISComDetailsEntity> findByFormId(Integer formId);
+
+	int deleteISComMembersByFormId(Integer formId);
 }

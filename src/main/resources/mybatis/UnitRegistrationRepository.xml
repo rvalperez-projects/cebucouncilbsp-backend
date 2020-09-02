@@ -135,17 +135,13 @@
     ON
       TUR.INSTITUTION_ID = MINST.INSTITUTION_ID
     WHERE
-      <if test="area != null">
-        MINST.AREA = #{area,jdbcType=VARCHAR} AND
-      </if>
-      <if test="district != null">
-        MINST.DISTRICT = #{district,jdbcType=VARCHAR} AND
-      </if>
+      MINST.AREA = #{area,jdbcType=VARCHAR}
+      AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
       <if test="institutionId != null">
-        MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER} AND
+        AND MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
       </if>
       <if test="name != null">
-        TUR.FORM_ID IN (
+        AND TUR.FORM_ID IN (
           SELECT
             TUR.FORM_ID
           FROM
@@ -161,144 +157,51 @@
             OR LOWER(TISC.SURNAME || ' ' || TISC.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
           GROUP BY
 		    TUR.FORM_ID
-          ) <!-- AND -->
+          )
       </if>
-      <!-- TUR.STATUS_CODE = #{statusCode,jdbcType=VARCHAR}  -->
+      <!-- AND TUR.STATUS_CODE = #{statusCode,jdbcType=VARCHAR}  -->
     ORDER BY
       TUR.DATE_APPLIED DESC,
       TUR.STATUS_CODE ASC
   </select>
 
-  <insert id="insertUnitRegistrationEntityForm" parameterType="map">
-    WITH INSERTED_FORM AS (
-      INSERT INTO
-        T_UNIT_REGISTRATION
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        INSTITUTION_ID,
-        UNIT_NUMBER,
-        UNIT_REGISTRATION_NO,
-        CHARTER_FLAG,
-        SECTION_CODE,
-        STATUS_CODE,
-        DATE_APPLIED,
-        OFFICIAL_RECEIPT_NO,
-        OFFICIAL_RECEIPT_DATE,
-        EXPIRATION_DATE,
-        CREATED_BY,
-        CREATED_DATETIME,
-        UPDATED_BY,
-        UPDATED_DATETIME
-      </trim>
-      <trim prefix="values (" suffix=")" suffixOverrides=",">
-        #{institutionId,jdbcType=INTEGER},
-        #{unitNumber,jdbcType=VARCHAR},
-        #{unitRegistrationNo,jdbcType=VARCHAR},
-        #{charterFlag,jdbcType=BOOLEAN},
-        #{sectionCode,jdbcType=VARCHAR},
-        #{statusCode,jdbcType=VARCHAR},
-        #{dateApplied,jdbcType=TIMESTAMP},
-        #{officialReceiptNo,jdbcType=VARCHAR},
-        #{officialReceiptDate,jdbcType=TIMESTAMP},
-        #{expirationDate,jdbcType=TIMESTAMP},
-        #{createdBy,jdbcType=VARCHAR},
-        #{createdDateTime,jdbcType=TIMESTAMP},
-        #{updatedBy,jdbcType=VARCHAR},
-        #{updatedDateTime,jdbcType=TIMESTAMP}
-      </trim>
-      RETURNING FORM_ID
-    ),
-    INSERTED_ISCOM AS (
-      INSERT INTO
-        T_ISCOM_DETAILS
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        FORM_ID,
-        POSITION_CODE,
-        SURNAME,
-        GIVEN_NAME,
-        MIDDLE_INITIAL,
-        SIGNATURE,
-        AGE,
-        MEMBERSHIP_CERT_NO,
-        HIGHEST_TRAINING_CODE,
-        TENURE,
-        RELIGION,
-        CREATED_BY,
-        CREATED_DATETIME,
-        UPDATED_BY,
-        UPDATED_DATETIME
-      </trim>
-      <foreach item="committee" collection="iSComMembersList" open="values" separator="," close="">
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-          (SELECT FORM_ID FROM INSERTED_FORM),
-          #{committee.positionCode,jdbcType=VARCHAR},
-          #{committee.surname,jdbcType=VARCHAR},
-          #{committee.givenName,jdbcType=VARCHAR},
-          #{committee.middleInitial,jdbcType=VARCHAR},
-          #{committee.signature,jdbcType=VARCHAR},
-          #{committee.age,jdbcType=INTEGER},
-          #{committee.membershipCertNo,jdbcType=VARCHAR},
-          #{committee.highestTrainingCode,jdbcType=VARCHAR},
-          #{committee.tenure,jdbcType=INTEGER},
-          #{committee.religion,jdbcType=VARCHAR},
-          #{committee.createdBy,jdbcType=VARCHAR},
-          #{committee.createdDateTime,jdbcType=TIMESTAMP},
-          #{committee.updatedBy,jdbcType=VARCHAR},
-          #{committee.updatedDateTime,jdbcType=TIMESTAMP}
-        </trim>
-      </foreach>
-    ),
-    INSERTED_MEMBERS AS (
-    INSERT INTO
-      T_MEMBER_DETAILS
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      FORM_ID,
-      POSITION_CODE,
-      SURNAME,
-      GIVEN_NAME,
-      MIDDLE_INITIAL,
-      REGISTRATION_STATUS_CODE,
-      AGE,
-      MEMBERSHIP_CERT_NO,
-      HIGHEST_BADGE_CODE,
-      TENURE,
-      RELIGION,
-      CREATED_BY,
-      CREATED_DATETIME,
-      UPDATED_BY,
-      UPDATED_DATETIME
-    </trim>
-    <foreach item="member" collection="unitMembersList" open="values" separator="," close="">
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        (SELECT FORM_ID FROM INSERTED_FORM),
-        #{member.positionCode,jdbcType=VARCHAR},
-        #{member.surname,jdbcType=VARCHAR},
-        #{member.givenName,jdbcType=VARCHAR},
-        #{member.middleInitial,jdbcType=VARCHAR},
-        #{member.registrationStatusCode,jdbcType=VARCHAR},
-        #{member.age,jdbcType=INTEGER},
-        #{member.membershipCertNo,jdbcType=VARCHAR},
-        #{member.highestBadgeCode,jdbcType=VARCHAR},
-        #{member.tenure,jdbcType=INTEGER},
-        #{member.religion,jdbcType=VARCHAR},
-        #{member.createdBy,jdbcType=VARCHAR},
-        #{member.createdDateTime,jdbcType=TIMESTAMP},
-        #{member.updatedBy,jdbcType=VARCHAR},
-        #{member.updatedDateTime,jdbcType=TIMESTAMP}
-      </trim>
-    </foreach>
-    )
-    UPDATE
-      M_UNIT_NUMBER
-    <set>
-      INSTITUTION_ID = #{institutionId,jdbcType=INTEGER},
-      SECTION_CODE = #{sectionCode,jdbcType=VARCHAR},
-      LAST_USED_YEAR = extract (YEAR from NOW()),
-      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
-      UPDATED_DATETIME = #{updatedDateTime,jdbcType=TIMESTAMP}
-    </set>
-    WHERE
-      UNIT_NUMBER = #{unitNumber,jdbcType=VARCHAR}
-  </insert>
+  <select id="insertUnitRegistrationEntityForm" parameterType="map" resultType="Integer">
+     INSERT INTO
+       T_UNIT_REGISTRATION
+     <trim prefix="(" suffix=")" suffixOverrides=",">
+       INSTITUTION_ID,
+       UNIT_NUMBER,
+       UNIT_REGISTRATION_NO,
+       CHARTER_FLAG,
+       SECTION_CODE,
+       STATUS_CODE,
+       DATE_APPLIED,
+       OFFICIAL_RECEIPT_NO,
+       OFFICIAL_RECEIPT_DATE,
+       EXPIRATION_DATE,
+       CREATED_BY,
+       CREATED_DATETIME,
+       UPDATED_BY,
+       UPDATED_DATETIME
+     </trim>
+     <trim prefix="values (" suffix=")" suffixOverrides=",">
+       #{institutionId,jdbcType=INTEGER},
+       #{unitNumber,jdbcType=VARCHAR},
+       #{unitRegistrationNo,jdbcType=VARCHAR},
+       #{charterFlag,jdbcType=BOOLEAN},
+       #{sectionCode,jdbcType=VARCHAR},
+       #{statusCode,jdbcType=VARCHAR},
+       #{dateApplied,jdbcType=TIMESTAMP},
+       #{officialReceiptNo,jdbcType=VARCHAR},
+       #{officialReceiptDate,jdbcType=TIMESTAMP},
+       #{expirationDate,jdbcType=TIMESTAMP},
+       #{createdBy,jdbcType=VARCHAR},
+       #{createdDateTime,jdbcType=TIMESTAMP},
+       #{updatedBy,jdbcType=VARCHAR},
+       #{updatedDateTime,jdbcType=TIMESTAMP}
+     </trim>
+     RETURNING FORM_ID
+  </select>
 
   <update id="updateUnitRegistrationEntityForm" parameterType="UnitRegistrationEntity">
     UPDATE
@@ -332,5 +235,10 @@
     WHERE
       FORM_ID = #{formId,jdbcType=INTEGER}
   </update>
+
+  <delete id="deleteUnitRegistrationFormByFormId" parameterType="map">
+    DELETE FROM T_UNIT_REGISTRATION
+    WHERE FORM_ID = #{formId,jdbcType=INTEGER}
+  </delete>
 
 </mapper>

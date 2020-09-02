@@ -34,7 +34,8 @@
     WHERE
       VALID_FLAG = true
     ORDER BY
-      AREA_CODE ASC
+      AREA_CODE ASC,
+      DISTRICT_NAME ASC
   </select>
 
   <select id="findDistinctAreas" parameterType="map" resultMap="AreaEntityResultMap" resultType="AreaEntity">

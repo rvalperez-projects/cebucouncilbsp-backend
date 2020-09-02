@@ -29,4 +29,6 @@ public interface UnitRegistrationRepository {
 
 	List<UnitRegistrationSearchResultEntity> findByAreaDistInstStatusName(String area, String district,
 			Integer institutionId, String statusCode, String name);
+
+	int deleteUnitRegistrationFormByFormId(Integer formId);
 }
