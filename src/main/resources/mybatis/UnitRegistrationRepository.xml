@@ -136,7 +136,9 @@
       TUR.INSTITUTION_ID = MINST.INSTITUTION_ID
     WHERE
       MINST.AREA = #{area,jdbcType=VARCHAR}
-      AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+      <if test="district != null">
+        AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+      </if>
       <if test="institutionId != null">
         AND MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
       </if>

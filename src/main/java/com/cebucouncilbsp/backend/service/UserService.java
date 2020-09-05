@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.cebucouncilbsp.backend.constant.AuthorityCategoryCode;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.entity.UserProfileEntity;
+import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
 import com.cebucouncilbsp.backend.repository.AuthorityRepository;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
@@ -166,12 +168,12 @@ public class UserService {
 	 * @param requestForm
 	 * @return
 	 */
-	public List<UserEntity> searchUsers(SearchRequestForm requestForm) {
+	public List<UserSearchResultEntity> searchUsers(SearchRequestForm requestForm) {
 		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();
-		String name = requestForm.getName() == null ? null : requestForm.getName().toLowerCase();
+		String name = StringUtils.hasText(requestForm.getName()) ? requestForm.getName().toLowerCase() : null;
 
 		return userRepository.findByAreaDistrictInstitutionName(area, district, institutionId, name);
 	}

@@ -16,6 +16,18 @@
     <result column="UPDATED_DATETIME" jdbcType="TIMESTAMP" property="updatedDateTime"/>
   </resultMap>
 
+  <resultMap id="UserSearchResultMap" type="UserSearchResultEntity">
+    <id column="USER_ID" jdbcType="INTEGER" property="userId"/>
+    <result column="SURNAME" jdbcType="VARCHAR" property="surname"/>
+    <result column="GIVEN_NAME" jdbcType="VARCHAR" property="givenName"/>
+    <result column="MIDDLE_INITIAL" jdbcType="VARCHAR" property="middleInitial"/>
+    <result column="EMAIL_ADDRESS" jdbcType="VARCHAR" property="emailAddress"/>
+    <result column="MOBILE_NUMBER" jdbcType="VARCHAR" property="mobileNumber"/>
+    <result column="INSTITUTION_ID" jdbcType="INTEGER" property="institutionId"/>
+    <result column="INSTITUTION_NAME" jdbcType="VARCHAR" property="institutionName"/>
+    <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
+  </resultMap>
+
   <select id="findAllUsers" parameterType="map" resultType="UserEntity" resultMap="UserResultMap">
     SELECT
       MUSR.USER_ID,
@@ -52,12 +64,14 @@
       MUSR.USER_ID = #{userId,jdbcType=INTEGER}
   </select>
 
-  <select id="findByAreaDistrictInstitutionName" parameterType="map" resultType="UserEntity" resultMap="UserResultMap">
+  <select id="findByAreaDistrictInstitutionName" parameterType="map" resultType="UserSearchResultEntity" resultMap="UserSearchResultMap">
     SELECT
       MUSR.USER_ID,
       MUSR.SURNAME,
       MUSR.GIVEN_NAME,
       MUSR.MIDDLE_INITIAL,
+      MINST.INSTITUTION_NAME,
+      MINST.DISTRICT,
       MUSR.EMAIL_ADDRESS,
       MUSR.MOBILE_NUMBER,
       MUSR.INSTITUTION_ID,
@@ -71,16 +85,20 @@
     ON
       MUSR.INSTITUTION_ID = MINST.INSTITUTION_ID
     WHERE
-      <if test="area != null">
-        MINST.AREA = #{area,jdbcType=VARCHAR} AND
-      </if>
+      MINST.AREA = #{area,jdbcType=VARCHAR}
       <if test="district != null">
-        MINST.DISTRICT = #{district,jdbcType=VARCHAR} AND
+        AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
       </if>
       <if test="institutionId != null">
-        MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER} AND
+        AND MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
       </if>
-      LOWER(MUSR.SURNAME || ' ' || MUSR.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
+      <if test="name != null">
+      	AND (LOWER(MUSR.SURNAME || ' ' || MUSR.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%')
+      </if>
+    ORDER BY
+      MINST.DISTRICT ASC,
+      MINST.INSTITUTION_NAME ASC,
+      MUSR.SURNAME ASC
   </select>
 
   <select id="insertUser" parameterType="UserEntity" resultType="Integer">
