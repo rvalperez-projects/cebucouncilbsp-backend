@@ -10,14 +10,18 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import com.cebucouncilbsp.backend.constant.AuthorityCategoryCode;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
-import com.cebucouncilbsp.backend.exception.BusinessFailureException;
+import com.cebucouncilbsp.backend.entity.UserProfileEntity;
+import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
 import com.cebucouncilbsp.backend.repository.AuthorityRepository;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
@@ -34,6 +38,15 @@ public class UserService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
 	private static final String USER_NOT_FOUND = "backend.error.auth.login.NotFound";
+
+	@Value("${auth.council.name}")
+	private String councilName;
+
+	@Value("${auth.council.address}")
+	private String councilAddress;
+
+	@Value("${auth.council.contactNumber}")
+	private String councilContactNumber;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -57,13 +70,42 @@ public class UserService {
 	 * @param userId
 	 * @return
 	 */
-	public UserEntity getUserByUserId(Integer userId) {
-		LOGGER.debug(MessageFormat.format("UserId: {0}", userId));
-		UserEntity result = userRepository.findByUserId(userId);
-		if (result == null) {
-			LOGGER.error(MessageFormat.format("User {0} not found.", userId));
-			throw new BusinessFailureException(USER_NOT_FOUND);
+	@Transactional
+	public UserProfileEntity getUserByUserId(Integer userId) {
+		UserProfileEntity result = new UserProfileEntity();
+
+		UserEntity user = userRepository.findByUserId(userId);
+		result.setUserId(userId);
+		result.setSurname(user.getSurname());
+		result.setGivenName(user.getGivenName());
+		result.setMiddleInitial(user.getMiddleInitial());
+		result.setMobileNumber(user.getMobileNumber());
+		result.setEmailAddress(user.getEmailAddress());
+
+		// Password NOT returned back to user
+		AuthorityEntity authority = authorityRepository.findAuthUserByUserId(userId);
+		result.setUsername(authority.getUsername());
+		result.setAuthorityCode(authority.getRoleCode());
+
+		if (AuthorityCategoryCode.GENERAL_USER.getCode().equals(result.getAuthorityCode())) {
+			result.setInstitutionId(user.getInstitutionId());
+			InstitutionEntity institution = institutionRepository.findByInstitutionId(user.getInstitutionId());
+			result.setInstitutionName(institution.getInstitutionName());
+			result.setAddress(institution.getAddress());
+			result.setDistrict(institution.getDistrict());
+			result.setArea(institution.getArea());
+			result.setCategoryCode(institution.getCategoryCode());
+			result.setContactNumber(institution.getContactNumber());
+		} else {
+			result.setAddress(this.councilAddress);
+			result.setContactNumber(this.councilContactNumber);
+			if (AuthorityCategoryCode.COUNCIL.getCode().equals(result.getAuthorityCode())) {
+				result.setInstitutionName(AuthorityCategoryCode.COUNCIL.name());
+			} else if (AuthorityCategoryCode.ADMIN.getCode().equals(result.getAuthorityCode())) {
+				result.setInstitutionName(AuthorityCategoryCode.ADMIN.name());
+			}
 		}
+
 		return result;
 	}
 
@@ -126,12 +168,12 @@ public class UserService {
 	 * @param requestForm
 	 * @return
 	 */
-	public List<UserEntity> searchUsers(SearchRequestForm requestForm) {
+	public List<UserSearchResultEntity> searchUsers(SearchRequestForm requestForm) {
 		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();
-		String name = requestForm.getName() == null ? null : requestForm.getName().toLowerCase();
+		String name = StringUtils.hasText(requestForm.getName()) ? requestForm.getName().toLowerCase() : null;
 
 		return userRepository.findByAreaDistrictInstitutionName(area, district, institutionId, name);
 	}

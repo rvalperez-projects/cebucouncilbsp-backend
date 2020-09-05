@@ -17,6 +17,8 @@ import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
 import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
 import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.entity.UserEntity;
+import com.cebucouncilbsp.backend.entity.UserProfileEntity;
+import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
 import com.cebucouncilbsp.backend.service.UserService;
@@ -36,13 +38,13 @@ public class UserController {
 
 	@GetMapping(path = "/{userId}")
 	@AllUsers
-	public UserEntity getUserByUserId(@PathVariable Integer userId) {
+	public UserProfileEntity getUserByUserId(@PathVariable Integer userId) {
 		return service.getUserByUserId(userId);
 	}
 
 	@PostMapping(path = "/search")
 	@AdminAndCouncilOnly
-	public List<UserEntity> searchUsers(@RequestBody @Valid SearchRequestForm requestForm, Errors errors) {
+	public List<UserSearchResultEntity> searchUsers(@RequestBody @Valid SearchRequestForm requestForm, Errors errors) {
 		if (errors.hasErrors()) {
 			throw new BusinessFailureException(errors);
 		}
