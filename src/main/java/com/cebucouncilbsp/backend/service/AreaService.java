@@ -27,7 +27,6 @@ import com.cebucouncilbsp.backend.repository.InstitutionRepository;
  */
 @Service
 public class AreaService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AreaService.class);
 
 	@Autowired
 	private AreaRepository areaRepository;

@@ -144,4 +144,14 @@ public class UnitRegistrationFormRequestForm {
 	public void setDateApplied(LocalDateTime dateApplied) {
 		this.dateApplied = dateApplied;
 	}
+
+	@Override
+	public String toString() {
+		return "UnitRegistrationFormRequestForm [formId=" + formId + ", unitRegistrationNo=" + unitRegistrationNo
+				+ ", unitNumber=" + unitNumber + ", sectionCode=" + sectionCode + ", charterFlag=" + charterFlag
+				+ ", statusCode=" + statusCode + ", institutionId=" + institutionId + ", iscomMembersList="
+				+ iscomMembersList + ", unitMembersList=" + unitMembersList + ", officialReceiptNo=" + officialReceiptNo
+				+ ", officialReceiptDate=" + officialReceiptDate + ", expirationDate=" + expirationDate
+				+ ", dateApplied=" + dateApplied + "]";
+	}
 }

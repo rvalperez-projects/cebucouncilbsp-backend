@@ -35,7 +35,6 @@ import com.cebucouncilbsp.backend.security.SecurityUserDetailService;
  */
 @Service
 public class LoginService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoginService.class);
 
 	@Autowired
 	private UserRepository userRepository;

@@ -151,4 +151,13 @@ public class UserSignUpRequestForm {
 	public void setCategoryCode(String categoryCode) {
 		this.categoryCode = categoryCode;
 	}
+
+	@Override
+	public String toString() {
+		return "UserSignUpRequestForm [username=" + username + ", password=" + password + ", authorityCode="
+				+ authorityCode + ", surname=" + surname + ", givenName=" + givenName + ", middleInitial="
+				+ middleInitial + ", mobileNumber=" + mobileNumber + ", emailAddress=" + emailAddress
+				+ ", institutionName=" + institutionName + ", address=" + address + ", district=" + district + ", area="
+				+ area + ", contactNumber=" + contactNumber + ", categoryCode=" + categoryCode + "]";
+	}
 }
