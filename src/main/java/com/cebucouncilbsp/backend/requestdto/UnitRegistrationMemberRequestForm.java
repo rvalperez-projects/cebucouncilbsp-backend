@@ -128,4 +128,13 @@ public class UnitRegistrationMemberRequestForm {
 	public void setReligion(String religion) {
 		this.religion = religion;
 	}
+
+	@Override
+	public String toString() {
+		return "UnitRegistrationMemberRequestForm [memberId=" + memberId + ", formId=" + formId + ", positionCode="
+				+ positionCode + ", surname=" + surname + ", givenName=" + givenName + ", middleInitial="
+				+ middleInitial + ", registrationStatusCode=" + registrationStatusCode + ", age=" + age
+				+ ", membershipCertNo=" + membershipCertNo + ", highestBadgeCode=" + highestBadgeCode + ", tenure="
+				+ tenure + ", religion=" + religion + "]";
+	}
 }

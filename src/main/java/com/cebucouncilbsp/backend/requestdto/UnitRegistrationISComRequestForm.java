@@ -126,4 +126,13 @@ public class UnitRegistrationISComRequestForm {
 	public void setReligion(String religion) {
 		this.religion = religion;
 	}
+
+	@Override
+	public String toString() {
+		return "UnitRegistrationISComRequestForm [iscomId=" + iscomId + ", formId=" + formId + ", positionCode="
+				+ positionCode + ", surname=" + surname + ", givenName=" + givenName + ", middleInitial="
+				+ middleInitial + ", signature=" + signature + ", age=" + age + ", membershipCertNo=" + membershipCertNo
+				+ ", highestTrainingCode=" + highestTrainingCode + ", tenure=" + tenure + ", religion=" + religion
+				+ "]";
+	}
 }

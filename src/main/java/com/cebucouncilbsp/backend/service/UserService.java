@@ -3,7 +3,6 @@
  */
 package com.cebucouncilbsp.backend.service;
 
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -169,7 +168,6 @@ public class UserService {
 	 * @return
 	 */
 	public List<UserSearchResultEntity> searchUsers(SearchRequestForm requestForm) {
-		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();

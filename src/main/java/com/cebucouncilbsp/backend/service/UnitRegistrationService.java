@@ -76,7 +76,6 @@ public class UnitRegistrationService {
 	 * @return
 	 */
 	public UnitRegistrationEntity getByFormId(Integer formId) {
-		LOGGER.debug(MessageFormat.format("Form: {0}", formId));
 
 		UnitRegistrationEntity result = unitRegistrationRepository.findByFormId(formId);
 
@@ -98,8 +97,6 @@ public class UnitRegistrationService {
 	 * @return Number of submitted forms.
 	 */
 	public int submit(UnitRegistrationFormRequestForm requestForm, AuthorityEntity accessingUser) {
-		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
-
 		UnitNumberEntity unitNumber = null;
 		if (null == requestForm.getUnitNumber() || requestForm.getUnitNumber().equals("New")) {
 
@@ -200,7 +197,6 @@ public class UnitRegistrationService {
 	 * @return
 	 */
 	public List<UnitRegistrationSearchResultEntity> searchForms(SearchRequestForm requestForm) {
-		LOGGER.debug(MessageFormat.format("RequestForm: {0}", requestForm));
 		String area = requestForm.getArea() == null ? null : requestForm.getArea();
 		String district = requestForm.getDistrict() == null ? null : requestForm.getDistrict();
 		Integer institutionId = requestForm.getInstitutionId() == null ? null : requestForm.getInstitutionId();

@@ -23,7 +23,6 @@ import com.cebucouncilbsp.backend.utils.DateUtils;
  */
 @Service
 public class InstitutionService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(InstitutionService.class);
 
 	@Autowired
 	private InstitutionRepository institutionRepository;
