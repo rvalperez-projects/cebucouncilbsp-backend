@@ -3,6 +3,10 @@
  */
 package com.cebucouncilbsp.backend.constant;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author reneir.val.t.perez
  *
@@ -14,11 +18,24 @@ public enum ISComPositionCategoryCode {
 
 	private final String code;
 
+	private static Map<String, ISComPositionCategoryCode> map = new HashMap<>();
+
+	static {
+		for (ISComPositionCategoryCode value : values()) {
+			map.put(value.getCode(), value);
+		}
+		map = Collections.unmodifiableMap(map);
+	}
+
 	ISComPositionCategoryCode(String code) {
 		this.code = code;
 	}
 
 	public String getCode() {
 		return code;
+	}
+
+	public static ISComPositionCategoryCode get(String code) {
+		return map.get(code);
 	}
 }
