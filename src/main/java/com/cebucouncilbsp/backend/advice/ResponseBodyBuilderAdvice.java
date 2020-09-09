@@ -48,6 +48,6 @@ public class ResponseBodyBuilderAdvice implements ResponseBodyAdvice<Object> {
 	}
 
 	private void addServerDate(ServerHttpResponse response) {
-		response.getHeaders().set(SERVER_DATE_HEADER, DateUtils.getFormattedDate());
+		response.getHeaders().set(SERVER_DATE_HEADER, DateUtils.getCurrentFormattedDate());
 	}
 }

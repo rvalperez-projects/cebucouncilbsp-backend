@@ -4,6 +4,7 @@
 package com.cebucouncilbsp.backend.service;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +16,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cebucouncilbsp.backend.constant.FormStatusCode;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.ISComDetailsEntity;
+import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.MemberDetailsEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.entity.UnitRegistrationEntity;
 import com.cebucouncilbsp.backend.entity.UnitRegistrationSearchResultEntity;
+import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.repository.ISComDetailsRepository;
+import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.MemberDetailsRepository;
 import com.cebucouncilbsp.backend.repository.UnitNumberRepository;
 import com.cebucouncilbsp.backend.repository.UnitRegistrationRepository;
+import com.cebucouncilbsp.backend.repository.UserRepository;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationFormRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationISComRequestForm;
@@ -61,6 +67,12 @@ public class UnitRegistrationService {
 	private MemberDetailsRepository memberDetailsRepository;
 	@Autowired
 	private UnitNumberRepository unitNumberRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private InstitutionRepository institutionRepository;
+	@Autowired
+	private EmailService emailService;
 
 	/**
 	 *
@@ -110,6 +122,11 @@ public class UnitRegistrationService {
 			unitNumber = unitNumberRepository.findByUnitNumber(requestForm.getUnitNumber());
 		}
 
+		// Set date to Pinas timezone
+		requestForm.setDateApplied(DateUtils.getCurrentDateTime());
+		LocalDate expiryDate = requestForm.getDateApplied().plusYears(1).minusDays(1).toLocalDate();
+		requestForm.setExpirationDate(expiryDate);
+
 		UnitRegistrationEntity unitRegistrationForm = new UnitRegistrationEntity();
 		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.INSERT);
 
@@ -150,6 +167,11 @@ public class UnitRegistrationService {
 		unitNumber.setUpdatedDateTime(now);
 		unitNumberRepository.updateUnitNumber(unitNumber);
 
+		// Send Email
+		UserEntity user = userRepository.findByUserId(accessingUser.getUserId());
+		InstitutionEntity institution = institutionRepository.findByInstitutionId(user.getInstitutionId());
+		emailService.sendAURSubmissionEmail(user, institution, unitRegistrationForm);
+
 		return 1;
 	}
 
@@ -168,7 +190,7 @@ public class UnitRegistrationService {
 		}
 
 		// Throw back error when Unit Registration is already processed
-		if (!FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
+		if (FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
 			LOGGER.error(MessageFormat.format("Form {0} is already Processed.", formId));
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_ALREADY_PROCESSED);
 		}
@@ -318,5 +340,24 @@ public class UnitRegistrationService {
 			patrolMembersList.add(entity);
 		}
 		unitRegistrationForm.setUnitMembersList(patrolMembersList);
+	}
+
+	public int sendReceiptToEmail(MultipartFile receipt, Integer formId, AuthorityEntity accessingUser) {
+
+		// Get information
+		UserEntity user = userRepository.findByUserId(accessingUser.getUserId());
+		InstitutionEntity institution = institutionRepository.findByInstitutionId(user.getInstitutionId());
+		UnitRegistrationEntity unitRegistration = unitRegistrationRepository.findByFormId(formId);
+		unitRegistration.setIscomMembersList(iSComDetailsRepository.findByFormId(formId));
+		unitRegistration.setUnitMembersList(memberDetailsRepository.findByFormId(formId));
+
+		// Send Email
+		emailService.sendAURReceiptEmail(receipt, user, institution, unitRegistration);
+
+		// Set Paid status to True
+		unitRegistration.setStatusCode(FormStatusCode.PAID.getCode());
+		unitRegistration.setUpdatedBy(accessingUser.getUsername());
+		unitRegistration.setUpdatedDateTime(DateUtils.getCurrentDateTime());
+		return unitRegistrationRepository.updateFormStatus(unitRegistration);
 	}
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>AUR Form Receipt</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    <!-- use the font -->
+    <style>
+        body {font-family: 'Roboto', sans-serif;font-size: 15px;}
+        * {font-family: Arial, Helvetica, sans-serif;}
+        .receipt {max-width:200px;max-width:400px;border: 1px solid;}
+
+        table {margin-left: 15px;}
+        th {text-align: left;padding:5px;}
+        td {padding:5px;}
+    </style>
+</head>
+ <body>
+
+ 	<p>Proof of payment received from Scouter <b><span th:text="${scouterName}"></span></b>.</p>
+ 	<table>
+ 		<tr><th>Application Date:</th>
+ 			<td><span th:text="${applicationDate}"></td>
+ 		</tr>
+ 		<tr><th>Institution:</th>
+ 			<td><span th:text="${scouterInstitution}"></span>, <span th:text="${district}"></span>, Area <span th:text="${area}"></span></td>
+ 		</tr>
+ 		<tr><th>Unit Number:</th>
+ 			<td><span th:text="${unitNumber}"></td>
+ 		</tr>
+ 		<tr><th>Total Payment Due:</th>
+ 			<td>Php <span th:text="${#numbers.formatDecimal(totalFeesAmount, 1, 'COMMA', 2, 'POINT')}"></td>
+ 		</tr>
+ 	</table>
+
+	<br/>
+	<div><img class="receipt" th:src="|cid:${receipt}|" alt="Proof of Payment"/></div>
+
+  </body>
+</html>
