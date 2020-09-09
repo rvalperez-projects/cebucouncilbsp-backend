@@ -10,20 +10,21 @@
         body {font-family: 'Roboto', sans-serif;font-size: 15px;}
         * {font-family: Arial, Helvetica, sans-serif;}
         .banner-img {max-width:100%;max-height:200px;}
+		td {vertical-align:middle;white-space:nowrap;}
 
         table.summary {width:400px;table-layout:fixed;text-align:left;font-size:12px;font-style:normal;padding:10px;border: 1px solid;}
-        th {font-family:'Arial Black', Gadget, sans-serif;text-align:center;font-style:italic;font-size:15px;}
-        td {vertical-align:middle;white-space:nowrap;}
-
+        table.summary th {font-family:'Arial Black', Gadget, sans-serif;text-align:center;font-style:italic;font-size:15px;}
 		table.summary td {margin:0px;}
 		table.summary .bottom-underline {text-align:left;padding-left:10px;padding-right:10px;border-bottom-style:solid;border-bottom-width:0.5px;}
 		table.summary .label {text-align:left;padding-left:10px;padding-right:10px;}
 		table.summary .amount {text-align:right;padding-left:10px;padding-right:10px;}
 
-		table.payment {max-width:600px;text-align:left;font-size:12px;font-style:normal;padding:10px;border: 1px solid;}
-		.payment-logo {width:65px;height:55px;float:left;margin-top:10px;margin-right:15px;}
+		table.payment {max-width:600px;text-align:left;font-size:12px;font-style:normal;padding:10px;}
+		table.payment th {font-family:'Arial Black', Gadget, sans-serif;text-align:Left;font-size:15px;padding-bottom:10px;}
+		.payment-logo {width:65px;height:55px;float:left;margin-top:10px;margin-right:10px;}
 		.payment-details {font-weight:bold;font-size:14px;padding-left:15px;}
 		.payment-details-2 {font-size:11px;padding-left:15px;}
+		.payment-proof {width:350px;height:150px;border: 1px solid;}
 		.arialBlack {font-family:'Arial Black', Gadget, sans-serif;}
 		.footer1 {font-size:16px;font-weight:bold;}
 		.footer2 {font-size:13px;color:rgb(82,82,82);}
@@ -63,36 +64,36 @@
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomRepCount}"></span></td>
             <td class="label">Ins’tl Sctng. Representative</td>
             <td class="amount">P 100.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${iscomRepAmount}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomRepAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomCoordCount}"></span></td>
             <td class="label">ISC Chair/Coordr/Memb</td>
             <td class="amount">100.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${iscomCoordAmount}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCoordAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomUnitLeadersCount}"></span></td>
             <td class="label">Unit Leaders.Asst. ULs/CA/ACA</td>
             <td class="amount">60.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${iscomUnitLeadersAmount}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomUnitLeadersAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${unitScoutsCount}"></span></td>
             <td class="label">Scouts</td>
             <td class="amount">50.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${unitScoutsAmount}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(unitScoutsAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomCharterCount}"></span></td>
             <td class="label">Institutional Charter Fee</td>
             <td class="amount">10.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${iscomCharterAmount}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCharterAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="amount" colspan="2"><b>Total Fees To Be Remitted</b></td>
             <td class="amount"><b>P</b></td>
-            <td class="bottom-underline" style="text-align:right;"><b><span th:text="${totalFeesAmount}"></span></b></td>
+            <td class="bottom-underline" style="text-align:right;"><b><span th:text="${#numbers.formatDecimal(totalFeesAmount, 0, 'COMMA', 2, 'POINT')}"></span></b></td>
         </tr>
      </table>
 
@@ -103,8 +104,8 @@
             <col style="width: 20%;"/>
             <col style="width: 60%;"/>
         </colgroup>
-    	<tr><th colspan="3">PAYMENT METHODS</th></tr>
-   		<tr><td colspan="3" class="arialBlack">Bank Transfer</td></tr>
+    	<tr><th colspan="3">PAYMENT METHOD OPTIONS</th></tr>
+   		<tr><td colspan="3" class="arialBlack">1) Bank Transfer</td></tr>
    		<tr><td colspan="2"><img class="payment-logo" style="width:95px;" src="../email/img/logo-landbank.png"
            			th:src="|cid:${logoLandbank}|" alt="Landbank"/></td>
            <td>
@@ -114,7 +115,7 @@
 			<p><span class="payment-details" th:text="${landbankAccountNumber}"></span></p>
 		   </td>
 	   </tr>
-   	   <tr><td colspan="3" class="arialBlack"><br/>Money Remittance Centers</td></tr>
+   	   <tr><td colspan="3" class="arialBlack"><br/>2) Money Remittance Centers</td></tr>
 	   <tr><td><img class="payment-logo" src="../email/img/logo-gcash.png"
            			th:src="|cid:${logoGcash}|" alt="GCash"/></td>
            <td><img class="payment-logo" src="../email/img/logo-palawan.jpg"
@@ -134,7 +135,9 @@
 	   </tr>
 	</table>
 
-	<p>After processing fund transfer, reply back in this email and attach proof of payment (screenshot or scanned receipt).</p>
+	<p>Upload proof of payment (screenshot or scanned receipt) by selecting the submitted AUR Form in the Web Portal and clicking the Upload button:</p>
+	<div><img class="payment-proof" src="../email/img/img-upload-payment.png"
+ 			th:src="|cid:${uploadReceipt}|" alt="Upload Receipt Button"/></div>
 
     <p>Once payment is confirmed, you will receive another email from us with the Official Receipt and signed AUR Form as attachments.</p>
     <p>Until then, may the Great Scoutmaster continue to guide you in these challenging times.</p>

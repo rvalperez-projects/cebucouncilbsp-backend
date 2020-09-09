@@ -17,7 +17,7 @@ import org.thymeleaf.templatemode.TemplateMode;
  *
  */
 @Configuration
-public class ThymeleafTemplateConfig {
+public class EmailTemplateConfig {
 
 	@Bean
 	public ResourceBundleMessageSource emailMessageSource() {

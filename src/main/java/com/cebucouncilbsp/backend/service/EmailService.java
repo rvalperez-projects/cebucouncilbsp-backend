@@ -1,5 +1,6 @@
 package com.cebucouncilbsp.backend.service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -43,10 +47,13 @@ public class EmailService {
 	private SpringTemplateEngine templateEngine;
 
 	@Value("${spring.mail.username}")
-	private String from;
+	private String cebuCouncilEmailAddress;
 
 	@Value("${email.aurSubmission.subject}")
 	private String aurSubmissionSubject;
+
+	@Value("${email.aurReceipt.subject}")
+	private String aurReceiptSubject;
 
 	@Value("${email.payment.landbank.accountName}")
 	private String landbankAccountName;
@@ -81,14 +88,13 @@ public class EmailService {
 		try {
 			helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
 					StandardCharsets.UTF_8.name());
-			// Add Attachment
-//			helper.addAttachment("banner-bsp-webpage.png", new ClassPathResource("/email/img/banner-bsp-webpage.png"));
 
-			helper.setFrom(from);
+			helper.setFrom(cebuCouncilEmailAddress);
 			helper.setSubject(aurSubmissionSubject);
 			helper.setTo(user.getEmailAddress());
 			helper.setText(html, true);
 
+			// Add Attachment
 			helper.addInline("bannerImage", new ClassPathResource("/email/img/banner-bsp-webpage.png"), "image/png");
 			helper.addInline("logoLandbank", new ClassPathResource("/email/img/logo-landbank.png"), "image/png");
 			helper.addInline("logoGcash", new ClassPathResource("/email/img/logo-gcash.png"), "image/png");
@@ -108,6 +114,59 @@ public class EmailService {
 		}
 	}
 
+	public void sendAURReceiptEmail(MultipartFile receipt, UserEntity user, InstitutionEntity institution,
+			UnitRegistrationEntity unitRegistration) {
+
+		MimeMessage message = emailSender.createMimeMessage();
+
+		Map<String, Object> model = new HashMap<>();
+		// Set Variables
+		model.put("scouterName",
+				String.format("%s %s. %s", user.getGivenName(), user.getMiddleInitial(), user.getSurname()));
+		model.put("scouterInstitution", institution.getInstitutionName());
+		model.put("district", institution.getDistrict());
+		model.put("area", institution.getArea());
+		model.put("applicationDate", DateUtils.getFormattedDate(unitRegistration.getDateApplied()));
+		model.put("unitNumber", unitRegistration.getUnitNumber());
+
+		// Get Total Amount
+		RegistrationFees.calculateFees(unitRegistration);
+		model.put("totalFeesAmount", RegistrationFees.totalFeesAmount);
+
+		Context context = new Context();
+		context.setVariables(model);
+		context.setVariable("receipt", receipt.getName());
+
+		String html = templateEngine.process("email-aur-receipt-template", context);
+
+		MimeMessageHelper helper;
+		try {
+			helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+					StandardCharsets.UTF_8.name());
+
+			helper.setFrom(cebuCouncilEmailAddress);
+			helper.setSubject(aurReceiptSubject.replace("<unitNumber>", unitRegistration.getUnitNumber())
+					.replace("<institution>", institution.getInstitutionName()));
+			helper.setTo(cebuCouncilEmailAddress);
+			helper.setText(html, true);
+
+			// Add Attachment
+			final InputStreamSource imageSource = new ByteArrayResource(receipt.getBytes());
+			helper.addInline(receipt.getName(), imageSource, receipt.getContentType());
+
+		} catch (MessagingException | IOException e) {
+			LOGGER.error("Email Creation Failed");
+			throw new SystemFailureException("Email Creation Failed");
+		}
+
+		try {
+			emailSender.send(message);
+		} catch (MailSendException mailSendException) {
+			LOGGER.error("Email Sending Failed");
+			throw new SystemFailureException("Email Sending Failed");
+		}
+	}
+
 	private void setAURSubmissionValuesToHtml(Map<String, Object> model, UserEntity user, InstitutionEntity institution,
 			UnitRegistrationEntity unitRegistration) {
 		RegistrationFees.calculateFees(unitRegistration);
@@ -115,7 +174,7 @@ public class EmailService {
 		model.put("scouterName",
 				String.format("%s %s. %s", user.getGivenName(), user.getMiddleInitial(), user.getSurname()));
 		model.put("scouterInstitution", institution.getInstitutionName());
-		model.put("aurFormSubmissionDate", DateUtils.getFormattedDate(unitRegistration.getCreatedDateTime()));
+		model.put("aurFormSubmissionDate", DateUtils.getFormattedDate(unitRegistration.getDateApplied()));
 		model.put("iscomRepCount", RegistrationFees.iSComRepCount);
 		model.put("iscomRepAmount", RegistrationFees.iSComRepAmount);
 		model.put("iscomCoordCount", RegistrationFees.iSComCoordCount);

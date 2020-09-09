@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cebucouncilbsp.backend.annotation.AccessingUser;
 import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
@@ -86,5 +88,15 @@ public class UnitRegistrationController {
 	@AllUsers
 	public int deleteAURForm(@PathVariable Integer formId, @AccessingUser AuthorityEntity accessingUser) {
 		return service.deleteAURForm(formId, accessingUser);
+	}
+
+	@PostMapping(path = "/payment")
+	@AllUsers
+	public int uploadFundTransferReceipt(@RequestParam("paymentFile") MultipartFile paymentFile,
+			@RequestParam("formId") Integer formId, @AccessingUser AuthorityEntity accessingUser, Errors errors) {
+		if (errors.hasErrors()) {
+			throw new BusinessFailureException(errors);
+		}
+		return service.sendReceiptToEmail(paymentFile, formId, accessingUser);
 	}
 }

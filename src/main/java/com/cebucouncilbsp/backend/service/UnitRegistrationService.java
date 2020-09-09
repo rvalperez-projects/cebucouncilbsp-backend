@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cebucouncilbsp.backend.constant.FormStatusCode;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
@@ -333,5 +334,24 @@ public class UnitRegistrationService {
 			patrolMembersList.add(entity);
 		}
 		unitRegistrationForm.setUnitMembersList(patrolMembersList);
+	}
+
+	public int sendReceiptToEmail(MultipartFile receipt, Integer formId, AuthorityEntity accessingUser) {
+
+		// Get information
+		UserEntity user = userRepository.findByUserId(accessingUser.getUserId());
+		InstitutionEntity institution = institutionRepository.findByInstitutionId(user.getInstitutionId());
+		UnitRegistrationEntity unitRegistration = unitRegistrationRepository.findByFormId(formId);
+		unitRegistration.setIscomMembersList(iSComDetailsRepository.findByFormId(formId));
+		unitRegistration.setUnitMembersList(memberDetailsRepository.findByFormId(formId));
+
+		// Send Email
+		emailService.sendAURReceiptEmail(receipt, user, institution, unitRegistration);
+
+		// Set Paid status to True
+		unitRegistration.setStatusCode(FormStatusCode.PAID.getCode());
+		unitRegistration.setUpdatedBy(accessingUser.getUsername());
+		unitRegistration.setUpdatedDateTime(DateUtils.getCurrentDateTime());
+		return unitRegistrationRepository.updateFormStatus(unitRegistration);
 	}
 }
