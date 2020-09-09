@@ -4,6 +4,7 @@
 package com.cebucouncilbsp.backend.service;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +122,11 @@ public class UnitRegistrationService {
 			unitNumber = unitNumberRepository.findByUnitNumber(requestForm.getUnitNumber());
 		}
 
+		// Set date to Pinas timezone
+		requestForm.setDateApplied(DateUtils.getCurrentDateTime());
+		LocalDate expiryDate = requestForm.getDateApplied().plusYears(1).minusDays(1).toLocalDate();
+		requestForm.setExpirationDate(expiryDate);
+
 		UnitRegistrationEntity unitRegistrationForm = new UnitRegistrationEntity();
 		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.INSERT);
 
@@ -184,7 +190,7 @@ public class UnitRegistrationService {
 		}
 
 		// Throw back error when Unit Registration is already processed
-		if (!FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
+		if (FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
 			LOGGER.error(MessageFormat.format("Form {0} is already Processed.", formId));
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_ALREADY_PROCESSED);
 		}

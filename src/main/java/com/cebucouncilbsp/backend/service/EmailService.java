@@ -81,6 +81,7 @@ public class EmailService {
 		context.setVariable("logoPalawan", "logoPalawan");
 		context.setVariable("logoRd", "logoRd");
 		context.setVariable("logoML", "logoML");
+		context.setVariable("uploadPayment", "uploadPayment");
 
 		String html = templateEngine.process("email-aur-submission-template", context);
 
@@ -101,6 +102,7 @@ public class EmailService {
 			helper.addInline("logoPalawan", new ClassPathResource("/email/img/logo-palawan.jpg"), "image/jpg");
 			helper.addInline("logoRd", new ClassPathResource("/email/img/logo-rd-padala.png"), "image/png");
 			helper.addInline("logoML", new ClassPathResource("/email/img/logo-m-lhuillier.png"), "image/png");
+			helper.addInline("uploadPayment", new ClassPathResource("/email/img/img-upload-payment.png"), "image/png");
 
 		} catch (MessagingException e) {
 			LOGGER.error("Email Creation Failed");

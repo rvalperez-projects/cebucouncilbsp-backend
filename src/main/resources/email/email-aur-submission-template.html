@@ -64,36 +64,36 @@
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomRepCount}"></span></td>
             <td class="label">Ins’tl Sctng. Representative</td>
             <td class="amount">P 100.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomRepAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomRepAmount, 1, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomCoordCount}"></span></td>
             <td class="label">ISC Chair/Coordr/Memb</td>
             <td class="amount">100.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCoordAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCoordAmount, 1, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomUnitLeadersCount}"></span></td>
             <td class="label">Unit Leaders.Asst. ULs/CA/ACA</td>
             <td class="amount">60.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomUnitLeadersAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomUnitLeadersAmount, 1, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${unitScoutsCount}"></span></td>
             <td class="label">Scouts</td>
             <td class="amount">50.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(unitScoutsAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(unitScoutsAmount, 1, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="bottom-underline" style="text-align:center;"><span th:text="${iscomCharterCount}"></span></td>
             <td class="label">Institutional Charter Fee</td>
             <td class="amount">10.00</td>
-            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCharterAmount, 0, 'COMMA', 2, 'POINT')}"></span></td>
+            <td class="bottom-underline" style="text-align:right;"><span th:text="${#numbers.formatDecimal(iscomCharterAmount, 1, 'COMMA', 2, 'POINT')}"></span></td>
         </tr>
         <tr>
             <td class="amount" colspan="2"><b>Total Fees To Be Remitted</b></td>
             <td class="amount"><b>P</b></td>
-            <td class="bottom-underline" style="text-align:right;"><b><span th:text="${#numbers.formatDecimal(totalFeesAmount, 0, 'COMMA', 2, 'POINT')}"></span></b></td>
+            <td class="bottom-underline" style="text-align:right;"><b><span th:text="${#numbers.formatDecimal(totalFeesAmount, 1, 'COMMA', 2, 'POINT')}"></span></b></td>
         </tr>
      </table>
 
@@ -137,7 +137,7 @@
 
 	<p>Upload proof of payment (screenshot or scanned receipt) by selecting the submitted AUR Form in the Web Portal and clicking the Upload button:</p>
 	<div><img class="payment-proof" src="../email/img/img-upload-payment.png"
- 			th:src="|cid:${uploadReceipt}|" alt="Upload Receipt Button"/></div>
+ 			th:src="|cid:${uploadPayment}|" alt="Upload Receipt Button"/></div>
 
     <p>Once payment is confirmed, you will receive another email from us with the Official Receipt and signed AUR Form as attachments.</p>
     <p>Until then, may the Great Scoutmaster continue to guide you in these challenging times.</p>
