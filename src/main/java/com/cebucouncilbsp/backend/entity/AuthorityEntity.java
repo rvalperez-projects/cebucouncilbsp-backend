@@ -54,4 +54,10 @@ public class AuthorityEntity extends BaseEntity {
 	public void setRoleCode(String roleCode) {
 		this.roleCode = roleCode;
 	}
+
+	@Override
+	public String toString() {
+		return "AuthorityEntity [userId=" + userId + ", token=" + token + ", username=" + username + ", password="
+				+ password + ", roleCode=" + roleCode + "]";
+	}
 }

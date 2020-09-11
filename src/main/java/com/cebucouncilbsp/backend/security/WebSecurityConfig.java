@@ -58,23 +58,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// set allowed api and role
 				// Login & Logout, and Sign-Up
 				.antMatchers("/auth/**").permitAll()
+
 				// User api
 				.antMatchers("/user/{\\d}}").permitAll().antMatchers("/user/search").hasAnyAuthority(COUNCIL, ADMIN)
 				.antMatchers("/user/all").hasAuthority(ADMIN)
-				// Form api
+
+				// AUR Form api
 				.antMatchers("/form/{\\d}}").permitAll().antMatchers("/form/submit").hasAnyAuthority(USER, COUNCIL)
 				.antMatchers("/form/search").permitAll().antMatchers("/form/update").hasAnyAuthority(COUNCIL, ADMIN)
 				.antMatchers("/form/delete/{\\d}}").permitAll().antMatchers("/form/update")
 				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/form/all").hasAuthority(ADMIN)
 				.antMatchers("/form/payment").permitAll()
+
 				// Institution api
 				.antMatchers("/institution/all").hasAuthority(ADMIN).antMatchers("/institution/{\\d}}").permitAll()
 				.antMatchers("/institution/unitNumbers/{\\d}}").permitAll()
+
 				// Area api
 				.antMatchers("/area/all").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/districts/institutions")
 				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/area/{\\w}}").hasAnyAuthority(COUNCIL, ADMIN)
+
+				// Unit Number api
+				.antMatchers("/unitNumber/all").hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/unitNumber/{\\w}}")
+				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/unitNumber/available/{\\w}}")
+				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/unitNumber/institution/{\\d}}")
+				.hasAnyAuthority(COUNCIL, ADMIN).antMatchers("/unitNumber/new").hasAnyAuthority(COUNCIL, ADMIN)
+				.antMatchers("/unitNumber/update").hasAnyAuthority(COUNCIL, ADMIN)
+
 				// All other requests
 				.anyRequest().authenticated()
+
 				// this disables session creation on Spring Security
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

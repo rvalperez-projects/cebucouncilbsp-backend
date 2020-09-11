@@ -41,7 +41,33 @@
       M_UNIT_NUMBER
     WHERE
       (LAST_USED_YEAR IS NULL
-      OR (#{currentYear,jdbcType=INTEGER} - LAST_USED_YEAR) > 2)
+       OR (#{currentYear,jdbcType=INTEGER} - LAST_USED_YEAR) > 2
+       OR INSTITUTION_ID IS NULL)
+      <if test='sectionCode != null'>
+      	AND SECTION_CODE = #{sectionCode,jdbcType=VARCHAR}
+      </if>
+    ORDER BY
+      SECTION_CODE ASC,
+      LAST_USED_YEAR ASC
+  </select>
+
+  <select id="findAvailableUnitNumbersExceptInstId" parameterType="map" resultMap="UnitNumberEntityResultMap" resultType="UnitNumberEntity">
+    SELECT
+      UNIT_NUMBER,
+      INSTITUTION_ID,
+      SECTION_CODE,
+      LAST_USED_YEAR,
+      CREATED_BY,
+      CREATED_DATETIME,
+      UPDATED_BY,
+      UPDATED_DATETIME
+    FROM
+      M_UNIT_NUMBER
+    WHERE
+      (INSTITUTION_ID IS NULL
+       OR (INSTITUTION_ID != #{institutionId,jdbcType=INTEGER}
+       AND (LAST_USED_YEAR IS NULL
+       OR (#{currentYear,jdbcType=INTEGER} - LAST_USED_YEAR) > 2)))
       <if test='sectionCode != null'>
       	AND SECTION_CODE = #{sectionCode,jdbcType=VARCHAR}
       </if>
@@ -64,6 +90,25 @@
       M_UNIT_NUMBER
     WHERE
       UNIT_NUMBER = #{unitNumber,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findByInstitutionIdOnly" parameterType="map" resultMap="UnitNumberEntityResultMap" resultType="UnitNumberEntity">
+    SELECT
+      UNIT_NUMBER,
+      INSTITUTION_ID,
+      SECTION_CODE,
+      LAST_USED_YEAR
+      CREATED_BY,
+      CREATED_DATETIME,
+      UPDATED_BY,
+      UPDATED_DATETIME
+    FROM
+      M_UNIT_NUMBER
+    WHERE
+      INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
+    ORDER BY
+      SECTION_CODE ASC,
+      UNIT_NUMBER ASC
   </select>
 
   <select id="findByInstitutionId" parameterType="map" resultMap="UnitNumberEntityResultMap" resultType="UnitNumberEntity">
@@ -105,10 +150,9 @@
       #{institutionId,jdbcType=INTEGER},
       #{sectionCode,jdbcType=VARCHAR},
       #{lastUsedYear,jdbcType=INTEGER},
-      #{validFlag,jdbcType=BOOLEAN},
       #{createdBy,jdbcType=VARCHAR},
-      #{updatedBy,jdbcType=VARCHAR},
       #{createdDateTime,jdbcType=TIMESTAMP},
+      #{updatedBy,jdbcType=VARCHAR},
       #{updatedDateTime,jdbcType=TIMESTAMP}
     </trim>
   </insert>
