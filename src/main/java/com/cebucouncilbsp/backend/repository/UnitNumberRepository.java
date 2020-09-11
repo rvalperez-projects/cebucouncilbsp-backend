@@ -13,15 +13,20 @@ import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
  */
 public interface UnitNumberRepository {
 
-	int insertUnitNumber(UnitNumberEntity area);
+	int insertUnitNumber(UnitNumberEntity unitNumber);
 
-	int updateUnitNumber(UnitNumberEntity area);
+	int updateUnitNumber(UnitNumberEntity unitNumber);
 
 	List<UnitNumberEntity> findAllUnitNumbers();
 
 	List<UnitNumberEntity> findAvailableUnitNumbers(Integer currentYear, String sectionCode);
 
+	List<UnitNumberEntity> findAvailableUnitNumbersExceptInstId(Integer institutionId, Integer currentYear,
+			String sectionCode);
+
 	UnitNumberEntity findByUnitNumber(String unitNumber);
 
 	List<UnitNumberEntity> findByInstitutionId(Integer institutionId, Integer currentYear);
+
+	List<UnitNumberEntity> findByInstitutionIdOnly(Integer institutionId);
 }

@@ -45,4 +45,11 @@ public class UnitNumberEntity extends BaseEntity {
 	public void setLastUsedYear(Integer lastUsedYear) {
 		this.lastUsedYear = lastUsedYear;
 	}
+
+	@Override
+	public String toString() {
+		return "UnitNumberEntity [unitNumber=" + unitNumber + ", institutionId=" + institutionId + ", sectionCode="
+				+ sectionCode + ", lastUsedYear=" + lastUsedYear + "]";
+	}
+
 }
