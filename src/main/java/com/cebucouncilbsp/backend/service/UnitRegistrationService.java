@@ -121,6 +121,7 @@ public class UnitRegistrationService {
 		} else {
 			unitNumber = unitNumberRepository.findByUnitNumber(requestForm.getUnitNumber());
 		}
+		requestForm.setUnitNumber(unitNumber.getUnitNumber());
 
 		// Set date to Pinas timezone
 		requestForm.setDateApplied(DateUtils.getCurrentDateTime());
