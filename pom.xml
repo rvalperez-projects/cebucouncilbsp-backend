@@ -83,6 +83,12 @@
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
         </dependency>
+		<dependency>
+		    <groupId>org.powermock</groupId>
+		    <artifactId>powermock-api-mockito2</artifactId>
+		    <version>1.7.4</version>
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
