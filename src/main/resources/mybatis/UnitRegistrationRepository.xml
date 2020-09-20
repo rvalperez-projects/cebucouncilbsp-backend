@@ -13,6 +13,14 @@
     <result column="SECTION_CODE" jdbcType="VARCHAR" property="sectionCode"/>
     <result column="STATUS_CODE" jdbcType="VARCHAR" property="statusCode"/>
     <result column="DATE_APPLIED" jdbcType="TIMESTAMP" property="dateApplied"/>
+    <result column="COUNCIL_REGISTRATION_OFFICER" jdbcType="VARCHAR" property="councilRegistrationOfficer"/>
+    <result column="COUNCIL_PROCESSED_DATE" jdbcType="TIMESTAMP" property="councilProcessedDate"/>
+    <result column="COUNCIL_SCOUT_EXECUTIVE" jdbcType="VARCHAR" property="councilScoutExecutive"/>
+    <result column="COUNCIL_APPROVED_DATE" jdbcType="DATE" property="councilApprovedDate"/>
+    <result column="REGIONAL_REGISTRATION_OFFICER" jdbcType="VARCHAR" property="regionalRegistrationOfficer"/>
+    <result column="REGIONAL_PROCESSED_DATE" jdbcType="TIMESTAMP" property="regionalProcessedDate"/>
+    <result column="REGIONAL_SCOUT_EXECUTIVE" jdbcType="VARCHAR" property="regionalScoutExecutive"/>
+    <result column="REGIONAL_APPROVED_DATE" jdbcType="DATE" property="regionalApprovedDate"/>
     <result column="OFFICIAL_RECEIPT_NO" jdbcType="VARCHAR" property="officialReceiptNo"/>
     <result column="OFFICIAL_RECEIPT_DATE" jdbcType="DATE" property="officialReceiptDate"/>
     <result column="EXPIRATION_DATE" jdbcType="DATE" property="expirationDate"/>
@@ -85,6 +93,14 @@
       TUR.OFFICIAL_RECEIPT_NO,
       TUR.OFFICIAL_RECEIPT_DATE,
       TUR.EXPIRATION_DATE,
+      TUR.COUNCIL_REGISTRATION_OFFICER,
+      TUR.COUNCIL_PROCESSED_DATE,
+      TUR.COUNCIL_SCOUT_EXECUTIVE,
+      TUR.COUNCIL_APPROVED_DATE,
+      TUR.REGIONAL_REGISTRATION_OFFICER,
+      TUR.REGIONAL_PROCESSED_DATE,
+      TUR.REGIONAL_SCOUT_EXECUTIVE,
+      TUR.REGIONAL_APPROVED_DATE,
       TUR.CREATED_BY,
       TUR.CREATED_DATETIME,
       TUR.UPDATED_BY,
@@ -110,6 +126,14 @@
       TUR.OFFICIAL_RECEIPT_NO,
       TUR.OFFICIAL_RECEIPT_DATE,
       TUR.EXPIRATION_DATE,
+      TUR.COUNCIL_REGISTRATION_OFFICER,
+      TUR.COUNCIL_PROCESSED_DATE,
+      TUR.COUNCIL_SCOUT_EXECUTIVE,
+      TUR.COUNCIL_APPROVED_DATE,
+      TUR.REGIONAL_REGISTRATION_OFFICER,
+      TUR.REGIONAL_PROCESSED_DATE,
+      TUR.REGIONAL_SCOUT_EXECUTIVE,
+      TUR.REGIONAL_APPROVED_DATE,
       TUR.CREATED_BY,
       TUR.CREATED_DATETIME,
       TUR.UPDATED_BY,
@@ -181,6 +205,14 @@
        OFFICIAL_RECEIPT_NO,
        OFFICIAL_RECEIPT_DATE,
        EXPIRATION_DATE,
+       COUNCIL_REGISTRATION_OFFICER,
+       COUNCIL_PROCESSED_DATE,
+       COUNCIL_SCOUT_EXECUTIVE,
+       COUNCIL_APPROVED_DATE,
+       REGIONAL_REGISTRATION_OFFICER,
+       REGIONAL_PROCESSED_DATE,
+       REGIONAL_SCOUT_EXECUTIVE,
+       REGIONAL_APPROVED_DATE,
        CREATED_BY,
        CREATED_DATETIME,
        UPDATED_BY,
@@ -197,6 +229,14 @@
        #{officialReceiptNo,jdbcType=VARCHAR},
        #{officialReceiptDate,jdbcType=TIMESTAMP},
        #{expirationDate,jdbcType=TIMESTAMP},
+       #{councilRegistrationOfficer,jdbcType=VARCHAR},
+       #{councilProcessedDate,jdbcType=TIMESTAMP},
+       #{councilScoutExecutive,jdbcType=VARCHAR},
+       #{councilApprovedDate,jdbcType=TIMESTAMP},
+       #{regionalRegistrationOfficer,jdbcType=VARCHAR},
+       #{regionalProcessedDate,jdbcType=TIMESTAMP},
+       #{regionalScoutExecutive,jdbcType=VARCHAR},
+       #{regionalApprovedDate,jdbcType=TIMESTAMP},
        #{createdBy,jdbcType=VARCHAR},
        #{createdDateTime,jdbcType=TIMESTAMP},
        #{updatedBy,jdbcType=VARCHAR},
@@ -219,6 +259,14 @@
       OFFICIAL_RECEIPT_NO = #{officialReceiptNo,jdbcType=VARCHAR},
       OFFICIAL_RECEIPT_DATE = #{officialReceiptDate,jdbcType=TIMESTAMP},
       EXPIRATION_DATE = #{expirationDate,jdbcType=TIMESTAMP},
+      COUNCIL_REGISTRATION_OFFICER = #{councilRegistrationOfficer,jdbcType=VARCHAR},
+      COUNCIL_PROCESSED_DATE = #{councilProcessedDate,jdbcType=TIMESTAMP},
+      COUNCIL_SCOUT_EXECUTIVE = #{councilScoutExecutive,jdbcType=VARCHAR},
+      COUNCIL_APPROVED_DATE = #{councilApprovedDate,jdbcType=TIMESTAMP},
+      REGIONAL_REGISTRATION_OFFICER = #{regionalRegistrationOfficer,jdbcType=VARCHAR},
+      REGIONAL_PROCESSED_DATE = #{regionalProcessedDate,jdbcType=TIMESTAMP},
+      REGIONAL_SCOUT_EXECUTIVE = #{regionalScoutExecutive,jdbcType=VARCHAR},
+      REGIONAL_APPROVED_DATE = #{regionalApprovedDate,jdbcType=TIMESTAMP},
       UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
       UPDATED_DATETIME = #{updatedDateTime,jdbcType=TIMESTAMP}
     </set>

@@ -40,6 +40,14 @@ public class UnitRegistrationFormRequestForm {
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
 	private LocalDateTime dateApplied;
+	private String councilRegistrationOfficer;
+	private LocalDateTime councilProcessedDate;
+	private String councilScoutExecutive;
+	private LocalDate councilApprovedDate;
+	private String regionalRegistrationOfficer;
+	private LocalDateTime regionalProcessedDate;
+	private String regionalScoutExecutive;
+	private LocalDate regionalApprovedDate;
 
 	public Integer getFormId() {
 		return formId;
@@ -145,6 +153,70 @@ public class UnitRegistrationFormRequestForm {
 		this.dateApplied = dateApplied;
 	}
 
+	public String getCouncilRegistrationOfficer() {
+		return councilRegistrationOfficer;
+	}
+
+	public void setCouncilRegistrationOfficer(String councilRegistrationOfficer) {
+		this.councilRegistrationOfficer = councilRegistrationOfficer;
+	}
+
+	public LocalDateTime getCouncilProcessedDate() {
+		return councilProcessedDate;
+	}
+
+	public void setCouncilProcessedDate(LocalDateTime councilProcessedDate) {
+		this.councilProcessedDate = councilProcessedDate;
+	}
+
+	public String getCouncilScoutExecutive() {
+		return councilScoutExecutive;
+	}
+
+	public void setCouncilScoutExecutive(String councilScoutExecutive) {
+		this.councilScoutExecutive = councilScoutExecutive;
+	}
+
+	public LocalDate getCouncilApprovedDate() {
+		return councilApprovedDate;
+	}
+
+	public void setCouncilApprovedDate(LocalDate councilApprovedDate) {
+		this.councilApprovedDate = councilApprovedDate;
+	}
+
+	public String getRegionalRegistrationOfficer() {
+		return regionalRegistrationOfficer;
+	}
+
+	public void setRegionalRegistrationOfficer(String regionalRegistrationOfficer) {
+		this.regionalRegistrationOfficer = regionalRegistrationOfficer;
+	}
+
+	public LocalDateTime getRegionalProcessedDate() {
+		return regionalProcessedDate;
+	}
+
+	public void setRegionalProcessedDate(LocalDateTime regionalProcessedDate) {
+		this.regionalProcessedDate = regionalProcessedDate;
+	}
+
+	public String getRegionalScoutExecutive() {
+		return regionalScoutExecutive;
+	}
+
+	public void setRegionalScoutExecutive(String regionalScoutExecutive) {
+		this.regionalScoutExecutive = regionalScoutExecutive;
+	}
+
+	public LocalDate getRegionalApprovedDate() {
+		return regionalApprovedDate;
+	}
+
+	public void setRegionalApprovedDate(LocalDate regionalApprovedDate) {
+		this.regionalApprovedDate = regionalApprovedDate;
+	}
+
 	@Override
 	public String toString() {
 		return "UnitRegistrationFormRequestForm [formId=" + formId + ", unitRegistrationNo=" + unitRegistrationNo
@@ -152,6 +224,12 @@ public class UnitRegistrationFormRequestForm {
 				+ ", statusCode=" + statusCode + ", institutionId=" + institutionId + ", iscomMembersList="
 				+ iscomMembersList + ", unitMembersList=" + unitMembersList + ", officialReceiptNo=" + officialReceiptNo
 				+ ", officialReceiptDate=" + officialReceiptDate + ", expirationDate=" + expirationDate
-				+ ", dateApplied=" + dateApplied + "]";
+				+ ", dateApplied=" + dateApplied + ", councilRegistrationOfficer=" + councilRegistrationOfficer
+				+ ", councilProcessedDate=" + councilProcessedDate + ", councilScoutExecutive=" + councilScoutExecutive
+				+ ", councilApprovedDate=" + councilApprovedDate + ", regionalRegistrationOfficer="
+				+ regionalRegistrationOfficer + ", regionalProcessedDate=" + regionalProcessedDate
+				+ ", regionalScoutExecutive=" + regionalScoutExecutive + ", regionalApprovedDate="
+				+ regionalApprovedDate + "]";
 	}
+
 }

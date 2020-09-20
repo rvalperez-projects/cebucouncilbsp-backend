@@ -56,6 +56,9 @@ public class UserService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
+	@Autowired
+	private EmailService emailService;
+
 	/**
 	 *
 	 * @return
@@ -157,6 +160,9 @@ public class UserService {
 		authority.setCreatedDateTime(now);
 		authority.setUpdatedDateTime(now);
 		authorityRepository.insertAuthority(authority);
+
+		// Send email
+		emailService.sendRegistrationInfo(requestForm);
 
 		// Insert UserEntity and InstitutionEntity to DB
 		return userId;

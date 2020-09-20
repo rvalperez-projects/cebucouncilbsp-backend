@@ -25,12 +25,15 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.cebucouncilbsp.backend.constant.ISComPositionCategoryCode;
+import com.cebucouncilbsp.backend.constant.InstitutionCategoryCode;
 import com.cebucouncilbsp.backend.entity.ISComDetailsEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UnitRegistrationEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.exception.SystemFailureException;
+import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
 import com.cebucouncilbsp.backend.utils.DateUtils;
+import com.cebucouncilbsp.backend.utils.TextUtils;
 
 /**
  * @author reneir.val.t.perez
@@ -51,9 +54,10 @@ public class EmailService {
 
 	@Value("${email.aurSubmission.subject}")
 	private String aurSubmissionSubject;
-
 	@Value("${email.aurReceipt.subject}")
 	private String aurReceiptSubject;
+	@Value("${email.signup.subject}")
+	private String signUpSubject;
 
 	@Value("${email.payment.landbank.accountName}")
 	private String landbankAccountName;
@@ -64,6 +68,61 @@ public class EmailService {
 	private String remittanceAccountName;
 	@Value("${email.payment.remittance.accountNumber}")
 	private String remittanceAccountNumber;
+
+	public void sendRegistrationInfo(UserSignUpRequestForm user) {
+
+		MimeMessage message = emailSender.createMimeMessage();
+
+		Map<String, Object> model = new HashMap<>();
+		// Set Login Details
+		model.put("username", user.getUsername());
+		model.put("password", user.getPassword());
+
+		// Set Personal Information
+		model.put("scouterName",
+				TextUtils.getFullName(user.getSurname(), user.getGivenName(), user.getMiddleInitial()));
+		model.put("mobileNumber", user.getMobileNumber());
+		model.put("emailAddress", user.getEmailAddress());
+
+		// Set Institution
+		model.put("institution", user.getInstitutionName());
+		model.put("address", user.getAddress());
+		model.put("category", InstitutionCategoryCode.get(user.getCategoryCode()).name());
+		model.put("district", user.getDistrict());
+		model.put("area", user.getArea());
+		model.put("contactNumber", user.getContactNumber());
+
+		Context context = new Context();
+		context.setVariable("bannerImage", "bannerImage");
+		context.setVariables(model);
+
+		String html = templateEngine.process("email-signup-receipt-template", context);
+
+		MimeMessageHelper helper;
+		try {
+			helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+					StandardCharsets.UTF_8.name());
+
+			helper.setSubject(signUpSubject);
+			helper.setFrom(cebuCouncilEmailAddress);
+			helper.setTo(user.getEmailAddress());
+			helper.setText(html, true);
+
+			// Add Attachment
+			helper.addInline("bannerImage", new ClassPathResource("/email/img/banner-bsp-webpage.png"), "image/png");
+
+		} catch (MessagingException e) {
+			LOGGER.error("Sign Up Email Sending Failed");
+			throw new SystemFailureException("Sign Up Email Sending Failed");
+		}
+
+		try {
+			emailSender.send(message);
+		} catch (MailSendException mailSendException) {
+			LOGGER.error("Email Sending Failed");
+			throw new SystemFailureException("Email Sending Failed");
+		}
+	}
 
 	public void sendAURSubmissionEmail(UserEntity user, InstitutionEntity institution,
 			UnitRegistrationEntity unitRegistration) {
@@ -90,8 +149,8 @@ public class EmailService {
 			helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
 					StandardCharsets.UTF_8.name());
 
-			helper.setFrom(cebuCouncilEmailAddress);
 			helper.setSubject(aurSubmissionSubject);
+			helper.setFrom(cebuCouncilEmailAddress);
 			helper.setTo(user.getEmailAddress());
 			helper.setText(html, true);
 
@@ -174,7 +233,7 @@ public class EmailService {
 		RegistrationFees.calculateFees(unitRegistration);
 
 		model.put("scouterName",
-				String.format("%s %s. %s", user.getGivenName(), user.getMiddleInitial(), user.getSurname()));
+				TextUtils.getFullName(user.getSurname(), user.getGivenName(), user.getMiddleInitial()));
 		model.put("scouterInstitution", institution.getInstitutionName());
 		model.put("aurFormSubmissionDate", DateUtils.getFormattedDate(unitRegistration.getDateApplied()));
 		model.put("iscomRepCount", RegistrationFees.iSComRepCount);
