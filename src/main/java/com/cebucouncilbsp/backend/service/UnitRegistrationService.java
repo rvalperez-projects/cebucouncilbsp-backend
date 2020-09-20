@@ -12,6 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -56,8 +57,11 @@ public class UnitRegistrationService {
 	private static final String NO_MORE_UNIT_NUMBERS = "backend.error.unitNumber.NoMore";
 
 	private enum MethodCode {
-		INSERT, UPDATE
+		REGISTER, PROCESS_COUNCIL
 	}
+
+	@Value("${auth.council.executive}")
+	private String cebuCouncilScoutExecutive;
 
 	@Autowired
 	private UnitRegistrationRepository unitRegistrationRepository;
@@ -125,11 +129,9 @@ public class UnitRegistrationService {
 
 		// Set date to Pinas timezone
 		requestForm.setDateApplied(DateUtils.getCurrentDateTime());
-		LocalDate expiryDate = requestForm.getDateApplied().plusYears(1).minusDays(1).toLocalDate();
-		requestForm.setExpirationDate(expiryDate);
 
 		UnitRegistrationEntity unitRegistrationForm = new UnitRegistrationEntity();
-		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.INSERT);
+		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.REGISTER);
 
 		// Insert UnitRegistrationEntity
 		LocalDateTime now = DateUtils.getCurrentDateTime();
@@ -191,7 +193,7 @@ public class UnitRegistrationService {
 		}
 
 		// Throw back error when Unit Registration is already processed
-		if (FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
+		if (!FormStatusCode.SUBMITTED.getCode().equals(unitRegistrationForm.getStatusCode())) {
 			LOGGER.error(MessageFormat.format("Form {0} is already Processed.", formId));
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_ALREADY_PROCESSED);
 		}
@@ -254,7 +256,7 @@ public class UnitRegistrationService {
 			throw new BusinessFailureException(UNIT_REGISTRATION_FORM_NOT_FOUND);
 		}
 
-		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.UPDATE);
+		this.setUnitRegistrationEntity(unitRegistrationForm, requestForm, accessingUser, MethodCode.PROCESS_COUNCIL);
 
 		// Update unitRegistrationForm
 		unitRegistrationRepository.updateUnitRegistrationEntityForm(unitRegistrationForm);
@@ -281,11 +283,29 @@ public class UnitRegistrationService {
 		unitRegistrationForm.setOfficialReceiptDate(requestForm.getOfficialReceiptDate());
 		unitRegistrationForm.setOfficialReceiptNo(requestForm.getOfficialReceiptNo());
 		unitRegistrationForm.setDateApplied(requestForm.getDateApplied());
-		unitRegistrationForm.setExpirationDate(requestForm.getExpirationDate());
 
-		if (methodCode.equals(MethodCode.INSERT)) {
+		if (MethodCode.REGISTER.equals(methodCode)) {
 			unitRegistrationForm.setCreatedBy(accessingUser.getUsername());
 			unitRegistrationForm.setCreatedDateTime(now);
+		} else if (MethodCode.PROCESS_COUNCIL.equals(methodCode)) {
+			// Set Expiration Date
+			LocalDate expiryDate = now.plusYears(1).minusDays(1).toLocalDate();
+			unitRegistrationForm.setExpirationDate(expiryDate);
+
+			// Set Local Council Action details
+			UserEntity user = userRepository.findByUserId(accessingUser.getUserId());
+			String councilRegistrationOfficer = "";
+			if (StringUtils.hasText(user.getMiddleInitial())) {
+				councilRegistrationOfficer = String.format("%s %s. %s", user.getGivenName(), user.getMiddleInitial(),
+						user.getSurname());
+			} else {
+				councilRegistrationOfficer = String.format("%s %s", user.getGivenName(), user.getSurname());
+			}
+			unitRegistrationForm.setCouncilRegistrationOfficer(councilRegistrationOfficer);
+			unitRegistrationForm.setCouncilProcessedDate(now);
+
+			unitRegistrationForm.setCouncilScoutExecutive(cebuCouncilScoutExecutive);
+			unitRegistrationForm.setCouncilApprovedDate(now.toLocalDate());
 		}
 		unitRegistrationForm.setUpdatedBy(accessingUser.getUsername());
 		unitRegistrationForm.setUpdatedDateTime(now);
@@ -306,7 +326,7 @@ public class UnitRegistrationService {
 			entity.setTenure(iSCom.getTenure());
 			entity.setReligion(iSCom.getReligion());
 
-			if (methodCode.equals(MethodCode.INSERT)) {
+			if (methodCode.equals(MethodCode.REGISTER)) {
 				entity.setCreatedBy(accessingUser.getUsername());
 				entity.setCreatedDateTime(now);
 			}
@@ -332,7 +352,7 @@ public class UnitRegistrationService {
 			entity.setTenure(member.getTenure());
 			entity.setReligion(member.getReligion());
 
-			if (methodCode.equals(MethodCode.INSERT)) {
+			if (MethodCode.REGISTER.equals(methodCode)) {
 				entity.setCreatedBy(accessingUser.getUsername());
 				entity.setCreatedDateTime(now);
 			}

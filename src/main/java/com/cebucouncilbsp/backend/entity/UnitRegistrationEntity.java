@@ -26,6 +26,14 @@ public class UnitRegistrationEntity extends BaseEntity {
 	private String officialReceiptNo;
 	private LocalDate officialReceiptDate;
 	private LocalDate expirationDate;
+	private String councilRegistrationOfficer;
+	private LocalDateTime councilProcessedDate;
+	private String councilScoutExecutive;
+	private LocalDate councilApprovedDate;
+	private String regionalRegistrationOfficer;
+	private LocalDateTime regionalProcessedDate;
+	private String regionalScoutExecutive;
+	private LocalDate regionalApprovedDate;
 
 	private List<ISComDetailsEntity> iSComMembersList;
 	private List<MemberDetailsEntity> unitMembersList;
@@ -148,5 +156,69 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setUnitMembersList(List<MemberDetailsEntity> unitMembersList) {
 		this.unitMembersList = unitMembersList;
+	}
+
+	public String getCouncilRegistrationOfficer() {
+		return councilRegistrationOfficer;
+	}
+
+	public void setCouncilRegistrationOfficer(String councilRegistrationOfficer) {
+		this.councilRegistrationOfficer = councilRegistrationOfficer;
+	}
+
+	public LocalDateTime getCouncilProcessedDate() {
+		return councilProcessedDate;
+	}
+
+	public void setCouncilProcessedDate(LocalDateTime councilProcessedDate) {
+		this.councilProcessedDate = councilProcessedDate;
+	}
+
+	public String getCouncilScoutExecutive() {
+		return councilScoutExecutive;
+	}
+
+	public void setCouncilScoutExecutive(String councilScoutExecutive) {
+		this.councilScoutExecutive = councilScoutExecutive;
+	}
+
+	public LocalDate getCouncilApprovedDate() {
+		return councilApprovedDate;
+	}
+
+	public void setCouncilApprovedDate(LocalDate councilApprovedDate) {
+		this.councilApprovedDate = councilApprovedDate;
+	}
+
+	public String getRegionalRegistrationOfficer() {
+		return regionalRegistrationOfficer;
+	}
+
+	public void setRegionalRegistrationOfficer(String regionalRegistrationOfficer) {
+		this.regionalRegistrationOfficer = regionalRegistrationOfficer;
+	}
+
+	public LocalDateTime getRegionalProcessedDate() {
+		return regionalProcessedDate;
+	}
+
+	public void setRegionalProcessedDate(LocalDateTime regionalProcessedDate) {
+		this.regionalProcessedDate = regionalProcessedDate;
+	}
+
+	public String getRegionalScoutExecutive() {
+		return regionalScoutExecutive;
+	}
+
+	public void setRegionalScoutExecutive(String regionalScoutExecutive) {
+		this.regionalScoutExecutive = regionalScoutExecutive;
+	}
+
+	public LocalDate getRegionalApprovedDate() {
+		return regionalApprovedDate;
+	}
+
+	public void setRegionalApprovedDate(LocalDate regionalApprovedDate) {
+		this.regionalApprovedDate = regionalApprovedDate;
 	}
 }
