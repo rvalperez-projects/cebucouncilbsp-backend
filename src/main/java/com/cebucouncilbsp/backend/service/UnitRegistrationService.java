@@ -40,6 +40,7 @@ import com.cebucouncilbsp.backend.requestdto.UnitRegistrationFormRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationISComRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UnitRegistrationMemberRequestForm;
 import com.cebucouncilbsp.backend.utils.DateUtils;
+import com.cebucouncilbsp.backend.utils.TextUtils;
 
 import io.jsonwebtoken.lang.Collections;
 
@@ -294,13 +295,8 @@ public class UnitRegistrationService {
 
 			// Set Local Council Action details
 			UserEntity user = userRepository.findByUserId(accessingUser.getUserId());
-			String councilRegistrationOfficer = "";
-			if (StringUtils.hasText(user.getMiddleInitial())) {
-				councilRegistrationOfficer = String.format("%s %s. %s", user.getGivenName(), user.getMiddleInitial(),
-						user.getSurname());
-			} else {
-				councilRegistrationOfficer = String.format("%s %s", user.getGivenName(), user.getSurname());
-			}
+			String councilRegistrationOfficer = TextUtils.getFullName(user.getSurname(), user.getGivenName(),
+					user.getMiddleInitial());
 			unitRegistrationForm.setCouncilRegistrationOfficer(councilRegistrationOfficer);
 			unitRegistrationForm.setCouncilProcessedDate(now);
 

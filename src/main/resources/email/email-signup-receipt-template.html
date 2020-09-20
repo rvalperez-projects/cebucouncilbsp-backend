@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Cebu Council BSP Web Portal Registration Details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    <!-- use the font -->
+    <style>
+        body {font-family: 'Roboto', sans-serif;font-size: 15px;}
+        * {font-family: Arial, Helvetica, sans-serif;}
+        .banner-img {max-width:100%;max-height:200px;}
+
+        table {margin-left: 15px;}
+        th {text-align: left;padding:5px;}
+        td {padding:5px;}
+
+		.footer1 {font-size:16px;font-weight:bold;}
+		.footer2 {font-size:13px;color:rgb(82,82,82);}
+
+		.footer-content {max-height:80px;font-weight:bold;background-color:#003000;margin-top:25px;font-size:smaller;color:white;padding:10px;}
+		.footer-content ul {padding-left:25px;margin:0px;}
+		.footer-content a {color:white;text-decoration:none;}
+		.footer-content a:hover {text-decoration:underline;}
+    </style>
+</head>
+ <body>
+
+ 	<div><img class="banner-img" src="../email/img/banner-bsp-webpage.png"
+ 			th:src="|cid:${bannerImage}|" alt="Banner-Image"/></div>
+
+ 	<p>Good morning Scouter <b><span th:text="${scouterName}"></span></b> of <span th:text="${institution}"></span>!</p>
+ 	<p>Thank you for your registering in Cebu Council BSP's Web Portal.</p>
+ 	<p>This is the online portal that allows all Unit Leaders of Cebu Council to submit their <b>Application for Unit Registration Form</b>
+ 		and will be expanded even further in the future.</p>
+ 	<p>Below are the summary of your registration details. Please remember: <em>"DO NOT SHARE"</em> this info to anyone.</p>
+
+ 	<table>
+ 		<tr><th>Username:</th>
+ 			<td><span th:text="${username}"/></td>
+ 		</tr>
+ 		<tr><th>Password:</th>
+ 			<td><span th:text="${password}"/></td>
+ 		</tr>
+ 		<tr><th>Mobile Number:</th>
+ 			<td><span th:text="${mobileNumber}"/></td>
+ 		</tr>
+ 		<tr><th>Email Address:</th>
+ 			<td><span th:text="${emailAddress}"/></td>
+ 		</tr>
+ 		<tr><th>Sponsoring Institution:</th>
+ 			<td><span th:text="${institution}"/></td>
+ 		</tr>
+ 		<tr><th>Address:</th>
+ 			<td><span th:text="${address}"/></td>
+ 		</tr>
+ 		<tr><th>Institution Category:</th>
+ 			<td><span th:text="${category}"/></td>
+ 		</tr>
+ 		<tr><th>Area / District:</th>
+ 			<td>Area <span th:text="${area}"/> : <span th:text="${district}"></td>
+ 		</tr>
+ 		<tr><th>Contact Number:</th>
+ 			<td><span th:text="${contactNumber}"/></td>
+ 		</tr>
+ 	</table>
+
+    <p>Login to explore our Web Portal.</p>
+    <p>Until then, may the Great Scoutmaster continue to guide you in these challenging times.</p>
+
+    <p>Yours in Scouting,</p>
+    <br/>
+    <div class="footer1"><em>Cebu Council BSP</em></div>
+    <div class="footer2">Natalio Bacalso Avenue Corner Tres de Abril Street, </div>
+    <div class="footer2">Cebu City, Philippines</div>
+    <div class="footer2">(032) 261 1402</div>
+
+    <div class="footer-content">
+    	<div>LINKS</div>
+        <ul><li><a href="https://www.facebook.com/cebucouncilbsp" target=”_blank”>Cebu Council BSP - FB Page</a></li>
+        	<li><a href="https://cebucouncilbsp.netlify.com" target=”_blank”>Cebu Council BSP - Web Portal</a></li>
+            <li><a href="https://www.facebook.com/boyscoutsPH/" target=”_blank”>Boy Scouts of the Philippines - FB Page</a></li>
+            <li><a href="http://scouts.org.ph/" target=”_blank”>Boy Scouts of the Philippines - Web Page</a></li>
+        </ul>
+    </div>
+  </body>
+</html>
