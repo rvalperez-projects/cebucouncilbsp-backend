@@ -25,6 +25,8 @@ public interface InstitutionRepository {
 
 	InstitutionEntity findByInstitutionId(Integer institutionId);
 
+	InstitutionEntity findByInstitutionNameAreaDistrict(String institutionName, String area, String district);
+
 	List<InstitutionEntity> findByArea(String area);
 
 	List<InstitutionEntity> findByDistrict(String district);

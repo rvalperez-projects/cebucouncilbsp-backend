@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				// User api
 				.antMatchers("/user/{\\d}}").permitAll().antMatchers("/user/search").hasAnyAuthority(COUNCIL, ADMIN)
-				.antMatchers("/user/all").hasAuthority(ADMIN)
+				.antMatchers("/user/update").permitAll().antMatchers("/user/all").hasAuthority(ADMIN)
 
 				// AUR Form api
 				.antMatchers("/form/{\\d}}").permitAll().antMatchers("/form/submit").hasAnyAuthority(USER, COUNCIL)

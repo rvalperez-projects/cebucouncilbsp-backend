@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
  */
 public class UserSignUpRequestForm {
 
+	private Integer userId;
 	@NotBlank
 	private String username;
 	@NotBlank
@@ -28,17 +29,21 @@ public class UserSignUpRequestForm {
 	@NotBlank
 	@Email
 	private String emailAddress;
-	@NotBlank
+	private Integer institutionId;
 	private String institutionName;
-	@NotBlank
 	private String address;
-	@NotBlank
 	private String district;
-	@NotBlank
 	private String area;
 	private String contactNumber;
-	@NotBlank
 	private String categoryCode;
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
 	public String getUsername() {
 		return username;
@@ -102,6 +107,14 @@ public class UserSignUpRequestForm {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public Integer getInstitutionId() {
+		return institutionId;
+	}
+
+	public void setInstitutionId(Integer institutionId) {
+		this.institutionId = institutionId;
 	}
 
 	public String getInstitutionName() {
