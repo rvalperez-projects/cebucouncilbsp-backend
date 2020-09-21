@@ -129,7 +129,7 @@
     UPDATE
       M_AUTH
     <set>
-      TOKEN = #{surname,jdbcType=VARCHAR},
+      TOKEN = #{token,jdbcType=VARCHAR},
       USERNAME = #{username,jdbcType=VARCHAR},
       PASSWORD = #{password,jdbcType=VARCHAR},
       ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
