@@ -9,18 +9,22 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cebucouncilbsp.backend.annotation.AccessingUser;
 import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
 import com.cebucouncilbsp.backend.annotation.AdminUserOnly;
 import com.cebucouncilbsp.backend.annotation.AllUsers;
+import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.entity.UserProfileEntity;
 import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.SearchRequestForm;
+import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
 import com.cebucouncilbsp.backend.service.UserService;
 
 @RestController
@@ -40,6 +44,16 @@ public class UserController {
 	@AllUsers
 	public UserProfileEntity getUserByUserId(@PathVariable Integer userId) {
 		return service.getUserByUserId(userId);
+	}
+
+	@PutMapping(path = "/update")
+	@AllUsers
+	public UserSignUpRequestForm updateUser(@RequestBody UserSignUpRequestForm user,
+			@AccessingUser AuthorityEntity accessingUser, Errors errors) {
+		if (errors.hasErrors()) {
+			throw new BusinessFailureException(errors);
+		}
+		return service.updateUser(user, accessingUser);
 	}
 
 	@PostMapping(path = "/search")

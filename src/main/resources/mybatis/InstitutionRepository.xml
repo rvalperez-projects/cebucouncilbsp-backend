@@ -58,6 +58,23 @@
       MINST.INSTITUTION_ID = #{institutionId,jdbcType=INTEGER}
   </select>
 
+  <select id="findByInstitutionNameAreaDistrict" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
+    SELECT
+      MINST.INSTITUTION_ID,
+      MINST.INSTITUTION_NAME,
+      MINST.ADDRESS,
+      MINST.CONTACT_NUMBER,
+      MINST.DISTRICT,
+      MINST.AREA,
+      MINST.CATEGORY_CODE
+    FROM
+      M_INSTITUTION MINST
+    WHERE
+      MINST.INSTITUTION_NAME = #{institutionName,jdbcType=VARCHAR}
+      AND MINST.AREA = #{area,jdbcType=VARCHAR}
+      AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+  </select>
+
   <select id="findByArea" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
     SELECT
       MINST.INSTITUTION_ID,

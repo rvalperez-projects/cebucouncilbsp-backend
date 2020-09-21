@@ -101,6 +101,35 @@
       MUSR.SURNAME ASC
   </select>
 
+  <select id="findCouncilUsers" parameterType="map" resultType="UserSearchResultEntity" resultMap="UserSearchResultMap">
+    SELECT
+      MUSR.USER_ID,
+      MUSR.SURNAME,
+      MUSR.GIVEN_NAME,
+      MUSR.MIDDLE_INITIAL,
+      'Cebu Council' :: Text AS INSTITUTION_NAME,
+      '-' :: Text AS DISTRICT,
+      MUSR.EMAIL_ADDRESS,
+      MUSR.MOBILE_NUMBER,
+      null AS INSTITUTION_ID,
+      MUSR.CREATED_BY,
+      MUSR.CREATED_DATETIME,
+      MUSR.UPDATED_BY,
+      MUSR.UPDATED_DATETIME
+    FROM
+      M_USER MUSR
+    LEFT JOIN M_AUTH MAUTH
+    ON
+      MUSR.USER_ID = MAUTH.USER_ID
+    WHERE
+      MAUTH.ROLE_CODE = '01'
+      <if test="name != null">
+      	AND (LOWER(MUSR.SURNAME || ' ' || MUSR.GIVEN_NAME) LIKE '%' || #{name,jdbcType=VARCHAR} || '%')
+      </if>
+    ORDER BY
+      MUSR.SURNAME ASC
+  </select>
+
   <select id="insertUser" parameterType="UserEntity" resultType="Integer">
     INSERT INTO
       M_USER

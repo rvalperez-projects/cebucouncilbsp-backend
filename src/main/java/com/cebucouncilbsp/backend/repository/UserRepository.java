@@ -24,4 +24,6 @@ public interface UserRepository {
 
 	List<UserSearchResultEntity> findByAreaDistrictInstitutionName(String area, String district, Integer institutionId,
 			String name);
+
+	List<UserSearchResultEntity> findCouncilUsers(String name);
 }
