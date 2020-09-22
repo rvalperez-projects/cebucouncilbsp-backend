@@ -254,20 +254,34 @@ public class EmailService {
 	}
 
 	static class RegistrationFees {
-		static int iSComRepCount = 0;
-		static float iSComRepAmount = 0.00f;
-		static int iSComCoordCount = 0;
-		static float iSComCoordAmount = 0.00f;
-		static int iSComUnitLeadersCount = 0;
-		static float iSComUnitLeadersAmount = 0.00f;
-		static int iSComCharterCount = 0;
-		static float iSComCharterAmount = 0.00f;
-		static int unitScoutsCount = 0;
-		static float unitScoutsAmount = 0.00f;
-		static float totalFeesAmount = 0.00f;
+		static int iSComRepCount;
+		static float iSComRepAmount;
+		static int iSComCoordCount;
+		static float iSComCoordAmount;
+		static int iSComUnitLeadersCount;
+		static float iSComUnitLeadersAmount;
+		static int iSComCharterCount;
+		static float iSComCharterAmount;
+		static int unitScoutsCount;
+		static float unitScoutsAmount;
+		static float totalFeesAmount;
 
 		// private constructor
 		private RegistrationFees() {
+		}
+
+		static void initializeFees() {
+			iSComRepCount = 0;
+			iSComRepAmount = 0.00f;
+			iSComCoordCount = 0;
+			iSComCoordAmount = 0.00f;
+			iSComUnitLeadersCount = 0;
+			iSComUnitLeadersAmount = 0.00f;
+			iSComCharterCount = 0;
+			iSComCharterAmount = 0.00f;
+			unitScoutsCount = 0;
+			unitScoutsAmount = 0.00f;
+			totalFeesAmount = 0.00f;
 		}
 
 		/**
@@ -276,6 +290,7 @@ public class EmailService {
 		 * @param unitRegistration
 		 */
 		static void calculateFees(UnitRegistrationEntity unitRegistration) {
+			initializeFees();
 
 			// Count ISCOM Members
 			for (ISComDetailsEntity iscom : unitRegistration.getIscomMembersList()) {

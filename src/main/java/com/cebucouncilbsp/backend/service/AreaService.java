@@ -8,13 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cebucouncilbsp.backend.constant.AreaCode;
 import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.AreaEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
@@ -50,7 +47,7 @@ public class AreaService {
 		List<AreaEntity> entities = areaRepository.findAllAreas();
 		for (AreaEntity area : entities) {
 			AreaDistrictsEntity district = new AreaDistrictsEntity();
-			district.setArea(AreaCode.get(area.getAreaCode()).name());
+			district.setArea(area.getAreaCode());
 			district.setDistrict(area.getDistrictName());
 			result.add(district);
 		}
@@ -90,7 +87,7 @@ public class AreaService {
 				}
 				districtMap.put(district.getDistrictName(), institutionMap);
 			}
-			areaMap.put(AreaCode.get(area.getAreaCode()).name(), districtMap);
+			areaMap.put(area.getAreaCode(), districtMap);
 		}
 		return areaMap;
 	}

@@ -24,9 +24,9 @@ TABLESPACE pg_default;
 
 -- Table: M_AUTH
 
--- DROP TABLE m_auth;
+-- DROP TABLE M_AUTH;
 
-CREATE TABLE m_auth
+CREATE TABLE M_AUTH
 (
     USER_ID integer NOT NULL,
     TOKEN character varying(64) COLLATE pg_catalog.default NOT NULL,
@@ -55,7 +55,7 @@ COMMENT ON COLUMN m_auth.ROLE_CODE IS '"00": General User; "01": Council; "99": 
 
 CREATE TABLE M_AREA
 (
-    AREA_CODE character varying(3) COLLATE pg_catalog.default NOT NULL,
+    AREA_CODE character varying(64) COLLATE pg_catalog.default NOT NULL,
     DISTRICT_NAME character varying(32) COLLATE pg_catalog.default NOT NULL,
     CHAIRMAN_NAME character varying(32) COLLATE pg_catalog.default,
     CHAIRMAN_CONTACT_NO character varying(32) COLLATE pg_catalog.default,
@@ -106,7 +106,7 @@ COMMENT ON COLUMN M_INSTITUTION.CATEGORY_CODE IS '"00": preschool; "01": primary
 
 CREATE TABLE M_UNIT_NUMBER
 (
-    UNIT_NUMBER character varying(7) COLLATE pg_catalog.default NOT NULL,
+    UNIT_NUMBER character varying(8) COLLATE pg_catalog.default NOT NULL,
     INSTITUTION_ID integer,
     SECTION_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     LAST_USED_YEAR integer,
@@ -132,7 +132,7 @@ CREATE TABLE T_UNIT_REGISTRATION
 (
     FORM_ID serial NOT NULL,
     INSTITUTION_ID integer NOT NULL,
-    UNIT_NUMBER character varying(6) COLLATE pg_catalog.default NOT NULL,
+    UNIT_NUMBER character varying(8) COLLATE pg_catalog.default NOT NULL,
     UNIT_REGISTRATION_NO character varying(10) COLLATE pg_catalog.default,
     SECTION_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     CHARTER_FLAG boolean default false NOT NULL,

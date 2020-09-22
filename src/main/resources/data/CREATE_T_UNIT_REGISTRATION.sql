@@ -7,7 +7,7 @@ CREATE TABLE public.T_UNIT_REGISTRATION
 (
     FORM_ID serial NOT NULL,
     INSTITUTION_ID integer NOT NULL,
-    UNIT_NUMBER character varying(6) COLLATE pg_catalog.default NOT NULL,
+    UNIT_NUMBER character varying(8) COLLATE pg_catalog.default NOT NULL,
     UNIT_REGISTRATION_NO character varying(10) COLLATE pg_catalog.default,
     SECTION_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     CHARTER_FLAG boolean default false NOT NULL,
