@@ -20,7 +20,7 @@ public class UnitRegistrationFormRequestForm {
 	private Integer formId;
 	@Size(max = 10)
 	private String unitRegistrationNo;
-	@Size(max = 7)
+	@Size(max = 8)
 	private String unitNumber;
 	@NotNull
 	@Size(max = 2)

@@ -4,7 +4,7 @@
 
 CREATE TABLE public.M_AREA
 (
-    AREA_CODE character varying(3) COLLATE pg_catalog.default NOT NULL,
+    AREA_CODE character varying(64) COLLATE pg_catalog.default NOT NULL,
     DISTRICT_NAME character varying(32) COLLATE pg_catalog.default NOT NULL,
     CHAIRMAN_NAME character varying(32) COLLATE pg_catalog.default,
     CHAIRMAN_CONTACT_NO character varying(32) COLLATE pg_catalog.default,

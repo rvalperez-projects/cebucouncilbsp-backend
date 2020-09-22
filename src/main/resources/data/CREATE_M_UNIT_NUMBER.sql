@@ -4,7 +4,7 @@
 
 CREATE TABLE public.M_UNIT_NUMBER
 (
-    UNIT_NUMBER character varying(7) COLLATE pg_catalog.default NOT NULL,
+    UNIT_NUMBER character varying(8) COLLATE pg_catalog.default NOT NULL,
     INSTITUTION_ID integer,
     SECTION_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     LAST_USED_YEAR integer,
