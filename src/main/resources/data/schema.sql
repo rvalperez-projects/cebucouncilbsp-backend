@@ -85,7 +85,7 @@ CREATE TABLE M_INSTITUTION
     ADDRESS character varying(256) COLLATE pg_catalog.default NOT NULL,
     CONTACT_NUMBER character varying(32) COLLATE pg_catalog.default,
     DISTRICT character varying(32) COLLATE pg_catalog.default NOT NULL,
-    AREA character varying(3) COLLATE pg_catalog.default,
+    AREA character varying(64) COLLATE pg_catalog.default,
     CATEGORY_CODE character varying(2) COLLATE pg_catalog.default NOT NULL,
     CREATED_BY character varying(32) COLLATE pg_catalog.default NOT NULL,
     CREATED_DATETIME timestamp without time zone NOT NULL,
