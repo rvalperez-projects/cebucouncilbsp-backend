@@ -14,6 +14,7 @@ public class UnitRegistrationSearchResultEntity {
 
 	private Integer formId;
 	private String unitRegistrationNo;
+	private String unitNumber;
 	private String institutionName;
 	private String district;
 	private String statusCode;
@@ -34,6 +35,14 @@ public class UnitRegistrationSearchResultEntity {
 
 	public void setUnitRegistrationNo(String unitRegistrationNo) {
 		this.unitRegistrationNo = unitRegistrationNo;
+	}
+
+	public String getUnitNumber() {
+		return unitNumber;
+	}
+
+	public void setUnitNumber(String unitNumber) {
+		this.unitNumber = unitNumber;
 	}
 
 	public String getInstitutionName() {

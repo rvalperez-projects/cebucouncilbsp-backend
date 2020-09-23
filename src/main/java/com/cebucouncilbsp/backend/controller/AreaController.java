@@ -1,7 +1,6 @@
 package com.cebucouncilbsp.backend.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +23,6 @@ public class AreaController {
 	@AdminAndCouncilOnly
 	public List<AreaEntity> getAllAreas() {
 		return service.getAll();
-	}
-
-	@GetMapping(path = "/districts/institutions")
-	@AdminAndCouncilOnly
-	public Map<String, Map<String, Map<Integer, String>>> getAllAreasDistrictsInstitutions() {
-		return service.getAllAreasDistrictsInstitutions();
 	}
 
 	@GetMapping(path = "/{areaCode}")
