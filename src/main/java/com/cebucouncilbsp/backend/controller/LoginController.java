@@ -1,6 +1,7 @@
 package com.cebucouncilbsp.backend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
+import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.requestdto.LoginRequestForm;
 import com.cebucouncilbsp.backend.requestdto.LogoutRequestForm;
@@ -63,5 +65,11 @@ public class LoginController {
 	@AllUsers
 	public List<AreaDistrictsEntity> getAllDistinctDistricts() {
 		return areaService.getAreasAndDistricts();
+	}
+
+	@GetMapping(path = "/area/districts/institutions")
+	@AllUsers
+	public Map<String, Map<String, Map<Integer, InstitutionEntity>>> getAllAreasDistrictsInstitutions() {
+		return areaService.getAllAreasDistrictsInstitutions();
 	}
 }

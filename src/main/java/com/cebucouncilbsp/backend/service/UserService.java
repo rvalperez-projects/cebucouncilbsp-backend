@@ -103,13 +103,13 @@ public class UserService {
 			result.setCategoryCode(institution.getCategoryCode());
 			result.setContactNumber(institution.getContactNumber());
 		} else {
+			if (AuthorityCategoryCode.COUNCIL.getCode().equals(result.getAuthorityCode())) {
+				result.setArea(AuthorityCategoryCode.COUNCIL.name());
+			} else if (AuthorityCategoryCode.ADMIN.getCode().equals(result.getAuthorityCode())) {
+				result.setArea(AuthorityCategoryCode.ADMIN.name());
+			}
 			result.setAddress(this.councilAddress);
 			result.setContactNumber(this.councilContactNumber);
-			if (AuthorityCategoryCode.COUNCIL.getCode().equals(result.getAuthorityCode())) {
-				result.setInstitutionName(AuthorityCategoryCode.COUNCIL.name());
-			} else if (AuthorityCategoryCode.ADMIN.getCode().equals(result.getAuthorityCode())) {
-				result.setInstitutionName(AuthorityCategoryCode.ADMIN.name());
-			}
 		}
 
 		return result;

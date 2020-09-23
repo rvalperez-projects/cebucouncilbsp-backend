@@ -59,9 +59,9 @@ public class AreaService {
 	 * @return
 	 */
 	@Transactional
-	public Map<String, Map<String, Map<Integer, String>>> getAllAreasDistrictsInstitutions() {
+	public Map<String, Map<String, Map<Integer, InstitutionEntity>>> getAllAreasDistrictsInstitutions() {
 
-		Map<String, Map<String, Map<Integer, String>>> areaMap = new LinkedHashMap<>();
+		Map<String, Map<String, Map<Integer, InstitutionEntity>>> areaMap = new LinkedHashMap<>();
 		List<AreaEntity> areas = areaRepository.findDistinctAreas();
 		if (areas == null) {
 			return areaMap;
@@ -73,7 +73,7 @@ public class AreaService {
 				continue;
 			}
 
-			Map<String, Map<Integer, String>> districtMap = new LinkedHashMap<>();
+			Map<String, Map<Integer, InstitutionEntity>> districtMap = new LinkedHashMap<>();
 			for (AreaEntity district : districts) {
 
 				List<InstitutionEntity> institutions = institutionRepository.findByDistrict(district.getDistrictName());
@@ -81,9 +81,9 @@ public class AreaService {
 					continue;
 				}
 
-				Map<Integer, String> institutionMap = new LinkedHashMap<>();
+				Map<Integer, InstitutionEntity> institutionMap = new LinkedHashMap<>();
 				for (InstitutionEntity institution : institutions) {
-					institutionMap.put(institution.getInstitutionId(), institution.getInstitutionName());
+					institutionMap.put(institution.getInstitutionId(), institution);
 				}
 				districtMap.put(district.getDistrictName(), institutionMap);
 			}

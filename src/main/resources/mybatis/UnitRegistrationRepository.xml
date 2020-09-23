@@ -69,6 +69,7 @@
   <resultMap id="UnitRegistrationSearchResultMap" type="UnitRegistrationSearchResultEntity">
     <id column="FORM_ID" jdbcType="INTEGER" property="formId"/>
     <result column="UNIT_REGISTRATION_NO" jdbcType="VARCHAR" property="unitRegistrationNo"/>
+    <result column="UNIT_NUMBER" jdbcType="VARCHAR" property="unitNumber"/>
     <result column="INSTITUTION_NAME" jdbcType="INTEGER" property="institutionName"/>
     <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
     <result column="STATUS_CODE" jdbcType="VARCHAR" property="statusCode"/>
@@ -148,6 +149,7 @@
     SELECT
       TUR.FORM_ID,
       TUR.UNIT_REGISTRATION_NO,
+      TUR.UNIT_NUMBER,
       MINST.INSTITUTION_NAME,
       MINST.DISTRICT,
       TUR.STATUS_CODE,

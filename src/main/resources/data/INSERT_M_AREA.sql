@@ -137,5 +137,4 @@ INSERT INTO public.M_AREA(
 		('X-8: Cebu Province (Camotes Island)','Poro', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('X-8: Cebu Province (Camotes Island)','San Francisco', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('X-8: Cebu Province (Camotes Island)','Tudela', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
-		('X-8: Cebu Province (Camotes Island)','Pilar', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
-		;
+		('X-8: Cebu Province (Camotes Island)','Pilar', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00');
