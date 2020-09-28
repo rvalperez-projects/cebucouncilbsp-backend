@@ -6,7 +6,7 @@ CREATE TABLE public.M_INSTITUTION
 (
     INSTITUTION_ID serial NOT NULL,
     INSTITUTION_NAME character varying(64) COLLATE pg_catalog.default NOT NULL,
-    ADDRESS character varying(256) COLLATE pg_catalog.default NOT NULL,
+    ADDRESS character varying(256) COLLATE pg_catalog.default,
     CONTACT_NUMBER character varying(32) COLLATE pg_catalog.default,
     DISTRICT character varying(32) COLLATE pg_catalog.default NOT NULL,
     AREA character varying(64) COLLATE pg_catalog.default,
