@@ -40,6 +40,7 @@ INSERT INTO public.M_AREA(
 		('V: Toledo City','Toledo Cluster - 8', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('V: Toledo City','Toledo Cluster - 9', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('V: Toledo City','Toledo Cluster - 10', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
+		('V: Toledo City','Toledo Private Schools', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 
 		('VI: Mandaue City','Mandaue Central', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('VI: Mandaue City','Mandaue North', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
