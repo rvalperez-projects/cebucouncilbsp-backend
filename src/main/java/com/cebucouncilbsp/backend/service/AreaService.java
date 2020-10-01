@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.AreaEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.repository.AreaRepository;
@@ -42,14 +41,19 @@ public class AreaService {
 	 *
 	 * @return
 	 */
-	public List<AreaDistrictsEntity> getAreasAndDistricts() {
-		List<AreaDistrictsEntity> result = new ArrayList<>();
+	public Map<String, List<String>> getAreasAndDistricts() {
+		Map<String, List<String>> result = new LinkedHashMap<>();
 		List<AreaEntity> entities = areaRepository.findAllAreas();
 		for (AreaEntity area : entities) {
-			AreaDistrictsEntity district = new AreaDistrictsEntity();
-			district.setArea(area.getAreaCode());
-			district.setDistrict(area.getDistrictName());
-			result.add(district);
+			if (result.containsKey(area.getAreaCode())) {
+				List<String> districts = result.get(area.getAreaCode());
+				districts.add(area.getDistrictName());
+				result.put(area.getAreaCode(), districts);
+				continue;
+			}
+			List<String> districts = new ArrayList<>();
+			districts.add(area.getDistrictName());
+			result.put(area.getAreaCode(), districts);
 		}
 		return result;
 	}
