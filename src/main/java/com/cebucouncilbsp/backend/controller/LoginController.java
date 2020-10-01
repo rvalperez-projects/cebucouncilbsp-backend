@@ -8,13 +8,13 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cebucouncilbsp.backend.annotation.AllUsers;
-import com.cebucouncilbsp.backend.entity.AreaDistrictsEntity;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
@@ -22,6 +22,7 @@ import com.cebucouncilbsp.backend.requestdto.LoginRequestForm;
 import com.cebucouncilbsp.backend.requestdto.LogoutRequestForm;
 import com.cebucouncilbsp.backend.requestdto.UserSignUpRequestForm;
 import com.cebucouncilbsp.backend.service.AreaService;
+import com.cebucouncilbsp.backend.service.InstitutionService;
 import com.cebucouncilbsp.backend.service.LoginService;
 import com.cebucouncilbsp.backend.service.UserService;
 
@@ -37,6 +38,9 @@ public class LoginController {
 
 	@Autowired
 	private AreaService areaService;
+
+	@Autowired
+	private InstitutionService institutionService;
 
 	@PostMapping(path = "/login")
 	@AllUsers
@@ -61,15 +65,16 @@ public class LoginController {
 		userService.signUp(requestForm, user);
 	}
 
-	@GetMapping(path = "/areaDistricts")
+	@GetMapping(path = "/area/districts")
 	@AllUsers
-	public List<AreaDistrictsEntity> getAllDistinctDistricts() {
+	public Map<String, List<String>> getAllDistinctDistricts() {
 		return areaService.getAreasAndDistricts();
 	}
 
-	@GetMapping(path = "/area/districts/institutions")
+	@GetMapping(path = "/{area}/{district}/institutions")
 	@AllUsers
-	public Map<String, Map<String, Map<Integer, InstitutionEntity>>> getAllAreasDistrictsInstitutions() {
-		return areaService.getAllAreasDistrictsInstitutions();
+	public List<InstitutionEntity> getInstitutionsByAreaAndDistrict(@PathVariable String area,
+			@PathVariable String district) {
+		return institutionService.getInstitutionsByAreaAndDistrict(area, district);
 	}
 }
