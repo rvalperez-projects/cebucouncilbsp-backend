@@ -16,6 +16,7 @@ public class UnitRegistrationEntity extends BaseEntity {
 	private Integer formId;
 	private Integer institutionId;
 	private String institutionName;
+	private String area;
 	private String district;
 	private String unitNumber;
 	private String unitRegistrationNo;
@@ -60,6 +61,14 @@ public class UnitRegistrationEntity extends BaseEntity {
 
 	public void setInstitutionName(String institutionName) {
 		this.institutionName = institutionName;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
 	}
 
 	public String getDistrict() {

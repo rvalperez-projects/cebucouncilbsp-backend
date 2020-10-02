@@ -31,6 +31,10 @@
       MINST.CATEGORY_CODE
     FROM
       M_INSTITUTION MINST
+    ORDER BY
+      MINST.AREA ASC,
+      MINST.INSTITUTION_NAME ASC,
+      MINST.CATEGORY_CODE ASC
   </select>
 
   <select id="findAllDistinctDistricts" parameterType="map" resultMap="AreaDistrictResultMap" resultType="AreaDistrictsEntity">
@@ -40,7 +44,9 @@
     FROM
       M_INSTITUTION
     ORDER BY
-      AREA ASC
+      AREA ASC,
+      INSTITUTION_NAME ASC,
+      CATEGORY_CODE ASC
   </select>
 
   <select id="findByInstitutionId" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
@@ -73,6 +79,9 @@
       MINST.INSTITUTION_NAME = #{institutionName,jdbcType=VARCHAR}
       AND MINST.AREA = #{area,jdbcType=VARCHAR}
       AND MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+    ORDER BY
+      MINST.INSTITUTION_NAME ASC,
+      MINST.CATEGORY_CODE ASC
   </select>
 
   <select id="findByAreaDistrict" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
@@ -107,6 +116,9 @@
       M_INSTITUTION MINST
     WHERE
       MINST.AREA = #{area,jdbcType=VARCHAR}
+    ORDER BY
+      MINST.INSTITUTION_NAME ASC,
+      MINST.CATEGORY_CODE ASC
   </select>
 
   <select id="findByDistrict" parameterType="map" resultMap="InstitutionResultMap" resultType="InstitutionEntity">
@@ -122,6 +134,9 @@
       M_INSTITUTION MINST
     WHERE
       MINST.DISTRICT = #{district,jdbcType=VARCHAR}
+    ORDER BY
+      MINST.INSTITUTION_NAME ASC,
+      MINST.CATEGORY_CODE ASC
   </select>
 
   <select id="insertInstitution" parameterType="InstitutionEntity" resultType="Integer">

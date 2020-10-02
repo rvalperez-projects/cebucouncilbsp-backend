@@ -6,6 +6,7 @@
     <id column="FORM_ID" jdbcType="INTEGER" property="formId"/>
     <result column="INSTITUTION_ID" jdbcType="INTEGER" property="institutionId"/>
     <result column="INSTITUTION_NAME" jdbcType="VARCHAR" property="institutionName"/>
+    <result column="AREA" jdbcType="VARCHAR" property="area"/>
     <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
     <result column="UNIT_NUMBER" jdbcType="VARCHAR" property="unitNumber"/>
     <result column="UNIT_REGISTRATION_NO" jdbcType="VARCHAR" property="unitRegistrationNo"/>
@@ -83,6 +84,8 @@
       TUR.INSTITUTION_ID,
       ( SELECT INSTITUTION_NAME FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
         AS INSTITUTION_NAME,
+      ( SELECT AREA FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS AREA,
       ( SELECT DISTRICT FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
         AS DISTRICT,
       TUR.UNIT_NUMBER,
@@ -116,6 +119,8 @@
       TUR.INSTITUTION_ID,
       ( SELECT INSTITUTION_NAME FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
         AS INSTITUTION_NAME,
+      ( SELECT AREA FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
+        AS AREA,
       ( SELECT DISTRICT FROM M_INSTITUTION WHERE INSTITUTION_ID = TUR.INSTITUTION_ID)
         AS DISTRICT,
       TUR.UNIT_NUMBER,
