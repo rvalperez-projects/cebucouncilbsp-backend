@@ -39,9 +39,8 @@ public class UserService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
 	private static final String USER_NOT_FOUND = "backend.error.auth.login.NotFound";
-	private static final String INSTITUTION_NOT_FOUND = "backend.error.institution.NotFound";
 	private static final String COUNCIL = "Council";
-	private static final String DUMMY_PASSWORD = "x----x";
+	private static final String DUMMY_PASS = "x----x";
 
 	@Value("${auth.council.name}")
 	private String councilName;
@@ -131,8 +130,11 @@ public class UserService {
 		user.setMobileNumber(requestForm.getMobileNumber());
 		user.setEmailAddress(requestForm.getEmailAddress());
 
-		if (AuthorityCategoryCode.GENERAL_USER.getCode().equals(requestForm.getAuthorityCode())) {
-			// Create Institution Entity to insert
+		Integer institutionId = requestForm.getInstitutionId();
+
+		// Create New Institution if institution ID is less than 0 (NEW)
+		if (institutionId < 1 && AuthorityCategoryCode.GENERAL_USER.getCode().equals(requestForm.getAuthorityCode())) {
+			LOGGER.debug("Insert New Institution.");
 			InstitutionEntity institution = new InstitutionEntity();
 			institution.setInstitutionName(requestForm.getInstitutionName());
 			institution.setDistrict(requestForm.getDistrict());
@@ -144,9 +146,11 @@ public class UserService {
 			institution.setUpdatedBy(accessingUser.getUsername());
 			institution.setCreatedDateTime(now);
 			institution.setUpdatedDateTime(now);
-			Integer institutionId = institutionRepository.insertInstitution(institution);
-			user.setInstitutionId(institutionId);
+
+			institutionId = institutionRepository.insertInstitution(institution);
 		}
+		user.setInstitutionId(institutionId);
+
 		user.setCreatedBy(accessingUser.getUsername());
 		user.setUpdatedBy(accessingUser.getUsername());
 		user.setCreatedDateTime(now);
@@ -195,49 +199,33 @@ public class UserService {
 		user.setMobileNumber(requestForm.getMobileNumber());
 		user.setEmailAddress(requestForm.getEmailAddress());
 
-		// Update Institution if user to update is General User
-		if (AuthorityCategoryCode.GENERAL_USER.getCode().equals(requestForm.getAuthorityCode())) {
-			Integer institutionId = null;
+		Integer institutionId = requestForm.getInstitutionId();
 
-			// Create New Institution Entity if inputed a New Institution
-			InstitutionEntity institution = institutionRepository.findByInstitutionNameAreaDistrict(
-					requestForm.getInstitutionName(), requestForm.getArea(), requestForm.getDistrict());
-			if (null == institution) {
-				LOGGER.debug("Insert New Institution.");
-				institution = new InstitutionEntity();
-				institution.setInstitutionName(requestForm.getInstitutionName());
-				institution.setDistrict(requestForm.getDistrict());
-				institution.setArea(requestForm.getArea());
-				institution.setAddress(requestForm.getAddress());
-				institution.setContactNumber(requestForm.getContactNumber());
-				institution.setCategoryCode(requestForm.getCategoryCode());
-				institution.setCreatedBy(accessingUser.getUsername());
-				institution.setUpdatedBy(accessingUser.getUsername());
-				institution.setCreatedDateTime(now);
-				institution.setUpdatedDateTime(now);
+		// Create New Institution if institution ID is less than 0 (NEW)
+		if (institutionId < 1 && AuthorityCategoryCode.GENERAL_USER.getCode().equals(requestForm.getAuthorityCode())) {
+			LOGGER.debug("Insert New Institution.");
+			InstitutionEntity institution = new InstitutionEntity();
+			institution.setInstitutionName(requestForm.getInstitutionName());
+			institution.setDistrict(requestForm.getDistrict());
+			institution.setArea(requestForm.getArea());
+			institution.setAddress(requestForm.getAddress());
+			institution.setContactNumber(requestForm.getContactNumber());
+			institution.setCategoryCode(requestForm.getCategoryCode());
+			institution.setCreatedBy(accessingUser.getUsername());
+			institution.setUpdatedBy(accessingUser.getUsername());
+			institution.setCreatedDateTime(now);
+			institution.setUpdatedDateTime(now);
 
-				institutionId = institutionRepository.insertInstitution(institution);
-				user.setInstitutionId(institutionId);
-				requestForm.setInstitutionId(institutionId);
-			} else {
-				LOGGER.debug("Update User's Institution with the found data.");
-				institutionId = institution.getInstitutionId();
-				user.setInstitutionId(institutionId);
-				requestForm.setInstitutionId(institutionId);
-				requestForm.setInstitutionName(institution.getInstitutionName());
-				requestForm.setDistrict(institution.getDistrict());
-				requestForm.setArea(institution.getArea());
-				requestForm.setAddress(institution.getAddress());
-				requestForm.setContactNumber(institution.getContactNumber());
-				requestForm.setCategoryCode(institution.getCategoryCode());
-			}
+			institutionId = institutionRepository.insertInstitution(institution);
 		}
+		user.setInstitutionId(institutionId);
+
 		user.setUpdatedBy(accessingUser.getUsername());
 		user.setUpdatedDateTime(now);
 		userRepository.updateUser(user);
 
 		// Update Authority Rights if password is NOT dummy password
-		if (!requestForm.getPassword().equals(DUMMY_PASSWORD)) {
+		if (!requestForm.getPassword().equals(DUMMY_PASS)) {
 			AuthorityEntity authority = authorityRepository.findAuthUserByUserId(requestForm.getUserId());
 			authority.setUsername(requestForm.getUsername());
 			authority.setPassword(new BCryptPasswordEncoder().encode(requestForm.getPassword()));
