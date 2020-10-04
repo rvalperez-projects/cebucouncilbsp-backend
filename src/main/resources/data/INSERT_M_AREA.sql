@@ -23,9 +23,9 @@ INSERT INTO public.M_AREA(
 		('II: Talisay City','Talisay - II', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('II: Talisay City','Talisay - III', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 
-		('III - Naga City','Naga - I', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
-		('III - Naga City','Naga - II', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
-		('III - Naga City','Naga - III', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
+		('III: Naga City','Naga - I', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
+		('III: Naga City','Naga - II', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
+		('III: Naga City','Naga - III', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 
 		('IV: Carcar City','Carcar - I', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
 		('IV: Carcar City','Carcar - II', null, null, null, null, '', true, 'Admin', '2020-09-22 12:00:00', 'Admin', '2020-09-22 12:00:00'),
