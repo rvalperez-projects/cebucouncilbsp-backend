@@ -21,7 +21,7 @@ import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.entity.UserProfileEntity;
 import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
-import com.cebucouncilbsp.backend.exception.BusinessFailureException;
+import com.cebucouncilbsp.backend.exception.UserNotFoundException;
 import com.cebucouncilbsp.backend.repository.AuthorityRepository;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
@@ -188,8 +188,7 @@ public class UserService {
 
 		UserEntity user = userRepository.findByUserId(requestForm.getUserId());
 		if (null == user) {
-			LOGGER.debug("User Not Found.");
-			throw new BusinessFailureException(USER_NOT_FOUND);
+			throw new UserNotFoundException();
 		}
 
 		// Create User Entity to update
@@ -224,18 +223,20 @@ public class UserService {
 		user.setUpdatedDateTime(now);
 		userRepository.updateUser(user);
 
-		// Update Authority Rights if password is NOT dummy password
+		// Update Authority Rights
+		AuthorityEntity authority = authorityRepository.findAuthUserByUserId(requestForm.getUserId());
+		authority.setUsername(requestForm.getUsername());
+		authority.setRoleCode(requestForm.getAuthorityCode());
+		authority.setUpdatedBy(accessingUser.getUsername());
+		authority.setUpdatedDateTime(now);
+
+		// Update password only if changed
 		if (!requestForm.getPassword().equals(DUMMY_PASS)) {
-			AuthorityEntity authority = authorityRepository.findAuthUserByUserId(requestForm.getUserId());
-			authority.setUsername(requestForm.getUsername());
 			authority.setPassword(new BCryptPasswordEncoder().encode(requestForm.getPassword()));
-			authority.setRoleCode(requestForm.getAuthorityCode());
-			authority.setUpdatedBy(accessingUser.getUsername());
-			authority.setUpdatedDateTime(now);
-			authorityRepository.updateAuthority(authority);
 		} else {
 			requestForm.setPassword("<Same as before>");
 		}
+		authorityRepository.updateAuthority(authority);
 
 		if (AuthorityCategoryCode.GENERAL_USER.getCode().equals(requestForm.getAuthorityCode())) {
 			// Send email
