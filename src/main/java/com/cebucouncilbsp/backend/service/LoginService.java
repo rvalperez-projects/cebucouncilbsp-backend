@@ -3,8 +3,6 @@
  */
 package com.cebucouncilbsp.backend.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,7 +18,7 @@ import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.InstitutionEntity;
 import com.cebucouncilbsp.backend.entity.LoginResultEntity;
 import com.cebucouncilbsp.backend.entity.UserEntity;
-import com.cebucouncilbsp.backend.exception.SystemFailureException;
+import com.cebucouncilbsp.backend.exception.UserNotFoundException;
 import com.cebucouncilbsp.backend.repository.AuthorityRepository;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
@@ -98,10 +96,8 @@ public class LoginService {
 	private Authentication authenticate(String username, String password) {
 		try {
 			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new SystemFailureException("USER_DISABLED");
-		} catch (BadCredentialsException e) {
-			throw new SystemFailureException("INVALID_CREDENTIALS");
+		} catch (DisabledException | BadCredentialsException e) {
+			throw new UserNotFoundException();
 		}
 	}
 
