@@ -38,9 +38,8 @@ import com.cebucouncilbsp.backend.utils.DateUtils;
 public class UserService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-	private static final String USER_NOT_FOUND = "backend.error.auth.login.NotFound";
 	private static final String COUNCIL = "Council";
-	private static final String DUMMY_PASS = "x----x";
+	private static final String DUMMY_PASS = "<secret>";
 
 	@Value("${auth.council.name}")
 	private String councilName;
