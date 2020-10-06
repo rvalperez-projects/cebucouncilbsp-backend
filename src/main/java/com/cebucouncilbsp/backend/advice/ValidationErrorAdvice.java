@@ -75,12 +75,17 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 		Errors errors = exception.getErrors();
 
 		List<String> errorMessagesList = new ArrayList<>();
+		// Get Field and Global Error Messages
 		if (errors != null) {
 			setValidationErrorMessages(errorMessagesList, errors);
 		}
-		String message = messageSource.getMessage(exception.getMessage(), new Object[] {}, null);
-		if (!message.isEmpty()) {
-			errorMessagesList.add(message);
+
+		// Get error message from exception
+		if (null != exception.getMessage()) {
+			String message = messageSource.getMessage(exception.getMessage(), new Object[] {}, null);
+			if (!message.isEmpty()) {
+				errorMessagesList.add(message);
+			}
 		}
 
 		return new ResponseBodyWrapper(ResponseStatusCode.VALIDATION_FAILURE.getCode(), null, errorMessagesList);
