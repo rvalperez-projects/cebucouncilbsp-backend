@@ -56,6 +56,7 @@ public class UnitRegistrationService {
 	private static final String UNIT_REGISTRATION_FORM_NOT_FOUND = "backend.aur.submit.form.NotFound";
 	private static final String UNIT_REGISTRATION_FORM_ALREADY_PROCESSED = "backend.aur.submit.form.AlreadyProcessed";
 	private static final String NO_MORE_UNIT_NUMBERS = "backend.error.unitNumber.NoMore";
+	private static final String UNIT_NUMBER_ALREADY_USED = "backend.error.unitNumber.used";
 
 	private enum MethodCode {
 		REGISTER, PROCESS_COUNCIL

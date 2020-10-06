@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cebucouncilbsp.backend.annotation.AccessingUser;
 import com.cebucouncilbsp.backend.annotation.AdminAndCouncilOnly;
+import com.cebucouncilbsp.backend.annotation.AllUsers;
 import com.cebucouncilbsp.backend.entity.AuthorityEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberEntity;
 import com.cebucouncilbsp.backend.entity.UnitNumberSearchResultEntity;
@@ -40,7 +41,7 @@ public class UntiNumberController {
 	}
 
 	@GetMapping(path = "/institution/{institutionId}")
-	@AdminAndCouncilOnly
+	@AllUsers
 	public List<UnitNumberEntity> getUnitNumbersByInstitutionId(@PathVariable Integer institutionId) {
 		return service.getUnitNumbersByInstitutionId(institutionId);
 	}
