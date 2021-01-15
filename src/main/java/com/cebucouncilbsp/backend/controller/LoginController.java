@@ -44,13 +44,13 @@ public class LoginController {
 
 	@PostMapping(path = "/login")
 	@AllUsers
-	public String login(@RequestBody @Valid LoginRequestForm form) throws Exception {
+	public String login(@RequestBody @Valid LoginRequestForm form) {
 		return loginService.login(form);
 	}
 
 	@PostMapping(path = "/logout")
 	@AllUsers
-	public void login(@RequestBody @Valid LogoutRequestForm form) {
+	public void logout(@RequestBody @Valid LogoutRequestForm form) {
 		loginService.logout(form);
 	}
 

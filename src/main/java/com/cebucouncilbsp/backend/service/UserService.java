@@ -22,6 +22,7 @@ import com.cebucouncilbsp.backend.entity.UserEntity;
 import com.cebucouncilbsp.backend.entity.UserProfileEntity;
 import com.cebucouncilbsp.backend.entity.UserSearchResultEntity;
 import com.cebucouncilbsp.backend.exception.UserNotFoundException;
+import com.cebucouncilbsp.backend.exception.UsernameExistsException;
 import com.cebucouncilbsp.backend.repository.AuthorityRepository;
 import com.cebucouncilbsp.backend.repository.InstitutionRepository;
 import com.cebucouncilbsp.backend.repository.UserRepository;
@@ -121,6 +122,11 @@ public class UserService {
 		Integer userId = null;
 		LocalDateTime now = DateUtils.getCurrentDateTime();
 
+		AuthorityEntity auth = authorityRepository.findAuthUserByUsername(requestForm.getUsername());
+		if (null != auth) {
+			throw new UsernameExistsException();
+		}
+
 		// Create User Entity to insert
 		UserEntity user = new UserEntity();
 		user.setSurname(requestForm.getSurname());
@@ -188,6 +194,11 @@ public class UserService {
 		UserEntity user = userRepository.findByUserId(requestForm.getUserId());
 		if (null == user) {
 			throw new UserNotFoundException();
+		}
+
+		AuthorityEntity auth = authorityRepository.findAuthUserByUserId(requestForm.getUserId());
+		if (null != auth && !auth.getUsername().equals(requestForm.getUsername())) {
+			throw new UsernameExistsException();
 		}
 
 		// Create User Entity to update
