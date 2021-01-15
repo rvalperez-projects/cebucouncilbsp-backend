@@ -26,6 +26,7 @@ import com.cebucouncilbsp.backend.exception.AccessForbiddenException;
 import com.cebucouncilbsp.backend.exception.BusinessFailureException;
 import com.cebucouncilbsp.backend.exception.SystemFailureException;
 import com.cebucouncilbsp.backend.exception.UserNotFoundException;
+import com.cebucouncilbsp.backend.exception.UsernameExistsException;
 
 /**
  * @author reneir.val.t.perez
@@ -54,6 +55,26 @@ public class ValidationErrorAdvice extends ResponseEntityExceptionHandler {
 		BACKEND_LOGGER.info(MessageFormat.format("UserNotFoundException has occurred. {0}", exception.getMessage()));
 
 		String message = messageSource.getMessage("backend.error.auth.login.NotFound", new Object[] {}, null);
+		List<String> errorMessagesList = new ArrayList<>();
+		errorMessagesList.add(message);
+
+		return new ResponseBodyWrapper(ResponseStatusCode.VALIDATION_FAILURE.getCode(), null, errorMessagesList);
+	}
+
+	/**
+	 * Handles {@link UsernameExistsException} and creates an object that shows a
+	 * Validation error.
+	 *
+	 * @param exception The exception thrown: {@link UsernameExistsException}.
+	 * @return A {@link ResponseBodyWrapper} that contains the Validation error.
+	 */
+	@ExceptionHandler(UsernameExistsException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ResponseBodyWrapper handleValidationError(UsernameExistsException exception) {
+		BACKEND_LOGGER.info(MessageFormat.format("UsernameExistsException has occurred. {0}", exception.getMessage()));
+
+		String message = messageSource.getMessage("backend.error.auth.username.AlreadyExists", new Object[] {}, null);
 		List<String> errorMessagesList = new ArrayList<>();
 		errorMessagesList.add(message);
 

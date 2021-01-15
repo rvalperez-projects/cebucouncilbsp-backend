@@ -58,7 +58,7 @@ public class LoginService {
 	 * @return
 	 * @throws Exception
 	 */
-	public String login(LoginRequestForm form) throws Exception {
+	public String login(LoginRequestForm form) {
 		// Authenticate User
 		this.authenticate(form.getUsername(), form.getPassword());
 
